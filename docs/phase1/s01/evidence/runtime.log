@@ -1,0 +1,32 @@
+
+> test:runtime
+> node --test --experimental-test-isolation=none tests/runtime.test.js
+
+✔ D1 real: publicação, preço do servidor, comissão e reserva idempotente (4228.987109ms)
+✔ D1 real: estranho não cancela, comprador cancela e libera estoque (216.419641ms)
+✔ D1 real: proposta, contraproposta, aceite e preço combinado no pedido (637.10808ms)
+✔ R2 real: mídia privada só entregue após autorização; bloqueio revoga novas leituras (305.814755ms)
+✔ D1 real: anúncio só ativa após revisão; impressão e clique deduplicados (1177.786156ms)
+✔ D1 real: orçamento de ADS nunca ultrapassa o saldo (1361.49222ms)
+✔ D1 real: autorização recorrente não concede benefício; só pagamento confirmado vigente (202.286251ms)
+✔ D1 real + provedor isolado: webhook assinado, repetição e estorno não restauram estoque/benefício (304.074906ms)
+✔ D1 real + provedor isolado: cobrança recorrente confirmada, estorno e replay (117.337658ms)
+✔ Stories: revisão, autoria, expiração, métricas deduplicadas e comentário moderado (1416.549595ms)
+✔ ADS consentimento é revogável e segmentação exclui usuários não consentidos (1971.421408ms)
+✔ mídia social nova não abre anexos privados e exige revisão para leitura pública (1489.151507ms)
+✔ conversão ADS só conta produto comprado e pagamento; estorno retira a conversão (912.80742ms)
+✔ devolução exige comprador, entrega confirmada e transições corretas (1139.665979ms)
+✔ disputa não pode ser marcada como reembolsada sem refund confirmado (277.44066ms)
+✔ Now ADS hierárquico: ownership, campanha idempotente e limites atômicos diário/conjunto (2105.785649ms)
+✔ Now ADS: público semelhante recusa origem insuficiente e leads não aceitam entrega de outro usuário (61.838203ms)
+✔ Market: anúncio profissional não abre fotos antes da revisão e preserva localização aproximada (2133.321082ms)
+✔ Now Call SFU: grant de espectador não publica, sala limita 25 e revogação respeita servidor (121.214429ms)
+✔ Now ADS leads: contato exige clique e consentimento; exportação só do anunciante (806.42394ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 20
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 21911.773161

@@ -1,0 +1,28 @@
+Listing tests:
+  visual.spec.js:18:44 › index responsivo 320px
+  visual.spec.js:18:44 › index responsivo 375px
+  visual.spec.js:18:44 › index responsivo 768px
+  visual.spec.js:18:44 › index responsivo 1440px
+  visual.spec.js:18:44 › index responsivo 1920px
+  visual.spec.js:27:1 › FAQ funciona por teclado e link de salto recebe foco
+  visual.spec.js:28:1 › Market vazio, filtros e checkout honesto em mobile
+  visual.spec.js:29:1 › Chat carrega sem presença simulada e sem erros JS
+  visual.spec.js:30:1 › verificação não anuncia cobrança recorrente
+  visual.spec.js:32:1 › acessibilidade automatizada da landing
+  visual.spec.js:34:1 › Market transacional revisa total do servidor e mantém comissão fora do frete
+  visual.spec.js:40:1 › assinatura exige consentimento recorrente explícito antes do checkout
+  visual.spec.js:45:31 › Vice Sunset e Chat responsivos 375px
+  visual.spec.js:45:31 › Vice Sunset e Chat responsivos 1440px
+  visual.spec.js:53:1 › Now ADS mostra métricas calculadas, filtra e exporta CSV seguro
+  visual.spec.js:61:1 › Market restaura favoritos e envia limites de preço ao servidor
+  visual.spec.js:67:1 › Configurações carregam o sunset uma vez e preservam a preferência
+  visual.spec.js:70:1 › Stories reais exigem consentimento e enviam publicação para revisão
+  visual.spec.js:74:1 › ADS salva consentimento explícito sem integração externa Meta
+  visual.spec.js:79:1 › Now ADS usa os três níveis, seis objetivos e preserva rascunho sem cobrança
+  visual.spec.js:84:31 › Perfil V64 navega entre publicações fotos e vídeos 375px
+  visual.spec.js:84:31 › Perfil V64 navega entre publicações fotos e vídeos 1440px
+  visual.spec.js:88:1 › Mapa de localização abre com dimensões corretas e mantém aproximação como padrão
+  visual.spec.js:91:1 › Gerenciador Now ADS tem contraste e navegação acessíveis
+  visual.spec.js:93:48 › S01 compositor recusa opções repetidas sem gravar
+  visual.spec.js:93:48 › S01 compositor recusa opção única sem gravar
+Total: 26 tests in 1 file

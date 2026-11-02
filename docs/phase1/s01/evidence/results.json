@@ -1,0 +1,80 @@
+{
+  "completedAt": "2026-11-02T21:51:22.211Z",
+  "node": "v24.19.0",
+  "gitCommit": "9445442223cec3ce2112e889969f8239dbf4eab3",
+  "gitDirty": true,
+  "inputSha256": {
+    "firestore.rules": "1e8599b5f203bfcea747143e0cf1a395647e3cece9c498c7f52789c2b37ce891",
+    "firebase.test.json": "002e240b8e19ad4b4f5fe01b1c1cdc94ce85362cf6df662e7c418d73213db2dc",
+    "package.json": "eb61616f97640d1ce7d266992782d1a56a96373e1826da91493540b45ef33c16",
+    "package-lock.json": "12254e84a78b6f282ade7e2ad3b88f6afd3a0ee1ad940395da452da8a98b87b1",
+    "functions/package-lock.json": "5f13bb0ce2d6a9f3b493d34ff346c68a4c71bc103f5554a4fb6b2604d40a03c2",
+    "poll-domain.js": "1e53e5a43ccd0c06b62de0ac33c29846b1ea5308f708a77e9b054f037d90ee54",
+    "feed.js": "59d97417e4495a79f69301833f617e3cdc781d832fc6faa0750d0518c96a9931",
+    "feed-composer.js": "17da5d2743d43f232a5191c85f408dbf5e4e11981a7e00a0d1a4f0e1967636d9",
+    "dashboard.js": "25d6a19d7d2f0c1a7fe843601566641c1148ac5376bff254dc1ce8f254e5cd3a",
+    "events.js": "036c50a7037833f63fda8238f8489d0ccefc8990df6df6cd643f4bc9bc50a572",
+    "playwright.config.js": "2f03c4f2421ea15070c34e2277775eb1d29285609125c3de76e1af4a7cc19119",
+    "scripts/test-rules.mjs": "6223cc51d5ebe61b3659604dc2b57bba559ec2d024bfe736d14f9b1bdaa90bb2",
+    "scripts/validate-phase1.mjs": "95db015c4434643c08252406cb209e9d7c82cf98ffef892a5ecef85b61187402",
+    "scripts/check-browser.mjs": "d41d3be1828c00dcbcfb4a4e133cb441dff36c1212acced5d922b44a6cc047b9",
+    "scripts/preview-server.mjs": "273a6412f380ee838428f9a017c31bc7fc5820bd41499b4121e695bd832a36ca",
+    "tests/v69-audit/firestore-boundaries.test.mjs": "814a1a1a04f98c8fdba490754b8f0cc656a9194d1a72820dc2195a1ea193c97f",
+    "tests/firestore.test.js": "2081286a4c58c8f9276b190a85acd8d5e7a24b97f9d7ad692d350e5d79e67f72",
+    "tests/founders-emulator.test.mjs": "41c97bba048a8344a5d136c09208f6b5f85915fe0c851a09ec6cddc0b2dc29b6",
+    "tests/browser/visual.spec.js": "51f7553e3049a0abbb6a022609a6080183bbbf0378557864bde523a472efa869"
+  },
+  "allSelectedGatesPassed": false,
+  "completePhase1Run": true,
+  "results": [
+    {
+      "name": "dependencies",
+      "script": "audit:high",
+      "exitCode": 0,
+      "status": "passed",
+      "log": "dependencies.log"
+    },
+    {
+      "name": "fast",
+      "script": "check:fast",
+      "exitCode": 0,
+      "status": "passed",
+      "log": "fast.log"
+    },
+    {
+      "name": "runtime",
+      "script": "test:runtime",
+      "exitCode": 0,
+      "status": "passed",
+      "log": "runtime.log"
+    },
+    {
+      "name": "firestore",
+      "script": "test:rules",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "firestore.log"
+    },
+    {
+      "name": "security-s01",
+      "script": "test:rules:security",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "security-s01.log"
+    },
+    {
+      "name": "founders-emulator",
+      "script": "test:rules:founders",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "founders-emulator.log"
+    },
+    {
+      "name": "browser",
+      "script": "test:e2e",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "browser.log"
+    }
+  ]
+}

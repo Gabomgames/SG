@@ -1,0 +1,277 @@
+
+> check:fast
+> npm run verificar && npm test && npm run test:contracts && npm run test:founders && npm run test:polls && npm run test:regressions && npm run test:sqlite
+
+
+> verificar
+> node scripts/verificar.mjs
+
+390 arquivos conferidos.
+Tudo certo.
+
+> test
+> node --test --experimental-test-isolation=none tests/unit.test.js tests/worker.test.js tests/market.test.js tests/features.test.js
+
+✔ cargos: moderador não promove usuário, não modera dono ou outro moderador (11.30637ms)
+✔ voz: seis vagas, sessão fixa, expiração e expulsão não são contornadas (9.989486ms)
+✔ Now ADS: sem consentimento não aplica geografia, idade, gênero ou interesses (3.464024ms)
+✔ Now ADS: remarketing e lista exigem correspondência real e consentida (0.258406ms)
+✔ Now ADS: distribuição usa desempenho observado e mantém exploração (0.332911ms)
+✔ Market: localização residencial é arredondada; ponto exato exige autorização (1.040388ms)
+✔ Now Call: SFU só habilita com banco, flag e configuração; espectador não publica (0.656238ms)
+✔ comissão de 10% exclui frete e não é somada ao total (0.238521ms)
+✔ centavos e quantidades inválidos são rejeitados (5.279347ms)
+✔ comprador não pode marcar pedido pago nem enviado (2.894218ms)
+✔ somente comprador confirma entrega e estados finais não regressam (2.62183ms)
+✔ pagamento exige valor, comissão, referência, ambiente e recebedor (4.071071ms)
+✔ novos anúncios exigem estoque e política de devolução (0.598751ms)
+✔ contexto de mídia impede path traversal e recurso público (2.092068ms)
+✔ mídia verifica acesso com token do usuário, sem conta de serviço (163.364516ms)
+✔ arquivo expirado não consulta objeto nem entrega conteúdo (7.896348ms)
+✔ OAuth é cifrado com vínculo à UID e adulteração falha (34.72822ms)
+✔ codec Firestore preserva listas e valores decimais (1.975383ms)
+✔ assinatura mensal conserva dia quando existe e ajusta fim do mês (2.104703ms)
+✔ planos e valores exatos em centavos (0.299609ms)
+✔ valor inválido -1 (0.106234ms)
+✔ valor inválido NaN (4.22472ms)
+✔ valor inválido 1.123 (0.067919ms)
+✔ valor inválido 1e3 (0.042807ms)
+✔ valor inválido  (0.037971ms)
+✔ valor inválido Infinity (0.036057ms)
+✔ valor inválido  14.90 (0.033919ms)
+✔ valor inválido 14,90 (0.033233ms)
+✔ HMAC fixture conhecida aceita e normaliza ID alfanumérico (6.681511ms)
+✔ fixture usa manifesto canônico exato (0.102729ms)
+✔ assinatura errada rejeitada (8.632258ms)
+✔ query adulterada rejeitada (1.036611ms)
+✔ ID apenas no corpo não autoriza estado financeiro (1.593149ms)
+✔ ausência de headers rejeitada (0.28193ms)
+✔ ausência de secret falha fechada (4.298469ms)
+✔ header malformado ts=abc,v1=111111 (0.137396ms)
+✔ header malformado ts=1727890000,v1 (0.054392ms)
+✔ header malformado ts=1727890000,ts (0.035775ms)
+✔ header malformado  (0.031974ms)
+✔ simulador numérico não é Order real (0.155834ms)
+✔ aprovação exige estado, detalhe e transações confirmadas (3.663962ms)
+✔ integridade do Order id (0.154622ms)
+✔ integridade do Order external_reference (0.11001ms)
+✔ integridade do Order total_amount (0.063145ms)
+✔ integridade do Order currency_id (0.082644ms)
+✔ integridade do Order collector_id (0.058262ms)
+✔ integridade do Order transactions (0.052671ms)
+✔ estorno vence pendência e aprovação posterior (0.102647ms)
+✔ checkout somente no provedor HTTPS (0.200873ms)
+✔ SSRF https://127.0.0.1/a (0.129961ms)
+✔ SSRF https://169.254.169.254/ (5.912254ms)
+✔ SSRF https://[::1]/ (1.00533ms)
+✔ SSRF https://evil.example/ (0.202864ms)
+✔ SSRF https://lh3.googleusercontent.com.evil.example/a (1.222708ms)
+✔ SSRF https://user:pass@lh3.googleusercontent.com/a (0.165394ms)
+✔ SSRF https://lh3.googleusercontent.com:444/a (1.273803ms)
+✔ imagem autorizada em host exato (1.045583ms)
+✔ upload disfarçado de PNG é bloqueado (0.331389ms)
+✔ Market valida preço e categorias físicas (0.26728ms)
+✔ destaque expirado não aumenta relevância (0.114846ms)
+✔ busca sem acento, faixa de preços e salvos (0.56216ms)
+✔ Worker rejeita Origin malicioso antes de tocar persistência (9.701669ms)
+✔ CORS local negado por padrão (3.180104ms)
+✔ webhook sem assinatura retorna 401 e não consulta provedor (3.894446ms)
+✔ webhook sem secret não modifica estado (7.187002ms)
+✔ simulador assinado testa conectividade, não Order nem pagamento (4.814331ms)
+✔ consulta financeira anônima retorna 401 (5.077842ms)
+✔ D1 ausente desabilita pagamento autenticado (8.16143ms)
+✔ health não anuncia compras ou anexos privados habilitados (0.556752ms)
+✔ novos uploads privados falham antes de gravação (9.784228ms)
+✔ mídia legada não fica pública antes da revisão do armazenamento (0.856719ms)
+✔ repetição de checkout usa mesma referência e chave no provedor (10.768622ms)
+✔ conta comum não acessa financeiro, revisão de ADS ou reembolso (35.481123ms)
+ℹ tests 73
+ℹ suites 0
+ℹ pass 73
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 639.154757
+
+> test:contracts
+> node --test --experimental-test-isolation=none tests/verifier.test.mjs tests/browser-fixture.test.mjs tests/verification-view.test.mjs tests/v69-audit/contracts.test.mjs tests/v69-audit/dev-server.test.mjs tests/preview-server.test.mjs tests/validation-runner.test.mjs tests/rules-runner.test.mjs
+
+✔ browser fixture exports match the actual Firebase imports (668.677014ms)
+✔ unconfigured browser fixtures reject upload and account mutations (3.612289ms)
+✔ portable preview serves the selected build and rejects hidden files and writes (326.624251ms)
+✔ Firestore runner rejects external hosts, different ports and unexpected rule paths (1.840469ms)
+✔ only known suites can run and no project or target override is accepted (1.033658ms)
+✔ monthly: preço, prazo e confirmação financeira íntegros (3.746247ms)
+✔ semiannual: preço, prazo e confirmação financeira íntegros (3.104014ms)
+✔ annual: preço, prazo e confirmação financeira íntegros (0.214933ms)
+✔ estorno é terminal para toda entrada financeira conhecida (0.244992ms)
+✔ checkout rejeita credenciais, downgrade e domínios semelhantes (0.732818ms)
+✔ dev server entrega fonte e bloqueia caminhos internos e métodos de escrita (991.693006ms)
+✔ a failed or blocked child cannot be reported as passed, and later gates still run (747.603979ms)
+✔ spawn failure remains a failure even with a missing process exit code (6.665766ms)
+✔ founder display relies on server grant status and future expiry (0.3831ms)
+✔ promotional copy explains automatic free entitlement while paid review copy is preserved (0.456544ms)
+✔ static imports and aliases bind only their local name (6.804056ms)
+✔ dynamic import destructuring resolves in its function (1.218183ms)
+✔ sibling and nested declarations cannot hide a missing import (1.380765ms)
+✔ parameters, destructuring, catch and function-scoped var are recognized (2.245033ms)
+✔ comments strings and member calls do not count as global references (2.760431ms)
+✔ loop-scoped binding does not leak outside the loop (6.346511ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2979.129935
+
+> test:founders
+> node --test --experimental-test-isolation=none tests/founders.test.mjs tests/founders-client.test.mjs tests/founders-mirror.test.mjs
+
+✔ verified sign-in syncs automatically without a claim button or client entitlement fields (6.200836ms)
+✔ email verification is reloaded automatically and does not consume a request while unverified (0.430148ms)
+✔ backend outage does not break login or mark the promotion as granted (2.369057ms)
+✔ Firestore timestamp serialization retains millisecond expiry precision (5.368338ms)
+✔ paid mirror retains founder badge and retries a concurrent grant conflict (285.485028ms)
+✔ paid mirror fails closed when the authoritative profile version is missing (186.155532ms)
+✔ 80 concurrent eligible accounts receive exactly 50 atomic awards (315.921085ms)
+✔ concurrent duplicate calls cannot consume additional slots or notifications (6.866233ms)
+✔ disabled promotion and beta before launch consume no slots (1.449504ms)
+✔ unverified disabled anonymous and suspicious accounts do not hold up legitimate accounts (3.572116ms)
+✔ normalized email aliases cannot win twice under distinct UIDs (1.523393ms)
+✔ award contains exactly 365 free days and updates private/public badge and welcome notice atomically (2.635989ms)
+✔ transaction failure cannot consume a slot or leave a partial entitlement (0.462818ms)
+✔ paid reviews and refunds remain separate from the founder entitlement (3.158287ms)
+✔ longer paid benefit is not shortened and administrative revocation cannot regrant a founder slot (0.661711ms)
+✔ corrupt counter fails closed and expired grants never produce an active badge (0.341828ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 927.118007
+
+> test:polls
+> node --test --experimental-test-isolation=none tests/poll-domain.test.mjs
+
+✔ two to four distinct labels are accepted without changing user text (9.532389ms)
+✔ malformed options cannot become a valid new poll (3.562942ms)
+✔ duplicates are rejected even if they differ only in case (1.425147ms)
+✔ numeric votes and legacy text votes select the same real option (0.180152ms)
+✔ numeric-looking labels are never coerced to an unrelated index (4.798228ms)
+✔ untrusted vote values cannot choose outside the poll (1.402447ms)
+✔ ambiguous legacy labels are left unselected rather than inventing an answer (1.018546ms)
+✔ existing polls with more than four options remain readable and votable (1.402879ms)
+✔ new clients write integer indexes only and refuse missing/non-poll targets (0.925258ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 69.893142
+
+> test:regressions
+> npm run build && node --test --experimental-test-isolation=none tests/v65-ui.test.mjs tests/v651-regressions.test.mjs tests/v66-regressions.test.mjs tests/v67-regressions.test.mjs tests/v68-ui.test.mjs tests/v69-regression.test.mjs
+
+
+> build
+> node scripts/build.mjs
+
+copiados 174 arquivos para dist/
+42 páginas para empacotar
+removidos de dist/ (já estão dentro dos pacotes): admin-market.js, admin-payments.js, admin-social.js, ads-pro.js, api-client.js, badges.js, call-sfu-client.js, calls.js, channel-tools.js, community-tools.js, config.js, firebase.js, founders-client.js, i18n.js, icones.js, landing.js, legal.js, limites.js, market-app.js, market-domain.js, media-upload.js, moderation.js, now-telemetry.js, poll-domain.js, professional-ui.js, reports.js, safety.js, sanction-gate.js, sanction-ui.js, sanctions.js, seguranca-web.js, social-studio.js, subscriptions-app.js, v53-pro.js, vendor/livekit-client.js, verification-view.js, voice-room.js
+
+javascript: 567 KB de fonte -> 1311 KB empacotado e minificado
+dist/ pronto. O fonte no repositório continua legível.
+✔ V65: feed.html com CSS e navegação unificados (11.476544ms)
+✔ V65: social.html com CSS e navegação unificados (0.257492ms)
+✔ V65: communities.html com CSS e navegação unificados (0.19785ms)
+✔ V65: chat.html com CSS e navegação unificados (2.966378ms)
+✔ V65: marketplace.html com CSS e navegação unificados (0.281448ms)
+✔ V65: dashboard.html com CSS e navegação unificados (0.21614ms)
+✔ V65: profile.html com CSS e navegação unificados (2.706313ms)
+✔ V65: settings.html com CSS e navegação unificados (0.373586ms)
+✔ V65: events.html com CSS e navegação unificados (1.878204ms)
+✔ V65: companies.html com CSS e navegação unificados (1.341578ms)
+✔ V65: verification.html com CSS e navegação unificados (0.183795ms)
+✔ V65: monetization.html com CSS e navegação unificados (0.132819ms)
+✔ Now ADS mantém seu gerenciador e tema unificado (0.138041ms)
+✔ Criar conta e login permanecem disponíveis (0.313376ms)
+✔ Navegação possui URLs existentes (0.256474ms)
+✔ Now Call oferece saída segura e lado direito para mensagens próprias (1.38692ms)
+✔ Regras validam saída individual e bloqueiam proprietário (0.47433ms)
+✔ Link de convite público pede consentimento antes de entrar (0.597081ms)
+✔ Service worker não usa cache privado (0.219945ms)
+✔ feed usa um só fluxo de publicações (2.984123ms)
+✔ repair stylesheet é carregado em páginas afetadas (0.565548ms)
+✔ modal de criar servidor cabe dentro da viewport (0.26203ms)
+✔ ADMIN não concede privilégio pelo cliente (5.204362ms)
+✔ conquistas são geradas a partir de seguidores e verificação ativa (1.720891ms)
+✔ Novo design carregado nas páginas principais (2.943478ms)
+✔ Now Call sem dado, quiz e bots no composer (0.433806ms)
+✔ Market sem Seller Pro ou banners de monetização (7.033305ms)
+✔ Confirmação segura para excluir conta e backend autenticado (0.265705ms)
+✔ Menções exigem permissão para perfis privados (2.802989ms)
+✔ Sem privilégio administrativo no cliente (0.930282ms)
+✔ Arquivos de implementação necessários presentes (0.196531ms)
+✔ login and registration include explicit accessible password visibility toggle (2.380892ms)
+✔ admin uses its own navigation without injected global sidebar (0.525909ms)
+✔ notifications use real content and constrained layout (1.869503ms)
+✔ account closure protected by super admin, separate backend and cooling-off period (0.698886ms)
+✔ appeals remain available from support and are attached to a sanction (0.57644ms)
+✔ dist preview includes updated pages and styles (0.532452ms)
+✔ Landing V68 tem cadastro, chat e áreas reais do SG (1.47806ms)
+✔ Now Call real mantém todos os seletores usados pelo JavaScript V67 (0.731124ms)
+✔ Rotas modificadas resolvem seus recursos locais (2.860525ms)
+✔ Now Call mobile tem layout sem sobreposição do V57 (0.225012ms)
+✔ landing não força redirecionamento em sessão autenticada (0.806936ms)
+✔ V69 preserves all three original verified gamer plans and payment logic (3.401611ms)
+✔ new slogans are exact and public navigation exposes verification (1.810043ms)
+✔ feed has an actual composer with picture video poll file selection (2.071648ms)
+✔ media fallback matches existing Firebase Storage authorization rules and schema (0.573339ms)
+✔ old dashboard creation IDs are preserved and preview was added (0.38945ms)
+✔ mobile verification and legacy hidden card are fixed in final CSS (6.236875ms)
+✔ local resources for the changed routes exist (2.203878ms)
+✔ public profile is responsive and uses final V69 styles (0.348549ms)
+✔ brand text differentiates SG slogan from NOW slogan (0.161318ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 51
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 205.097577
+
+> test:sqlite
+> node scripts/test-sqlite.mjs
+
+{"event":"request_failed","requestId":"c5ffbc2e-5b28-4eeb-a11c-25abbf45f549","code":"INVALID_WEBHOOK_SIGNATURE","path":"/payments/webhook"}
+{"event":"request_failed","requestId":"d9d5e884-3f04-46b2-9e0d-73762ccfc583","code":"WEBHOOK_NOT_CONFIGURED","path":"/payments/webhook"}
+{"event":"request_failed","requestId":"1178a817-8ffc-40cd-bc83-3654db3f0754","code":"UNAUTHENTICATED","path":"/payments/list"}
+{"event":"request_failed","requestId":"7f743c41-d015-4f84-8d56-25e1fbe0c119","code":"PAYMENT_STORAGE_NOT_CONFIGURED","path":"/payments/create"}
+{"event":"request_failed","requestId":"0b458b4b-4d1d-4225-8bc3-515fd9995c5c","code":"PRIVATE_MEDIA_NOT_CONFIGURED","path":"/media/upload"}
+{"event":"request_failed","requestId":"d28b3c6e-1015-464c-acf4-2dee770c0ea0","code":"FORBIDDEN","path":"/admin/payments"}
+{"event":"request_failed","requestId":"723a707e-cfea-40f5-9fa6-53e70e629631","code":"FORBIDDEN","path":"/admin/commerce"}
+{"event":"request_failed","requestId":"81612e21-e6e7-4934-a1d9-e29ce05912a7","code":"FORBIDDEN","path":"/adminApi"}
+{"event":"request_failed","requestId":"fbeb81d3-a25b-4fae-8159-3ea82276c761","code":"FORBIDDEN","path":"/ads/review"}
+{"event":"request_failed","requestId":"2dde0204-2383-4fa0-8fe0-5e33ba9d1edb","code":"FORBIDDEN","path":"/market/refund"}
+{"event":"request_failed","requestId":"a3e0b70c-6a19-471c-a4dd-fd569ad642d6","code":"FORBIDDEN","path":"/market/disputes/resolve"}
+{"event":"request_failed","requestId":"c57e5a3b-780d-4907-b86e-a09cba3ecf53","code":"FORBIDDEN","path":"/admin/social"}
+{"event":"request_failed","requestId":"b01f036e-cbd7-4888-b3aa-0f6bd0ca9924","code":"FORBIDDEN","path":"/admin/social/media"}
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.009s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.125s
+
+OK

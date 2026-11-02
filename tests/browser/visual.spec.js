@@ -89,3 +89,16 @@ test('Mapa de localização abre com dimensões corretas e mantém aproximação
  await sdkFixtures(page);await page.setViewportSize({width:375,height:900});await page.route('https://tile.openstreetmap.org/**',route=>route.fulfill({status:200,contentType:'image/png',body:Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+lm3sAAAAASUVORK5CYII=','base64')}));const errors=[];page.on('pageerror',e=>errors.push(e.message));await page.goto('/marketplace.html');await page.locator('#openLocation').click();await expect(page.locator('#locationDialog')).toBeVisible();await expect(page.locator('#locationPickerMap')).toHaveClass(/leaflet-container/);const size=await page.locator('#locationPickerMap').boundingBox();expect(size.width).toBeGreaterThan(200);expect(size.height).toBeGreaterThan(250);await expect(page.locator('[name=locationPrecision][value=approximate]')).toBeChecked();await expect(page.locator('#locationPickerMap .leaflet-tile-loaded').first()).toBeVisible();expect(errors).toEqual([]);await page.screenshot({path:'artifacts/market-location-v64.png',fullPage:true});
 });
 test('Gerenciador Now ADS tem contraste e navegação acessíveis',async({page})=>{await sdkFixtures(page);await page.goto('/ads.html');const result=await new AxeBuilder({page}).withTags(['wcag2a','wcag2aa','wcag21aa']).analyze();expect(result.violations).toEqual([]);});
+
+for(const labels of [['RPG','rpg'],['RPG','']])test(`S01 compositor recusa ${labels[1]?'opções repetidas':'opção única'} sem gravar`,async({page})=>{
+ await sdkFixtures(page);await page.goto('/feed.html');
+ await page.locator('[data-open-composer="poll"]').click();
+ const options=page.locator('#sg69Composer [data-poll-option]');await expect(options).toHaveCount(4);
+ await options.nth(0).fill(labels[0]);await options.nth(1).fill(labels[1]);
+ const writes=await page.evaluate(()=>globalThis.__sgFixtureWriteCount||0);
+ await page.locator('#sg69Publish').click();
+ await expect(page.locator('#sg69ComposerError')).toContainText(labels[1]?'diferentes':'duas a quatro');
+ await expect(page.locator('#sg69Composer')).toBeVisible();
+ await expect(page.locator('#sg69Publish')).toBeEnabled();
+ expect(await page.evaluate(()=>globalThis.__sgFixtureWriteCount||0)).toBe(writes);
+});

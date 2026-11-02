@@ -16,17 +16,21 @@
     "test:rules": "node scripts/test-rules.mjs",
     "test:e2e": "playwright test",
     "check": "npm run verificar && npm test && npm run build",
-    "test:sqlite": "python3 tests/sqlite.test.py && python3 tests/market-sql.test.py",
+    "test:sqlite": "node scripts/test-sqlite.mjs",
     "test:runtime": "node --test --experimental-test-isolation=none tests/runtime.test.js",
     "test:v68": "node --test tests/v68-ui.test.mjs",
     "test:v69": "node --test tests/v69-regression.test.mjs",
     "deploy:media": "firebase deploy --only storage --project something-gamer",
-    "test:contracts": "node --test --experimental-test-isolation=none tests/verifier.test.mjs tests/browser-fixture.test.mjs tests/verification-view.test.mjs tests/v69-audit/contracts.test.mjs tests/v69-audit/dev-server.test.mjs",
+    "test:contracts": "node --test --experimental-test-isolation=none tests/verifier.test.mjs tests/browser-fixture.test.mjs tests/verification-view.test.mjs tests/v69-audit/contracts.test.mjs tests/v69-audit/dev-server.test.mjs tests/preview-server.test.mjs tests/validation-runner.test.mjs tests/rules-runner.test.mjs",
     "test:regressions": "npm run build && node --test --experimental-test-isolation=none tests/v65-ui.test.mjs tests/v651-regressions.test.mjs tests/v66-regressions.test.mjs tests/v67-regressions.test.mjs tests/v68-ui.test.mjs tests/v69-regression.test.mjs",
-    "check:fast": "npm run verificar && npm test && npm run test:contracts && npm run test:founders && npm run test:regressions && npm run test:sqlite",
+    "check:fast": "npm run verificar && npm test && npm run test:contracts && npm run test:founders && npm run test:polls && npm run test:regressions && npm run test:sqlite",
     "test:rules:security": "node scripts/test-rules.mjs --security",
     "test:founders": "node --test --experimental-test-isolation=none tests/founders.test.mjs tests/founders-client.test.mjs tests/founders-mirror.test.mjs",
-    "test:rules:founders": "node scripts/test-rules.mjs --founders"
+    "test:rules:founders": "node scripts/test-rules.mjs --founders",
+    "test:polls": "node --test --experimental-test-isolation=none tests/poll-domain.test.mjs",
+    "pretest:e2e": "node scripts/check-browser.mjs",
+    "validate:phase1": "node scripts/validate-phase1.mjs",
+    "audit:high": "npm audit --audit-level=high && npm audit --prefix functions --audit-level=high"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
@@ -42,6 +46,9 @@
   },
   "overrides": {
     "@grpc/grpc-js": "^1.14.6",
-    "basic-ftp": "^6.2.1"
+    "basic-ftp": "^6.2.1",
+    "miniflare": {
+      "undici": "^7.30.1"
+    }
   }
 }

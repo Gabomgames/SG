@@ -5,6 +5,7 @@ import { APP_CONFIG } from './config.js';
 import { escreverComLimite, mensagemDeLimite } from './limites.js';
 import { assertModeratedPublicText, assertModeratedImageUrl } from './moderation.js';
 import { prepareImage, uploadMedia } from './media-upload.js';
+import {validatePollOptions} from './poll-domain.js';
 const $ = id => document.getElementById(id);
 const dialog=$('sg69Composer'), form=$('sg69ComposerForm');
 let kind='text', previewUrl='';
@@ -36,7 +37,7 @@ form.addEventListener('submit',async e=>{
   if(kind==='text'&&!description)return error('Escreva uma mensagem para publicar.');
   if(['image','video'].includes(kind)&&(!file||!supported[kind].includes(file.type)))return error(kind==='image'?'Selecione uma foto válida.':'Selecione um vídeo válido.');
   if(file?.size>APP_CONFIG.maxPostFileSize)return error('O limite por arquivo é 20 MB.');
-  if(kind==='poll'&&(polls.length<2||new Set(polls.map(x=>x.toLowerCase())).size<2))return error('Informe duas opções diferentes para a enquete.');
+  if(kind==='poll'){try{validatePollOptions(polls);}catch(reason){return error(reason.message);}}
   button.disabled=true;button.textContent='Preparando publicação…';
   try {
     const [title,content]=await Promise.all([

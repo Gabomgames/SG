@@ -8,3 +8,7 @@ Empresa: NOW. Slogan NOW: "O futuro é agora ;)". Slogan SG: "Yes, Something for
 Não faça push sem confirmar privacidade do destino e obter autorização explícita posterior. Não faça merge na main, deploy, cobranças reais, gravações remotas ou avanço à Fase 2.
 
 Use Node 24.19.0 da .node-version; Functions declaram Node 20. Testes Firestore somente em demo-sg e 127.0.0.1:8085; navegador com fixtures e rede externa bloqueada. Nunca declare teste bloqueado aprovado. Não imprima ou versione segredos. Preserve fontes, IDs, contratos e funções legadas.
+
+A continuação S01 está em docs/phase1/s01. Não encerrar a Fase 1 com regras/navegador bloqueados ou riscos altos/críticos sem tratamento verificável. Execute npm run validate:phase1; preserve resultados individuais e o commit 9445442. Nenhum avanço automático à Fase 2.
+
+Downloads do projeto exclusivamente pelo GitHub, com upload confirmado antes de fornecer link. Não substituir por links de download local nem inventar URL. Esta entrega não autoriza push, upload, deploy, merge ou ativação de lançamento; preservar o pacote preparado enquanto o envio estiver impedido.

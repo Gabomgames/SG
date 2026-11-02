@@ -16,8 +16,8 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - run: npm ci
+      - run: npm run audit:high
       - run: npm run check:fast
-      - run: npm run build
   runtime:
     runs-on: ubuntu-latest
     steps:
@@ -61,10 +61,16 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .node-version
-      - run: npm run test:rules
-      - run: npm run test:rules:founders
-      # Known S01 findings remain visible in their own security gate.
-      - run: npm run test:rules:security
+      - run: npm run validate:phase1 -- --only firestore
+      - if: ${{ !cancelled() }}
+        run: npm run validate:phase1 -- --only security-s01
+      - if: ${{ !cancelled() }}
+        run: npm run validate:phase1 -- --only founders-emulator
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: firestore-phase1-evidence
+          path: artifacts/phase1-*/
   browser:
     runs-on: ubuntu-latest
     steps:

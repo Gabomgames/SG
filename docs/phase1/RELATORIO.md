@@ -1,3 +1,5 @@
+> Documento da entrega 9445442, preservado como histórico. A continuação atual é descrita em [s01/SEGURANCA.md](s01/SEGURANCA.md), com o procedimento Windows em [s01/WINDOWS-VSCODE.md](s01/WINDOWS-VSCODE.md). Resultados anteriores não validam a versão atual.
+
 # Something Gamer — Beta 0.1: implementação local
 
 Data: 02/11/2026. Empresa oficial: NOW. Slogans preservados: “Yes, Something for you ;)” e “O futuro é agora ;)”. Nenhum deploy, push, merge, cobrança ou alteração de dados reais. A promoção está desativada. Esta entrega não certifica uma beta pronta para produção.

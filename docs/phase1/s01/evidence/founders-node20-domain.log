@@ -1,0 +1,60 @@
+TAP version 13
+# Subtest: 80 concurrent eligible accounts receive exactly 50 atomic awards
+ok 1 - 80 concurrent eligible accounts receive exactly 50 atomic awards
+  ---
+  duration_ms: 415.810755
+  ...
+# Subtest: concurrent duplicate calls cannot consume additional slots or notifications
+ok 2 - concurrent duplicate calls cannot consume additional slots or notifications
+  ---
+  duration_ms: 25.591415
+  ...
+# Subtest: disabled promotion and beta before launch consume no slots
+ok 3 - disabled promotion and beta before launch consume no slots
+  ---
+  duration_ms: 0.393868
+  ...
+# Subtest: unverified disabled anonymous and suspicious accounts do not hold up legitimate accounts
+ok 4 - unverified disabled anonymous and suspicious accounts do not hold up legitimate accounts
+  ---
+  duration_ms: 2.463817
+  ...
+# Subtest: normalized email aliases cannot win twice under distinct UIDs
+ok 5 - normalized email aliases cannot win twice under distinct UIDs
+  ---
+  duration_ms: 1.941808
+  ...
+# Subtest: award contains exactly 365 free days and updates private/public badge and welcome notice atomically
+ok 6 - award contains exactly 365 free days and updates private/public badge and welcome notice atomically
+  ---
+  duration_ms: 2.505202
+  ...
+# Subtest: transaction failure cannot consume a slot or leave a partial entitlement
+ok 7 - transaction failure cannot consume a slot or leave a partial entitlement
+  ---
+  duration_ms: 1.545461
+  ...
+# Subtest: paid reviews and refunds remain separate from the founder entitlement
+ok 8 - paid reviews and refunds remain separate from the founder entitlement
+  ---
+  duration_ms: 1.099773
+  ...
+# Subtest: longer paid benefit is not shortened and administrative revocation cannot regrant a founder slot
+ok 9 - longer paid benefit is not shortened and administrative revocation cannot regrant a founder slot
+  ---
+  duration_ms: 0.525877
+  ...
+# Subtest: corrupt counter fails closed and expired grants never produce an active badge
+ok 10 - corrupt counter fails closed and expired grants never produce an active badge
+  ---
+  duration_ms: 5.572733
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 524.320566

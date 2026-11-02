@@ -8,6 +8,7 @@ import { escreverComLimite, mensagemDeLimite } from "./limites.js";
 import { icone, coracaoCheio } from "./icones.js";
 import { profileBadges, postBadges } from "./badges.js";
 import { uploadMedia, prepareImage } from "./media-upload.js";
+import {validatePollOptions,voteIndex,assertVoteIndex} from "./poll-domain.js";
 
 const $ = id => document.getElementById(id);
 const modal = $("postModal");
@@ -244,8 +245,8 @@ async function publishPost() {
     const button = $("publishPost");
     if (activePostType==="text"&&!description) return notify("Escreva algo para publicar.", "error");
     if (["image","video"].includes(activePostType)&&!$("postFile").files[0]) return notify(activePostType==="image"?"Escolha uma imagem.":"Escolha um vídeo.","error");
-    const pollOptions = [...$("pollFields").querySelectorAll("input")].map(input => input.value.trim()).filter(Boolean);
-    if (activePostType === "poll" && pollOptions.length < 2) return notify("Informe pelo menos duas opções para a enquete.", "error");
+    const pollOptions = activePostType === "poll" ? [...$("pollFields").querySelectorAll("input")].map(input => input.value.trim()).filter(Boolean) : [];
+    if(activePostType === "poll"){try{validatePollOptions(pollOptions);}catch(error){return notify(error.message,"error");}}
     try {
         button.disabled = true;
         button.textContent = "Publicando...";
@@ -305,7 +306,7 @@ function postMedia(post) {
 
 function pollMarkup(post) {
     if (post.type !== "poll" || !post.pollOptions?.length) return "";
-    return `<div class="feed-poll">${post.pollOptions.map(option => `<button type="button" data-poll="${escapeHtml(option)}"><span>${escapeHtml(option)}</span><i></i></button>`).join("")}</div>`;
+    return `<div class="feed-poll">${post.pollOptions.map((option,index) => `<button type="button" data-poll="${index}"><span>${escapeHtml(option)}</span><i></i></button>`).join("")}</div>`;
 }
 
 function renderFeed() {
@@ -324,12 +325,16 @@ function renderFeed() {
 async function refreshFeedSocialState(posts) {
     await Promise.all(posts.map(async post => {
         try {
-            const [likes, ownLike] = await Promise.all([getDocs(collection(db,"posts",post.id,"likes")), getDoc(doc(db,"posts",post.id,"likes",currentUser.uid))]);
+            const [likes, ownLike, ownVote] = await Promise.all([getDocs(collection(db,"posts",post.id,"likes")), getDoc(doc(db,"posts",post.id,"likes",currentUser.uid)), getDoc(doc(db,"posts",post.id,"votes",currentUser.uid))]);
             const card = document.querySelector(`[data-post-id="${post.id}"]`);
             if (!card) return;
             card.querySelector("[data-like-count]").textContent = likes.size || "";
             card.querySelector(".like-action").classList.toggle("active", ownLike.exists());
             card.querySelector(".like-action .acao-icone").innerHTML = ownLike.exists() ? coracaoCheio(16) : icone("coracao", 16);
+            if(ownVote.exists()){
+                const selected=voteIndex(ownVote.data().option,post.pollOptions);
+                card.querySelectorAll('[data-poll]').forEach(button=>{button.disabled=true;button.classList.toggle('selected',selected!==null&&Number(button.dataset.poll)===selected);});
+            }
         } catch (error) { console.warn("Interações indisponíveis", error); }
     }));
 }
@@ -356,7 +361,7 @@ async function handleFeedClick(event) {
     if (card && action === "share") { await navigator.clipboard.writeText(`${location.origin}${location.pathname}#post-${card.dataset.postId}`); notify("Link da publicação copiado.","success"); }
     const friend=event.target.closest("[data-friend]");
     if(friend){await setDoc(doc(db,"friendRequests",`${currentUser.uid}_${friend.dataset.friend}`),{fromUid:currentUser.uid,toUid:friend.dataset.friend,status:"pending",createdAt:serverTimestamp()});friend.textContent="Enviado";friend.disabled=true;notify("Pedido de amizade enviado.","success")}
-    const poll=event.target.closest("[data-poll]");if(poll&&card){await setDoc(doc(db,"posts",card.dataset.postId,"votes",currentUser.uid),{uid:currentUser.uid,option:poll.dataset.poll,updatedAt:serverTimestamp()});poll.closest(".feed-poll").querySelectorAll("button").forEach(item=>item.disabled=true);poll.classList.add("selected");notify("Voto registrado.","success")}
+    const poll=event.target.closest("[data-poll]");if(poll&&card){poll.disabled=true;try{const post=feedPosts.find(item=>item.id===card.dataset.postId);const option=assertVoteIndex(Number(poll.dataset.poll),post);await setDoc(doc(db,"posts",card.dataset.postId,"votes",currentUser.uid),{uid:currentUser.uid,option,updatedAt:serverTimestamp()});poll.closest(".feed-poll").querySelectorAll("button").forEach(item=>item.disabled=true);poll.classList.add("selected");notify("Voto registrado.","success")}catch(error){poll.disabled=false;notify(error.message||"Não foi possível registrar o voto.","error")}}
 }
 
 async function handleComment(event) {

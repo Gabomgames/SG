@@ -1,3 +1,5 @@
+> Documento da entrega 9445442, preservado como histórico. A continuação atual é descrita em [s01/SEGURANCA.md](s01/SEGURANCA.md), com o procedimento Windows em [s01/WINDOWS-VSCODE.md](s01/WINDOWS-VSCODE.md). Resultados anteriores não validam a versão atual.
+
 # Executar a Beta 0.1 localmente no VS Code
 
 O projeto usa a V69 fornecida, com correções locais. Não é necessário procurar os commits antigos: eles não foram recuperados, por decisão do usuário. Há um histórico inicial novo na branch codex/v69-phase1-local.

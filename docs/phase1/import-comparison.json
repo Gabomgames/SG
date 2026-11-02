@@ -1,18 +1,27 @@
 {
   "modified": [
+    ".gitignore",
+    "dashboard.js",
     "admin.html",
     "firestore.rules",
     "admin.js",
     "package.json",
+    "events.js",
     "firebase.js",
+    "feed.js",
     "config.js",
     "verification.js",
+    "playwright.config.js",
+    "feed-composer.js",
     "call-now.html",
+    "package-lock.json",
+    "dashboard.html",
     "scripts/verificar.mjs",
     "scripts/build.mjs",
     "tests/firestore.test.js",
     "tests/v67-regressions.test.mjs",
     "functions/index.js",
+    "functions/package-lock.json",
     "something-gamer-api/src/firestore-server.js",
     "something-gamer-api/src/admin.js",
     "something-gamer-api/src/firestore-store.js",
@@ -29,5 +38,7 @@
     "node_modules/",
     ".local/"
   ],
-  "old_commits_recovered": false
+  "old_commits_recovered": false,
+  "preserved_base_commit": "9445442223cec3ce2112e889969f8239dbf4eab3",
+  "portability_fix": "Remove tracked cloud-specific node_modules symlink; install dependencies locally."
 }
