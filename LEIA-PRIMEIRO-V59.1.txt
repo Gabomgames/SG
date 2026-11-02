@@ -1,0 +1,12 @@
+SOMETHING GAMER V59.1 — BRAND / FIREBASE PATH FIX
+
+ALTERAÇÕES:
+- A seção institucional da NOW foi removida do corpo do index; o acesso institucional fica no rodapé.
+- O link NOW foi removido da navegação principal do index.
+- Página Sobre a NOW refeita com fundo preto e paleta coerente com a marca.
+- Foto do fundador substituída pela fotografia original fornecida pelo usuário, sem transformação por IA.
+- Rodapé refinado e link NOW | Saiba mais mantido na área correta.
+
+FIREBASE:
+Não execute firebase init neste projeto. O projeto já contém firebase.json e .firebaserc.
+No PowerShell, primeiro entre na pasta que contém firebase.json e só depois use firebase use/deploy.

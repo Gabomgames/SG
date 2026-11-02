@@ -1,0 +1,1378 @@
+[
+  {
+    "path": ".gitignore",
+    "sha256": "093a6a795f81c1ac028b731040b1705a92cac1a95101b74af09d821c9e0b8f65"
+  },
+  {
+    "path": "app-shell.js",
+    "sha256": "a33ca4382647785829f9510cf79c14beb40c0478467d2d6384c78b724c19821f"
+  },
+  {
+    "path": "robots.txt",
+    "sha256": "b1ac79c358509c6b210d2db32502b461aaa49d9e4c61ee270e72226a98c692dd"
+  },
+  {
+    "path": "RELATORIO_V60.md",
+    "sha256": "5ccaa9b0f1d3a4da04183eb75570298819143330c9dac263a45c3d02d9f6b7ba"
+  },
+  {
+    "path": "dashboard.js",
+    "sha256": "6510f8e38f28aa2e5a55025d6c34ee2350ebbcfd0a06987a99a473a59c1ffab6"
+  },
+  {
+    "path": "v56-suite.js",
+    "sha256": "be8bb878f4d91bb033f6c8ac15378b29de8c6768d4e3154615622e430f31b0c4"
+  },
+  {
+    "path": "admin.html",
+    "sha256": "b652c1bc85f8ed57d47fca0ea5bb2d8f4494afce11cb89dc8a08a2f03c769f3b"
+  },
+  {
+    "path": "RELATORIO-IMPLEMENTACAO-V59.md",
+    "sha256": "81513e3d69dfca80dfeea18c7207fb2366886a42f979b5e210baad124a386520"
+  },
+  {
+    "path": "PUBLICAR-V58.2.ps1",
+    "sha256": "8945295329c455d117f1a0b7aacdb4bffc66bfecdf1eb745f0dbb881960e36f3"
+  },
+  {
+    "path": "sg-v66-market.js",
+    "sha256": "100a5afaffa862cf08ea0d465c3d0e53dfacca55b88d7b323df1352056778bf9"
+  },
+  {
+    "path": "v53-pro.js",
+    "sha256": "bf351f4bb63c60b13ad59f20d548ce9f3fb205a088b9f8c75fb36661b2009f56"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V69.md",
+    "sha256": "4199fd53ced123272ada7c2b705e148c970826b966bf4cd734fe132aeab49014"
+  },
+  {
+    "path": "PUBLICAR-V50.ps1",
+    "sha256": "cce38e64f51f32f6342433391c637cab121e363cd5297380bc3cd0e33e436b54"
+  },
+  {
+    "path": "sanction-ui.js",
+    "sha256": "542034f3321d09fe07cb1aafcf3171df8f28cc51ecf2abc23a168c3f8b08ff15"
+  },
+  {
+    "path": "sg-v65-ui.css",
+    "sha256": "53c90a8711bcb3940b11ea82ded9d59fef382b255189313e034d9bb290bccbd8"
+  },
+  {
+    "path": "SECURITY.md",
+    "sha256": "6ae9a2a7f56f65f183cd6ef71b3fc4562614940276e7a239595b7a76dd2e3374"
+  },
+  {
+    "path": "storage.rules",
+    "sha256": "85d9d8745b0470f1d7c5d49563d7f50d5f3a75c44e54bb70d8816c2b4fbdba02"
+  },
+  {
+    "path": "icones.js",
+    "sha256": "a1395f791bac407b6ce6e5e6125b4f02df91a69b9f4f22f7ae142533369b5904"
+  },
+  {
+    "path": "sg-v66-account.js",
+    "sha256": "5dd0899a6953867e5f9791104b3d8557dca9746a118b1489f5e16225764aac07"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V54.txt",
+    "sha256": "cb811d754d574c9b3eaefdc1e6cbfb40cfdfaccdbcb49086416f7d4e9939dd23"
+  },
+  {
+    "path": "sg-v67-password.js",
+    "sha256": "f01f1d18ae3cb651ca8e2cc29834ec04a80977347a38e505a503201da337f841"
+  },
+  {
+    "path": "offline.html",
+    "sha256": "e153cb96167a0030d15e0ba2a1402c4cdb9a67fb30448d793d776056e541f1e8"
+  },
+  {
+    "path": "sg-v67.css",
+    "sha256": "858b8c9ab4f93100aa9f78782c0c85220504b0e9851fad2db6a37104f4151f99"
+  },
+  {
+    "path": "ecosystem.js",
+    "sha256": "50382e391ffd496bcdd440a42a6c00a3efd81d04fca4f1b4051c9015ac9bc249"
+  },
+  {
+    "path": "reports.js",
+    "sha256": "708c30ae2e0ba55996d558028034e4c76b8b7f72f74c53ac33a7f62c0b4a36d1"
+  },
+  {
+    "path": "now-telemetry.js",
+    "sha256": "4b80722d988e71610a49401c2936b418f965831eebdfefe657afcfea77603ee4"
+  },
+  {
+    "path": "index.html",
+    "sha256": "976feee0c80445f8c9aede796622734dfb83761c4b82e2a8b841a2795d209e00"
+  },
+  {
+    "path": "v55-professional.css",
+    "sha256": "deedf63fa451987eb524d09e85273f16df2f3c931ce34f0b6ed0c383880a202f"
+  },
+  {
+    "path": "legal.js",
+    "sha256": "31cad904f625b16133fdf34a80bc43f9643f682fcfffe6bfcd5830604d034779"
+  },
+  {
+    "path": "privacidade.html",
+    "sha256": "633b9659302b28f475f2c16efcf95e11301f5eced4149d81c0f8745a8ae37208"
+  },
+  {
+    "path": "seguranca-web.js",
+    "sha256": "f7c676746d7ce8f42bceb39e7ff3ea7a9283690d5630f04f16d08357f37b8aa0"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V57-CHAT-CALL-PRO.txt",
+    "sha256": "e41ea079bf3b5a9a1bc1bdff85f1c9a616a6edaf34b3a2b3d710b0a5797ee0ef"
+  },
+  {
+    "path": "safety.js",
+    "sha256": "299c6cb88f2ffdffae7667b79bdb9d88f01252bf4ea801b3207458cf4269aea5"
+  },
+  {
+    "path": "firestore.rules",
+    "sha256": "b0b773d5e66db57ac1f7568b47e293115f0dee7081fa8db2faa94f4923979b2f"
+  },
+  {
+    "path": "admin.js",
+    "sha256": "2cf6cab19f792d080bdc0bd251e244ef0086a9e90f01c6d46a6e7b80bc1dcad1"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V59.txt",
+    "sha256": "490e0147818c0910565e7b013b0c6bfdd6e79063f3491f10f2830a8bd6445b04"
+  },
+  {
+    "path": "social-studio.js",
+    "sha256": "9266557f4fe18202ce2432e556af7b297b328192068e7d83858b86555b187d98"
+  },
+  {
+    "path": "PUBLICAR-V57-PRO.ps1",
+    "sha256": "367051e2e28699a4c721049e8f9fe7be52d5fb7369e80135acb3568d45d0d17c"
+  },
+  {
+    "path": "regras.html",
+    "sha256": "e27a64b8dcc5aa2e98f0108c73437ed0856f680e3a05effbb1344ed6cc7ec872"
+  },
+  {
+    "path": "package.json",
+    "sha256": "d0769e9c6e1e6ffa082618debae9262ee64a02fafd1339ead450a99d7be42d35"
+  },
+  {
+    "path": "404.html",
+    "sha256": "69314898ce8134e8361de7f42ae1fcb69b6ca59c62875c3104c43baa44bef88a"
+  },
+  {
+    "path": "chat-v60.css",
+    "sha256": "33a7b0b1ddf81cb2808d3306d524173526f12a0a3eb7a6d199156b12b9ff09ad"
+  },
+  {
+    "path": "aceitar-termos.html",
+    "sha256": "a2fb1604217d33f08ad96ff0c508cbee356f1e38d51b95bc30beb8b6025f1c59"
+  },
+  {
+    "path": "v57-pro-complete.css",
+    "sha256": "fd68dab9ecc1bc30eac284f43398b7a92aff627a299f8654d6acb68cad7a4650"
+  },
+  {
+    "path": "CONFIGURAR-FIREBASE-E-PAGAMENTOS-V59.1.md",
+    "sha256": "0bd84138ef06bbc5d84baec8256381c270f920dc295edc6466a6959f56ff2e1f"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V43.txt",
+    "sha256": "63c53295312575b2da764002de05a250f4e56f657c20cf4d83dd0ed41a565f26"
+  },
+  {
+    "path": "theme.js",
+    "sha256": "c93ebb7247f12d32d03eff3383298ab0eba6bc3eaa6be3a8536d3e24108bb627"
+  },
+  {
+    "path": "feed.html",
+    "sha256": "dc431ca670e2df65e3481d45146da0f17f3710f340be67d8f20e3890b01420e8"
+  },
+  {
+    "path": "verification.html",
+    "sha256": "35775e7efabae3fbefe3a4bc0dfc99532d74bf7346d396daf7cec43382e4a80e"
+  },
+  {
+    "path": "sg-v68-call-landing.css",
+    "sha256": "124072ebfd6050d04362a640701b6b0765d96f041829227be7e3e852ed212aad"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V44.txt",
+    "sha256": "821cd9c00984c9336917941a391d943b2a4abf326034d2ef1928f8ddfad16bf6"
+  },
+  {
+    "path": "sg-v65-auth.css",
+    "sha256": "83b756912ac597cf2827ee5c5596ba816930868469453c3d118dfbc3fa4e6489"
+  },
+  {
+    "path": "sg-v66-mentions.js",
+    "sha256": "b59f6f4c03082ceba975b15f7384f8a890e03f5c0d15a159be5ce117b8f1a134"
+  },
+  {
+    "path": "aceitar-termos.js",
+    "sha256": "546a85acb69deef69527e7342492415bb9b7b06ee8e68c690c38d39b7bc4ffc8"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V58.txt",
+    "sha256": "0333fa2ea3c08b347ddbce237c95d433a8ca172af7c03fef48bf3f4b87d5bf52"
+  },
+  {
+    "path": "media-upload.js",
+    "sha256": "dbb9d2b9acd95459109f2c17faa3b633957d18a5f6e40c624b01ab484c10f65c"
+  },
+  {
+    "path": "social.html",
+    "sha256": "77a1c0729bcd6b8c84a6193bdaa36fd8614d8d3fa940bb153211a24f7b0ad2a6"
+  },
+  {
+    "path": "LEIA-PRIMEIRO.txt",
+    "sha256": "4a78f06a5f0f01cb0a2ce425ced0c08560eefb6ce46a50d48d617e17843047b2"
+  },
+  {
+    "path": "badges.js",
+    "sha256": "37e477b26076d77310a02fe976f8f743fd7aada8ed977ba139c260c7f79823ee"
+  },
+  {
+    "path": "sitemap.xml",
+    "sha256": "a6c69af4ca0de6ecc96a5d870c3cca084434c82285c6052e6917f93c17bba820"
+  },
+  {
+    "path": "events.js",
+    "sha256": "7d12a6a2a22a803bfe1ca9f817093fa22a52281761f758832a16ff882adf1680"
+  },
+  {
+    "path": "moderation.js",
+    "sha256": "d2473dc93c63d8f18cb0ba09b5b9e1a724fbec1710578e26bda69b79182c1823"
+  },
+  {
+    "path": "chat.js",
+    "sha256": "cabd49a235f92695fe8042d60133229ec3f6bd256bb4eaa2cfab85d5bb19797e"
+  },
+  {
+    "path": "edit-profile.html",
+    "sha256": "0117c07441b4ce1e33e0d603e5c520b5e67a0758387809c31f3bc6d626de1d02"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V66.md",
+    "sha256": "d3bbd1b0a90ce2dbaf213dd18b65559799ec9e70569534ae3cfa8825e203bcf3"
+  },
+  {
+    "path": "v57-chat-fix.css",
+    "sha256": "fe6c5b2b1cb702c3806b9f514d173855e0e138d2b9de97b2457a72e0f55ddd2b"
+  },
+  {
+    "path": "about-now.html",
+    "sha256": "656d622e2d46be7fd56fbe2cd669533c516c6682a282fdd5d0bf1e3a9f91a829"
+  },
+  {
+    "path": "profile.html",
+    "sha256": "1f79728e8a017db1e2f7c1fcb2575edf5273225e41590918fe4b36dc4ed865d2"
+  },
+  {
+    "path": "install.html",
+    "sha256": "a46360eed0af03b27a87c0de1a63a40d47c41661f98c3a85795126ecf885ec57"
+  },
+  {
+    "path": "steam-callback.js",
+    "sha256": "d10dfdfe6ddaee9b642cd3927bfd3f697b7e52b97fbd9505519721d3e3dc7f2a"
+  },
+  {
+    "path": "firebase.js",
+    "sha256": "0b83e54d4bdf10c0a376518bb94594235df00520225b340f962cf554d255cf0a"
+  },
+  {
+    "path": "app-theme.css",
+    "sha256": "b17be6fcda369ee0f5da0ec7e31229055e16f972c870b18578630e01cbb10d3d"
+  },
+  {
+    "path": "now-lead.js",
+    "sha256": "ffe98a32576ca3aefdc255604aef623122cc121b3fd40854299fb28a38916dcb"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V53.txt",
+    "sha256": "8b10c75cda47eea359d929d8c0a4ac33c8b09845923ab95f83177fe4dc3bb846"
+  },
+  {
+    "path": "README-STEAM.md",
+    "sha256": "ce4804f57639448a77175c6d7960bf57a2769826c7ed5bff76ae858fc3d64909"
+  },
+  {
+    "path": "CONFIGURAR-MAPA-NOW-MARK-V59.md",
+    "sha256": "457bb7228e62a20450a4f42cc9a17d4ff65f97aa9d8809907cc17a3b6154705d"
+  },
+  {
+    "path": "v53-pro.css",
+    "sha256": "4e9bcd140b6d1e17ca4c3d713fcfdc5ecfae5af5539659fdc45e149098a4a7fa"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V48.txt",
+    "sha256": "2bcb8ab5a6b3f92a62eb9e957864e1ef8aded80fb202f321eeb8ab86dd4d0d76"
+  },
+  {
+    "path": "community-tools.js",
+    "sha256": "7e5b3eee838b8fc38be63f94e49f062d398a547c2e2410bbcbba0267a2edc82c"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V58.1.txt",
+    "sha256": "5e071db2ec82c962caa7283cb8ffeb429e32f38eff92b020f2a9c6f5a1286399"
+  },
+  {
+    "path": "landing.js",
+    "sha256": "a8d21094c050eadc394184201888b2d3e6b23a808d45f47fcee48c006de83fc2"
+  },
+  {
+    "path": "monetization.html",
+    "sha256": "adc21d48e5734d5c5f230c1b29c9dad9ab579c736f6effcea11f8c9fa5f0c521"
+  },
+  {
+    "path": "admin-market.js",
+    "sha256": "4f57865601a50a48dc29aeaad172f1c4978b19e996f74bfc6f8d442f2c05a697"
+  },
+  {
+    "path": "sanction-gate.js",
+    "sha256": "bd4fe473e111f1c85bfc3b2640a81482b34895cc8202a0858a66a530b42daf16"
+  },
+  {
+    "path": "feed.js",
+    "sha256": "1897f052a1599996b87826d428673f06b11a48090a54d8097b298de1c51d6da8"
+  },
+  {
+    "path": "ads-pro.js",
+    "sha256": "4cf7729130d2fe5684f25985bfb400aa9a4a589455dc55d967b613f240fa7cef"
+  },
+  {
+    "path": "PUBLICAR-V49-GRATIS.ps1",
+    "sha256": "4cfe4ff48de3280c71d37e6e23020f49bab058f70b800b38fc3ba55d3a504732"
+  },
+  {
+    "path": "PUBLICAR-V52.ps1",
+    "sha256": "1241284b07a949bb63d30af2acfb85d1ee851794ad1541b9d05cc7b1ec14a61d"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V68.md",
+    "sha256": "6c45b0fde26ac4c6419b6fc9da72d04dda78447cc6b9fce7e57813a73d9dc24b"
+  },
+  {
+    "path": "firebase.json",
+    "sha256": "e68447cd845d6024ce821aefb74dabf9bbf57f58c7c16f7e854cda6747d54e97"
+  },
+  {
+    "path": "PUBLICAR-V48.ps1",
+    "sha256": "a447c4281f5fd00eeb2f40dde6dd788b5e28ca73cea85397b98b5c5dc177e536"
+  },
+  {
+    "path": "steam-callback.html",
+    "sha256": "b2f63ab915b62e02be5c185c740290ec6d1f7bba58d0d53eace40f6b5cc92182"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V65.md",
+    "sha256": "ac9472499d1a1f1cadbf96ae5c5cd6ac4f5ecb1361273c44602833b07ac04152"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V45.txt",
+    "sha256": "8218bacf67fb046254b47a467514b5caa615bfd365c6456f5b2d940fda310f9f"
+  },
+  {
+    "path": "market-v64.css",
+    "sha256": "69fe6cc3aac9b743a3da7477496f097df8251433902deed87a5d721f34c410dc"
+  },
+  {
+    "path": "privacy-controls.js",
+    "sha256": "3652d9de1d1767ab87c38d28ebfb7052b6b99c9a49e0b1c735bf4ac7faacab72"
+  },
+  {
+    "path": "RELATORIO_V62.md",
+    "sha256": "08adc70fba9547838bebce56e887e25b63a460840de0fb4292988a7962c9265d"
+  },
+  {
+    "path": "sg-v69.css",
+    "sha256": "5cc33d33e3081d9a1b49279510e0e43ec8ab3238d302948482b610f35a3989b7"
+  },
+  {
+    "path": "subscriptions-app.js",
+    "sha256": "e96f8b12aeb26959ae2e1451e7f1728e428dbce8f7de8eaac1278ae5e220be52"
+  },
+  {
+    "path": "config.js",
+    "sha256": "ab61830046bbf8b09ddefc7ba8fa94266fd6ca46446fd22bca985d69cfdf69e3"
+  },
+  {
+    "path": "events.html",
+    "sha256": "81430a981181eca70aaea9a0273ffb623a9ef7472b7b35b3484bc20580596b26"
+  },
+  {
+    "path": "CONFIGURAR-PAGAMENTOS-V57-PRO.md",
+    "sha256": "0fd677a87faaf0cc17ca9fcfa20f4dc03b27adba4fcae4e6ec364e1b7c7285ee"
+  },
+  {
+    "path": "admin-payments.js",
+    "sha256": "a6d6d785965c0107228879d10e6dfe56020b5235ca54d78a48d3ab516546b7c3"
+  },
+  {
+    "path": "verification.js",
+    "sha256": "9916cba2482f3ab01420d228e349bed691fb6065ef314758a86c76a629b56580"
+  },
+  {
+    "path": "marketplace.html",
+    "sha256": "8db5540089e173e297cef7ad7019e92def8422e28443ed7c3f86005fcbfa2818"
+  },
+  {
+    "path": "playwright.config.js",
+    "sha256": "b149471fa8def0c314e3f87aa76ace3d2080414ced9777b0fd2b07e74775410f"
+  },
+  {
+    "path": "communities.html",
+    "sha256": "5c535e7e81237395f5afe4fa1c1f3d8f6cd671e79dd9c0b538ab8b7460a66c23"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V56.txt",
+    "sha256": "06e5785492c62d8898aceb28953d03d626c51f4715c0764198712253c97f1980"
+  },
+  {
+    "path": "manifest.webmanifest",
+    "sha256": "c2fe08c825c8ef65e8bc6bb3512ffe8383e6f810e2ef97d9ea6b4dbbccba6d22"
+  },
+  {
+    "path": "CONFIGURAR-RECAPTCHA-V2.ps1",
+    "sha256": "fa2fa3949be46ec16912f1ddfd34ca2b93a4b6d7b4bc38ac03de8bdba90800d1"
+  },
+  {
+    "path": "now-lead.html",
+    "sha256": "2c1a9c341e17c34ee4bce0bf919fea833b0e94e55d1f6ed61a022b1c65e41e0a"
+  },
+  {
+    "path": "v59-professional.css",
+    "sha256": "7b6bd295fb05dedd2a42c6da689a3973951c6880d222b4349ee40d669c9571fe"
+  },
+  {
+    "path": "market-app.js",
+    "sha256": "f912927302dcb6ce1311f369e3e3d1daa03fc1a727d3ebad1c5ce56ef7b59676"
+  },
+  {
+    "path": "v56-ultra.css",
+    "sha256": "fd8e2c22383f5bbc0b6ab228ceea4fae3afd4dba19884655d07b52692b5ce938"
+  },
+  {
+    "path": "market-domain.js",
+    "sha256": "325a26fe63870ee9ff9306edb7409fd2eb9d99e7198c4b8e1e9d85ce79878a26"
+  },
+  {
+    "path": "edit-profile.js",
+    "sha256": "1d48ade28e988a0f6fb5cf60f028d64bed837c6f0a518ef971e4d11da8e5e857"
+  },
+  {
+    "path": "landing-v60.css",
+    "sha256": "f8904a670304ef84aa2695179dffc486c5159c18548f5dd98e07eb22d23769ae"
+  },
+  {
+    "path": "feed-composer.js",
+    "sha256": "138c8f24e47691b2ea16405ff48e870f96882b13976fd5a90c8132c0f8fac82f"
+  },
+  {
+    "path": "PUBLICAR-V59.ps1",
+    "sha256": "ab10d7ab1fa9c6dde4bda4cd93605b60303db83ab7ef3fc2a50bb7e1c1b5294f"
+  },
+  {
+    "path": "voice-room.js",
+    "sha256": "d209152c69554313c57e4d5843ae68f9d9bcb4a25cf1445910c730320b80b94e"
+  },
+  {
+    "path": "LEIA-ME-V40.txt",
+    "sha256": "29b7d04bb71dffc6698ed10ecf598f67751e54cfd0fc816d72e1e30b91bbc43e"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V46.txt",
+    "sha256": "0c0dbd762003a19a9df23748ce0ab6f116864fc2d9fe2c13e8817f1b4ba6848d"
+  },
+  {
+    "path": "social.js",
+    "sha256": "7ae01895b9c073bf22e0ae847e34bf805623dd0f16e72b1a88b4061823d7e240"
+  },
+  {
+    "path": "CONFIGURAR-JAVA-17.ps1",
+    "sha256": "33dbac0996f0dd859f6e9568301943ac8d379560c6195bb6fe6a13ff7d519f8b"
+  },
+  {
+    "path": "v57-call-chat-pro.css",
+    "sha256": "9b7c4983dd581b3ff650afef9a6b6691c96e3cf724c22fc5a78fb6f5dcba495f"
+  },
+  {
+    "path": "sg-v66.css",
+    "sha256": "0b0de2a6d444fa0c8276ec7515fe61995810565fcba986b20e476d6e5b18437d"
+  },
+  {
+    "path": "CORRIGIR-JAVA-ANDROID.md",
+    "sha256": "31c4b6de7157a00b42303cb482f67b27cd289396545f914255615b2c9acbcb52"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V52.txt",
+    "sha256": "a675a86b7e1c5341063f65d21356540528202ddb66b74203372dd8acdb41c807"
+  },
+  {
+    "path": ".firebaserc",
+    "sha256": "ee74c711b24e7baf293a08558916f861cd8caacf46462f3a243c914bd788bf98"
+  },
+  {
+    "path": "sg-home.css",
+    "sha256": "d0aff3744c5d3c21e4c118fc95e40bedecde2fff2b265f1a4f77aa92e58e584e"
+  },
+  {
+    "path": "profile-v64.css",
+    "sha256": "da641cb0e1666fc8d81148e51ac3a81d476d2e394e2331c1e0c4cc4f9a462c12"
+  },
+  {
+    "path": "CONFIGURAR-RECAPTCHA.md",
+    "sha256": "a0a2326f468eeec77aadb39d2fc900e1c2dab2a04f76a54490adfe03ad15bf31"
+  },
+  {
+    "path": "call-now.html",
+    "sha256": "e8c58c6a51dfb7f27e683cd96786b2c10b0762b5c24f2601703fc6807e734158"
+  },
+  {
+    "path": "limites.js",
+    "sha256": "db7244783b68ee98f1a589451855ba1c287f2405991627b12948eca523d8c348"
+  },
+  {
+    "path": "ads.html",
+    "sha256": "d1a311390c5ba22d50002a2990f6f8b09c57665774f061d98bb723d166be3adc"
+  },
+  {
+    "path": "script.js",
+    "sha256": "49ef9badad8dbb82797863a101c6e3570eb12542a80aa0919d0a2c7aeb9219d5"
+  },
+  {
+    "path": "login.html",
+    "sha256": "ab05c8c57ea59a9e23670c73316506bffb0b635a8175c0e9410da14d529f6ce5"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V51.txt",
+    "sha256": "dca068cccf3109872d5ffe9608f0b16f73a361fbe399f61b716d5523b861905c"
+  },
+  {
+    "path": "offline.js",
+    "sha256": "b23b0e4e3c9cf22a8a5f1a4a74019e53f7b0f2ff3d4d3f6b8fac089002e4c4d7"
+  },
+  {
+    "path": "api-client.js",
+    "sha256": "8bd1d2f0108c4633ce2b28cf2606ab4a1caf619d8a3e1d3048ada01f1a34e56e"
+  },
+  {
+    "path": "communities.js",
+    "sha256": "a0d889096a91cdcc921c4eff40180264a59fcc9f4107525fa8731fb5bdcb6fdc"
+  },
+  {
+    "path": "BAIXAR-PARA-MOBILE.html",
+    "sha256": "9497b9d5f567e00b959bc81741d1422a197c5e13c1032c16c21c50121cf61f9f"
+  },
+  {
+    "path": "admin-social.js",
+    "sha256": "80cbfdf9ab80546d3c879346778d6b58d782d140dc544c93576dd964b5ce8b2a"
+  },
+  {
+    "path": "termos.html",
+    "sha256": "97ef9f5521827c9346d1fd4412d7b8be729c02d152a2fa3707fb08c2a7cf728f"
+  },
+  {
+    "path": "account-switcher.js",
+    "sha256": "be912d0e3577f6264bacc175fa2787f15b38b2881458a8d1d53f8490da54b5db"
+  },
+  {
+    "path": "PUBLICAR-V56.ps1",
+    "sha256": "21fa6f06ffb2a2ab5da012bee46de3b32b50dc25bbcefe92a19f37c6cba4a2cd"
+  },
+  {
+    "path": "settings.js",
+    "sha256": "5178b43ba90b6e3b0e0bccf05ca7dbb57242f32d53e519fb56e27ff4726fd8ba"
+  },
+  {
+    "path": "tutorial.html",
+    "sha256": "7f6118fbcb32a2b25268e2062ff34217a8ccb44c55e70f11f4929f226c4c88ae"
+  },
+  {
+    "path": "AUDITORIA_ATUAL.md",
+    "sha256": "4ed8017937574694dd540218d59b88e165be4e97cb0393eb4822db3f4b67641c"
+  },
+  {
+    "path": "CONFIGURAR-NOW-ADS-V59.md",
+    "sha256": "7161bc5c4c03d4737e166fb55e577bd4dd7fb3c31d8d95eefc06a39bc4e1ff6a"
+  },
+  {
+    "path": "style.css",
+    "sha256": "9b07413330efbc162c24263f77d0c50c9b578b4f8b84bf7ca12442d4e8594b36"
+  },
+  {
+    "path": "account-switcher.html",
+    "sha256": "51c138f12ea8084f2c54fe446240907b7d4b8a450055178f0a3149e6cd23a3c9"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V58.2.txt",
+    "sha256": "278deb432cb76db43496ecb5390d69d968c801c291b54df9c09c6fa60e2fbfe7"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V57-PRO-COMPLETE.txt",
+    "sha256": "ff0b2b3a0215c0691ee4ce4e243771831ec22159e101173cb2301fc8f4e29a42"
+  },
+  {
+    "path": "professional-ui.js",
+    "sha256": "cf2f594918fb3cd71085f2a1dfa12f107cee0a1e4863748cb504915be9ccee6b"
+  },
+  {
+    "path": "CONFIGURAR-ADMIN-SEGURO-V58.2.md",
+    "sha256": "d5315fdf7df11e8dc6790be5540cfc4d66fe0a2bbd5cd365d3972417fb040d70"
+  },
+  {
+    "path": "companies.js",
+    "sha256": "7296cb7e39f35d3ae197c79d04f4e0a7f29349a0b273395c6a31c70ba3812e27"
+  },
+  {
+    "path": "call-sfu-client.js",
+    "sha256": "d88e339b31c91d23f7ac4bf78553185d3b811961e6ba3f75624f1ebe77382a1a"
+  },
+  {
+    "path": "home.js",
+    "sha256": "f3a8e1a7ac1a0c05dc89c81118671bfa18eea3afd8b4d3db0ca240e8d19e2481"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V42.txt",
+    "sha256": "1961039b3416f0ecf6415d81f9ce83dd8889be6d06a60d16b397b688fe7b3299"
+  },
+  {
+    "path": "sg-v68-app.css",
+    "sha256": "feb51e945df81020f5005ad2f0d5a61faa7f22e9363128699bdf2380b59d2d32"
+  },
+  {
+    "path": "download.js",
+    "sha256": "a89831eaf3c82ca7bf6fa37c4ede725085919ef37c4690b880a0565a7b157840"
+  },
+  {
+    "path": "experience.js",
+    "sha256": "90c3b3e1b73c9f0192c684f37aedb1e01ed5a021f5ba89dcb5caa0b623a5daac"
+  },
+  {
+    "path": "firebase.test.json",
+    "sha256": "002e240b8e19ad4b4f5fe01b1c1cdc94ce85362cf6df662e7c418d73213db2dc"
+  },
+  {
+    "path": "sg-v65-shell.js",
+    "sha256": "d9f402082471cd12fdac30aa3d896cb8c2e69f75adf0242a4205d5c2a8f66719"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V59.1.txt",
+    "sha256": "02ec5b78e9306625f9517a920b34a8dabe33432015962e4c7b14981f791a0f32"
+  },
+  {
+    "path": "install.js",
+    "sha256": "6a64361faf1de327e19766085073823d04d73a1614c935e981c20ebfc0516188"
+  },
+  {
+    "path": "app-polish-v58.2.css",
+    "sha256": "ad0ea92a2504fa7c07e061faa7061acd09a024240cef21857b2102163c1e637e"
+  },
+  {
+    "path": "service-worker.js",
+    "sha256": "6e765e1e0bdb3930e0e30925498b25fbfa2407274a9cc89b0b397a00a60d44cb"
+  },
+  {
+    "path": "build-info.json",
+    "sha256": "afe597bb234a83327ff54f44fb4471c9a593fba033d819c4ec4e60af0ac9ed1c"
+  },
+  {
+    "path": "profile.js",
+    "sha256": "801d110051d6094645bbafb07a22e362486b6fdef64c7800069daf47dae42d4c"
+  },
+  {
+    "path": "tutorial.js",
+    "sha256": "1736ff85a327d2ce11aa14faf45dcb3a798f93763f22ad56b6966edbb4a45452"
+  },
+  {
+    "path": "register.html",
+    "sha256": "737d783381d0322466c8f2cca350242706bce675966e02961deb72218a9ee9ad"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V47.txt",
+    "sha256": "f65c9c44a5bfa98d1e120e4de62a48e0d537f2e8616941092818cdae72c4a439"
+  },
+  {
+    "path": "market-map.js",
+    "sha256": "2413d155601dfa37de4a6c887194b4d15150b18865897298ff1e8ced286b4087"
+  },
+  {
+    "path": "PUBLICAR-V51.ps1",
+    "sha256": "b68d20866644f7e22c4b4856f9bf93952370faa92cfe730981f27a3a55be4064"
+  },
+  {
+    "path": "v58-chat.css",
+    "sha256": "874f7ace4d1f6008959860e29f70ef47d03d78d67b69da7e83f3acc0e8677429"
+  },
+  {
+    "path": "audio-settings.js",
+    "sha256": "d1c7c6288642f81f6371049556542bdeff923d0b2dffd3924c031a47026a98a0"
+  },
+  {
+    "path": "BAIXAR-PRA-PC.html",
+    "sha256": "49a91c9b00481a56aa3111faab84f1dd4b92ab8a9f530014d85ca09409e423d1"
+  },
+  {
+    "path": "professional-ui.css",
+    "sha256": "8e092e52f5e2bf44bf96b319a0f4fac5f9353a4423c75e327cc129ef51c7f0d5"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V55.txt",
+    "sha256": "12280eb3a3ef05697e54fb3f3b9193e8a8d54cfe6b692c0ae39be0c34cd22252"
+  },
+  {
+    "path": "CONFIGURAR-TURN-V57-PRO.md",
+    "sha256": "3b9410ceca8e203f7ec5d62a17e1217a3b9b5c6aac678a45a7bcd33b7ca648a9"
+  },
+  {
+    "path": "RELATORIO_V61.md",
+    "sha256": "4cf1bafdd93118caa00bc2d3b8928f67cebe20ae862a80177663b0271ecd466c"
+  },
+  {
+    "path": "ads-delivery.js",
+    "sha256": "81bafef5748a4e28aab72d3d2f1bc8749b9a8710917254159701b9d33568bdde"
+  },
+  {
+    "path": "support.html",
+    "sha256": "a97e51f0e51395fe8ce98a18cfd78e255306b1241201c5c79e81963cebc2e329"
+  },
+  {
+    "path": "design-system.css",
+    "sha256": "f3ed5d37230e76be18c4fb9d4002a02fca658f35fb69601cb710c0f9c332eb27"
+  },
+  {
+    "path": "support.js",
+    "sha256": "b0aa3a2c42609d8812487775795b993c924c6dbee4f906cdd06e2e0c6b6902d7"
+  },
+  {
+    "path": "package-lock.json",
+    "sha256": "0d0b59e84c9ee05a4337b36ca7c8e6a49d28c045c4e0aa807f31997896936319"
+  },
+  {
+    "path": "v58-moderation.css",
+    "sha256": "926f37cb2558d65001f4c36061c42f8cc0f963d30ec8c80820333aa5544b9263"
+  },
+  {
+    "path": "sg-v68-home.css",
+    "sha256": "323a7a41eb1bc12e0c161762e6b02414c0b2302a7f2d457af1f6440c414fd909"
+  },
+  {
+    "path": "i18n.js",
+    "sha256": "602f659ac1458e77b8d97244b7a9d8025eb593aa1044b7f947fc331e54ecfafc"
+  },
+  {
+    "path": "sanctions.js",
+    "sha256": "d33439620313c32c8a13719c0aae7b4ac2990722f3384f02b780735df7545ace"
+  },
+  {
+    "path": "v52-ecosystem.css",
+    "sha256": "671cb5f18d47877a2618aee64cc06d14326f4f65a1f8d56e83953df6f6cd47c2"
+  },
+  {
+    "path": "channel-tools.js",
+    "sha256": "5c075157c7e11b61e40a9b36a3004048e970b5c4627aaed30f9bb2866ca8e706"
+  },
+  {
+    "path": "firestore.indexes.json",
+    "sha256": "0dd95ac8488f4b5bc21b8d7f550e1203a6028596efb88da5293a5bdc9d923e34"
+  },
+  {
+    "path": "calls.js",
+    "sha256": "818afab04a0d9fad7484ffd398576f04c0ebb4e4deb3ec8376b73b2ce5520eba"
+  },
+  {
+    "path": "sg-v651-repair.css",
+    "sha256": "201d0e58ae732d9f43512cb4d7a360595d8bdbbd43246c23ecf7e070156aedb8"
+  },
+  {
+    "path": "settings.html",
+    "sha256": "3e1a9ff59d9704a2cb1ddf6e7658b60ddf7fef0c9422d87f1bc8994b2af54778"
+  },
+  {
+    "path": "dashboard.html",
+    "sha256": "20c7cc1c5c6eccb46828bb798018e8101d79478920b035d0179246a584cfb912"
+  },
+  {
+    "path": "now-manager.css",
+    "sha256": "cb394874c957c07352cda0147a8a38436cd4e705003c73ac719f712f21b0f027"
+  },
+  {
+    "path": "now-call.css",
+    "sha256": "ca73f819022bc8554ed1013d41bb3095e1da4eeb6db3cfa451c0b98bb6cc8d91"
+  },
+  {
+    "path": "sg-v65-ads.css",
+    "sha256": "fd440024e955532994b79b3ec9e86f9702ab83ac67e3417ddd7cf9e6f7737e96"
+  },
+  {
+    "path": "v51-professional.css",
+    "sha256": "92433e73514ae6c1d1ba53e099b391985221b587ba033554877394ad4a3067ab"
+  },
+  {
+    "path": "chat.html",
+    "sha256": "f2fb2fde879eaca133efcbe25c2ec74fb6fbac04700e4863c3e0d3eccc8b0a19"
+  },
+  {
+    "path": "README-SETUP.md",
+    "sha256": "ab94dfd396994cb771d57f245dacdefe097956df9f9d5da778f135406af03368"
+  },
+  {
+    "path": "LEIA-PRIMEIRO-V67.md",
+    "sha256": "ece95fe28016eb5ed79c04aced9267b15bfb7aa91cbe8071df89cd936b822e23"
+  },
+  {
+    "path": "now.html",
+    "sha256": "181cc556f12bbdd02a4ca1bbb6d5721131be88fd48a93754ac589c28e0fe210b"
+  },
+  {
+    "path": "ads-app.js",
+    "sha256": "076023eec7217029cf7982aad997fbc32957d947684ed6cd46db6c312c2afc03"
+  },
+  {
+    "path": "companies.html",
+    "sha256": "30d046ad876a5ebb97020f664be5671638f45e5961912e2989aaa235500bbbc5"
+  },
+  {
+    "path": "PREVIEWS/sg69-feed-mobile.png",
+    "sha256": "ea1ae33410a4e94739684c24afcd013f43833cee28e4cc7faadfbae47934ce59"
+  },
+  {
+    "path": "PREVIEWS/sg69-edit-profile-desktop.png",
+    "sha256": "65f202d2f1655d82d30b39ba6d0ad2e432f69bb0429c9dbca9baaaa76b89d766"
+  },
+  {
+    "path": "PREVIEWS/sg69-dashboard-desktop.png",
+    "sha256": "23d8f869ac18339be1a6e1b5c3ffc7a0e876a5de1dabaf41e1a95186a28bbbd5"
+  },
+  {
+    "path": "PREVIEWS/sg69-index-desktop.png",
+    "sha256": "ea5c764a9afdfb06d48b534d2095d5874bab9ba40771d983a07fa280439f8e8b"
+  },
+  {
+    "path": "PREVIEWS/sg69-feed-desktop.png",
+    "sha256": "3ab432fee937b437c997a0177eca9350cdc25e9347556de01912519b8651df95"
+  },
+  {
+    "path": "PREVIEWS/sg69-edit-profile-mobile.png",
+    "sha256": "3703a7057bbade2587b948bf08f9f5cee65fc2f9a98de8fb073d1fb60107c60e"
+  },
+  {
+    "path": "PREVIEWS/sg69-verification-desktop.png",
+    "sha256": "1a7f772c648c42d8ef054800008d0b929bf64834775701e704e95e8618e9d50a"
+  },
+  {
+    "path": "PREVIEWS/sg69-verification-mobile.png",
+    "sha256": "3d516ebb7abbcfafb302e29e5065fe288d026461431217142f80db3b091c9f42"
+  },
+  {
+    "path": "PREVIEWS/sg69-index-mobile.png",
+    "sha256": "ab9295879a208f0e194808f73158cc3296f283a9200ab78bfa8ae1efc507d25e"
+  },
+  {
+    "path": "PREVIEWS/sg69-dashboard-mobile.png",
+    "sha256": "7aa495b7695a27c1f9692352e41295dbf18363c5e1a0b68d455f75344e505282"
+  },
+  {
+    "path": "docs/RELATORIO_V63.md",
+    "sha256": "ba3e66e9c4329e336607d688793af179c044fe6985997eb0fd938b3af010e4ef"
+  },
+  {
+    "path": "docs/CONFIGURACAO_V60.md",
+    "sha256": "57b527f94b0cddc7bc2561894edef5b32a604e52535e2c0670877fa6828eeb5b"
+  },
+  {
+    "path": "docs/CONFIGURACAO_V63.md",
+    "sha256": "ba0eee049bdb1ad994a3a0f6ebdcdd817977cfa453b00e87e445ec3d6c426587"
+  },
+  {
+    "path": "docs/AUTENTICACAO_E_HOMOLOGACAO.md",
+    "sha256": "712c3064694a5fd70a1432bb05964827e166979113276f2b14fd270c5bc903c2"
+  },
+  {
+    "path": "docs/RELATORIO_V64.md",
+    "sha256": "53257188ec8f1ea00a42f1f974c4d6fd28b21591e167a9e2ad9d5898af7e3b1f"
+  },
+  {
+    "path": "docs/INVENTARIO_ORIGINAL.json",
+    "sha256": "cb1eac4a8f8a587b2b52af6f74dacdf1cdf1ec0282cbbc2029a5875615522386"
+  },
+  {
+    "path": "scripts/dev-server.mjs",
+    "sha256": "53bf08d802235bae17ab5979c89af5b43f084287a6ff082a821f82ee326cbd87"
+  },
+  {
+    "path": "scripts/verificar.mjs",
+    "sha256": "e9ff9eb5e18cbcdeba297ca7daec2b9244acce1c203285dabd5960a72f414f9f"
+  },
+  {
+    "path": "scripts/configurar-app-check.mjs",
+    "sha256": "65ce970462d1600ac9c6b6274db72197635bc5724b7055b193ab8de54c140d8c"
+  },
+  {
+    "path": "scripts/build.mjs",
+    "sha256": "4057ab9203fa750f34855c2f105c8dd92392fcb2180cfff803e97ebf663f1c72"
+  },
+  {
+    "path": "Games/Games.js",
+    "sha256": "1b34f155bcbcc8fd665064c24ce4c45faa6342ac1c86ad2e335dcb04f536686a"
+  },
+  {
+    "path": "Games/Games.html",
+    "sha256": "8373bac03d73df205fa2136ad3ccfbbaabd58d73e02b780bfe00adccaf6cb3be"
+  },
+  {
+    "path": "Games/Games.css",
+    "sha256": "b8613f332154a95fd8d453297e663887beed0f1b4aae57e2a2207525734706fb"
+  },
+  {
+    "path": "tests/v65-ui.test.mjs",
+    "sha256": "679555d07dbe775d5370737668ac0a33189343e2f20e14793629a8e67c1a1438"
+  },
+  {
+    "path": "tests/market-sql.test.py",
+    "sha256": "f33b1a327c29ae7e29e6c9b3bbf6e77fdf0b5160cb3ef3c88657366e8228410f"
+  },
+  {
+    "path": "tests/unit.test.js",
+    "sha256": "c5777b6850d881d44c2fff8011575d542d66bbbb29389f372ca63ecf28b8a16d"
+  },
+  {
+    "path": "tests/features.test.js",
+    "sha256": "cd53a4378f5f9325ea4566a9915082ae315e06e8a9dea73e0d8360d76accfd68"
+  },
+  {
+    "path": "tests/worker.test.js",
+    "sha256": "af34c32a444619448d7d5dd0289777d94b2330937e6a57d8cfa609f4255d0332"
+  },
+  {
+    "path": "tests/v66-regressions.test.mjs",
+    "sha256": "a9814eb916b30ffb1752ece52c1412d0e0c0d18ea3de62cd6bf543be40eeaaa9"
+  },
+  {
+    "path": "tests/v651-regressions.test.mjs",
+    "sha256": "cf03bb6a1ba67b0a5d7036c7f4f60b4605ddbe68b72e2e137ea5cb85ac4373d6"
+  },
+  {
+    "path": "tests/sqlite.test.py",
+    "sha256": "91e56899bce7d79d8fac21d239e91909160439f83ffaf4719590630cbee17889"
+  },
+  {
+    "path": "tests/firestore.test.js",
+    "sha256": "17b4bf070f418979780953cc2c569eb1b28eaef7a89d4c224dfbae5f283e9149"
+  },
+  {
+    "path": "tests/v68-ui.test.mjs",
+    "sha256": "7584f15aead41c906d61620535d2ebf04b039a6d170b378b960d7c340f480c38"
+  },
+  {
+    "path": "tests/runtime.test.js",
+    "sha256": "a6a8ecf58b1b447362890347073c870d0aaaaf2a4379fcac59ee1996c9875706"
+  },
+  {
+    "path": "tests/market.test.js",
+    "sha256": "95d406239daa3d44268a5b8fa9c0bdd52e699db8c55032589d6758d689e20643"
+  },
+  {
+    "path": "tests/v69-regression.test.mjs",
+    "sha256": "20520b34a30a7a42865a186a2c4fce5d78dd10f3b72aed1a5a52e93fc9b70891"
+  },
+  {
+    "path": "tests/v67-regressions.test.mjs",
+    "sha256": "5b785ecdecf7781cd9c0227b1f03648ea719fcc99d8182d5259304bb6a123a40"
+  },
+  {
+    "path": "assets/sg-follow-badge.png",
+    "sha256": "3eef30ca0d0f279f88b31178ce4705229128349691af7415807d5c69643651f1"
+  },
+  {
+    "path": "assets/verified-badge.png",
+    "sha256": "3bd6d86415e5686f590bab1878263e23e8fdb6bc8f8255323f09d64c7466eb3f"
+  },
+  {
+    "path": "assets/now-brand-logo.png",
+    "sha256": "ddc75275626843c77376229eb644b6db1d4667bac87124dbc0c0d5fd01b7272f"
+  },
+  {
+    "path": "assets/gabriel-martins-founder.jpg",
+    "sha256": "f6802ad1d4514c2e5cce8e79f0cd7f6d79f730e9d240d2f2c08a58640f386874"
+  },
+  {
+    "path": "assets/logo.png",
+    "sha256": "cb10bf26a21a81bb3fcec33bf6876e77dc3efd32078072c1cb15792b9cf4aa83"
+  },
+  {
+    "path": "assets/vice-palms.svg",
+    "sha256": "7e6a9026c1708fa3e207def6e4d947e185b652ed9f5b3b27213cc4136c01dcca"
+  },
+  {
+    "path": "assets/now-brand-logo-v2.jpg",
+    "sha256": "a8db060fd99692c488030ae620444f2056a1a3fdf61d9681df66e754c9bc510a"
+  },
+  {
+    "path": "assets/now-follow-badge.png",
+    "sha256": "a765104762c249ad0361b150c2a825aeb654db707d44715b47c407210b404a16"
+  },
+  {
+    "path": "assets/game-placeholder.svg",
+    "sha256": "7d39a019015bd084f2116bbe9be76e7a0b3c0de3b125ba855ec97fa046698a3d"
+  },
+  {
+    "path": "assets/logo-before-rounded.png",
+    "sha256": "cb10bf26a21a81bb3fcec33bf6876e77dc3efd32078072c1cb15792b9cf4aa83"
+  },
+  {
+    "path": "assets/steam.png",
+    "sha256": "318f08fba3339372c69e8e638821f01744ffe940d18c0a01c16b79d1cc0b2368"
+  },
+  {
+    "path": "Onboarding/onboarding.html",
+    "sha256": "d6790b7803046b3ed71faafa6f6c5e7af18d0d9ecdd01e08e1b49d90c3448cc0"
+  },
+  {
+    "path": "Onboarding/onboarding.css",
+    "sha256": "5d5af025bdfa31719c203c923fce7fdc989ebad0b9b3ba8a3934fcee7c535356"
+  },
+  {
+    "path": "Onboarding/onboarding.js",
+    "sha256": "503186fe289736b72225d0f788d4b1dea163a298077175665dbffb717dc71ed0"
+  },
+  {
+    "path": "something-gamer-api/package.json",
+    "sha256": "bb62a11ffe65a4716c09dbb0cd47a14c4f7c7f38579a80c152f7637025c5f126"
+  },
+  {
+    "path": "something-gamer-api/package-lock.json",
+    "sha256": "8aea72d884895884c47a2e6dfb1bf3a25b5f0e13b335d2453e6cfaeabda760eb"
+  },
+  {
+    "path": "something-gamer-api/wrangler.jsonc",
+    "sha256": "6151085a0801bf6723aecc4f5699dde575f91a0a859a24b044ee5e6d343d004f"
+  },
+  {
+    "path": "vendor/LICENSE-LiveKit.txt",
+    "sha256": "09e8a9bcec8067104652c168685ab0931e7868f9c8284b66f5ae6edae5f1130b"
+  },
+  {
+    "path": "vendor/livekit-client.js",
+    "sha256": "e492f60f4d445ce51aa3e6abb89f5680566cbfffca9696bcc637a8e9eb21cf2a"
+  },
+  {
+    "path": ".well-known/security.txt",
+    "sha256": "f6f0c5ed8392fb18bb3f3cc6e590c24434f4f3b87313dc74366dabbfee592a06"
+  },
+  {
+    "path": "desktop-app/package.json",
+    "sha256": "75021daac0a39b80e2ebd2d9c6d67b75c8535b48f37f0905b2a1ca4f347dea15"
+  },
+  {
+    "path": "desktop-app/icon.ico",
+    "sha256": "33ca25df52a6f1cb7cb99ac04c6e4f15d398cf6fe4d0c92c0e8796b58f117a87"
+  },
+  {
+    "path": "desktop-app/icon.png",
+    "sha256": "cb10bf26a21a81bb3fcec33bf6876e77dc3efd32078072c1cb15792b9cf4aa83"
+  },
+  {
+    "path": "desktop-app/main.js",
+    "sha256": "3680cc66758ef56dce574382637e03d376e41316c7c9660a67e54123fc87cd86"
+  },
+  {
+    "path": "desktop-app/preload.js",
+    "sha256": "1e99e39deb7677a414cdc53497ba9b46c7b6d70cd07d9e6c48b7391e1e1945b5"
+  },
+  {
+    "path": "android-app/build.gradle",
+    "sha256": "c3c0cf04da0fc239f391c774554d97d890018ab6e37e87cc62f6070d0c8c9909"
+  },
+  {
+    "path": "android-app/settings.gradle",
+    "sha256": "37f53193d605c7b35e8176b78face9a34b9d36945178b227cfde3d132371556c"
+  },
+  {
+    "path": "android-app/gradle.properties",
+    "sha256": "5e293da74a2f8bb01c8c66647aecd438a607a489b8380845efda9bf77a6ed178"
+  },
+  {
+    "path": "functions/.gitignore",
+    "sha256": "4ad2dd72b5b8511335b75e7b4dac1a8c92c576a7735f1e275b58c26ef1a1bef2"
+  },
+  {
+    "path": "functions/index.js",
+    "sha256": "77417b9f1bad1a2a27df748d1294ab9630b945db7efd2b075e1094e1234556bb"
+  },
+  {
+    "path": "functions/package.json",
+    "sha256": "613e6c5494be3f769e0b040a4cd1ab66ee0bd37521c5c133c661466592209972"
+  },
+  {
+    "path": "functions/sg-v66-functions.js",
+    "sha256": "6d8aff10f1699e293fdc77579aa40128c0dc1cff82509f21a7605c2f7571a79c"
+  },
+  {
+    "path": "functions/package-lock.json",
+    "sha256": "bb3100604ed50982ddfbd79eabf4e19734ca2adde3aad8b5f41f19d5d73607d5"
+  },
+  {
+    "path": "functions/scripts/set-admin.js",
+    "sha256": "e87255d069ebe914918b23f6a69122efd4e07488823bb7cf98a751fe54a8c338"
+  },
+  {
+    "path": "functions/scripts/provision-admin.cjs",
+    "sha256": "f30a8d5965e9f31eb0c38f5a4e2368c802f3786e51329bf637163d8b56b35ccd"
+  },
+  {
+    "path": "android-app/app/build.gradle",
+    "sha256": "8db7c499413d334c878350afeb53411b4b5ca4ce80a25b6d007b80f05005b9bd"
+  },
+  {
+    "path": "android-app/app/src/main/AndroidManifest.xml",
+    "sha256": "f9c8778dbfe5a7b01b7f3b77c7c0194caecd1a3c9d455ed7dcfe2a88b18577c9"
+  },
+  {
+    "path": "android-app/app/src/main/java/com/somethinggamer/app/MainActivity.java",
+    "sha256": "bc519e66ea97b5f4b17253925d2c7af4096963052dfe95f3f47fc51358955151"
+  },
+  {
+    "path": "android-app/app/src/main/res/mipmap-mdpi/ic_launcher.png",
+    "sha256": "6a7e73ed6e3a32f5a878881e8bd6327aaa9ba081c887ee3e71d2f25fabf7a024"
+  },
+  {
+    "path": "android-app/app/src/main/res/mipmap-xhdpi/ic_launcher.png",
+    "sha256": "7b8f94d5a36b6454168713ccf39e596800e95f3bd77e718062ea2a33bd258036"
+  },
+  {
+    "path": "android-app/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml",
+    "sha256": "d0b7050d918713b6bd1598265d44b6553aecc667db9be269c11c75b61521ca75"
+  },
+  {
+    "path": "android-app/app/src/main/res/mipmap-xxxhdpi/ic_launcher.png",
+    "sha256": "101406f69620634a502d002b29ef02dd66a4fa47826d2a078df30d2039866aff"
+  },
+  {
+    "path": "android-app/app/src/main/res/values/styles.xml",
+    "sha256": "dd7c886aa43b76a2366dcbb52b85001aebdc6819bc92abd2b0e54cd7193d4e11"
+  },
+  {
+    "path": "android-app/app/src/main/res/mipmap-hdpi/ic_launcher.png",
+    "sha256": "03ff6b942dead683a47b91b54f82243a1e679731509665c1a7c3a31e471759a1"
+  },
+  {
+    "path": "android-app/app/src/main/res/mipmap-xxhdpi/ic_launcher.png",
+    "sha256": "eda4db23a7c54e163ed23714a2074a9798f4b590810761b8397106de273fa970"
+  },
+  {
+    "path": "android-app/app/src/main/res/drawable/sg_logo.png",
+    "sha256": "cb10bf26a21a81bb3fcec33bf6876e77dc3efd32078072c1cb15792b9cf4aa83"
+  },
+  {
+    "path": "android-app/app/src/main/res/drawable/ic_launcher_foreground.png",
+    "sha256": "ef46db6766e7f03b1908fc5131a6e6e03f17c8547b3afe8c8f339839d717d2ff"
+  },
+  {
+    "path": "vendor/leaflet/LICENSE.txt",
+    "sha256": "53e8dc25862014e4324741ca18fbe3611e11d42ef69f59f86ea8c5389647d4cb"
+  },
+  {
+    "path": "vendor/leaflet/leaflet.css",
+    "sha256": "a7837102824184820dfa198d1ebcd109ff6d0ff9a2672a074b9a1b4d147d04c6"
+  },
+  {
+    "path": "vendor/leaflet/leaflet.js",
+    "sha256": "db49d009c841f5ca34a888c96511ae936fd9f5533e90d8b2c4d57596f4e5641a"
+  },
+  {
+    "path": "vendor/leaflet/images/marker-shadow.png",
+    "sha256": "264f5c640339f042dd729062cfc04c17f8ea0f29882b538e3848ed8f10edb4da"
+  },
+  {
+    "path": "vendor/leaflet/images/layers.png",
+    "sha256": "1dbbe9d028e292f36fcba8f8b3a28d5e8932754fc2215b9ac69e4cdecf5107c6"
+  },
+  {
+    "path": "vendor/leaflet/images/marker-icon-2x.png",
+    "sha256": "00179c4c1ee830d3a108412ae0d294f55776cfeb085c60129a39aa6fc4ae2528"
+  },
+  {
+    "path": "vendor/leaflet/images/layers-2x.png",
+    "sha256": "066daca850d8ffbef007af00b06eac0015728dee279c51f3cb6c716df7c42edf"
+  },
+  {
+    "path": "vendor/leaflet/images/marker-icon.png",
+    "sha256": "574c3a5cca85f4114085b6841596d62f00d7c892c7b03f28cbfa301deb1dc437"
+  },
+  {
+    "path": "something-gamer-api/migrations/0004_subscriptions.sql",
+    "sha256": "f6a2b846e90d4fd8925431804f9eb0148f45159b806e7f74ddd9558f464d5b7f"
+  },
+  {
+    "path": "something-gamer-api/migrations/0002_media.sql",
+    "sha256": "ed740500f9b11fb191a8d906906497eb543bdc1b32d40bad620743b1b4b32b16"
+  },
+  {
+    "path": "something-gamer-api/migrations/0008_ads_growth.sql",
+    "sha256": "6d69c45ef38a060f61b59c98efb95ec45a1cfb3436d430e79f115c4787c88b87"
+  },
+  {
+    "path": "something-gamer-api/migrations/0001_payments.sql",
+    "sha256": "4b4a67cbb8738d16c1b15871b67e8d97a8f8ea2e4cbdf47c681cfe4261c80897"
+  },
+  {
+    "path": "something-gamer-api/migrations/0011_meta_drafts.sql",
+    "sha256": "dd2366ff1cff190e8f16c1260304e80766db82635098f4ae479ca764f2a2f2f6"
+  },
+  {
+    "path": "something-gamer-api/migrations/0013_now_ads_manager.sql",
+    "sha256": "b99be8b5ba6ada1ce3a9479b5038d2db48a8cee7b48bd116f84d92c21d226770"
+  },
+  {
+    "path": "something-gamer-api/migrations/0014_market_discovery.sql",
+    "sha256": "34b18004f799461f291b48c9a515c34533ded98d02df1e32d2ed522ec67a926b"
+  },
+  {
+    "path": "something-gamer-api/migrations/0007_social.sql",
+    "sha256": "ff11e342ce055644b8e443dc23b1b35ae2342a54b9efe61972db16dd3aa14b55"
+  },
+  {
+    "path": "something-gamer-api/migrations/0005_ads.sql",
+    "sha256": "6a2d40f805493efd6bfa529c7f740cd1de0422fb39f7dc987af57a1163f30c9a"
+  },
+  {
+    "path": "something-gamer-api/migrations/0012_social_products.sql",
+    "sha256": "bcc8ba751bf0fb46963197ea71d64df09ebc6c83bb05a0820852a568bf7dbdb0"
+  },
+  {
+    "path": "something-gamer-api/migrations/0009_returns.sql",
+    "sha256": "032cd25f10d087e7a88719f1d12750570b91584ece22fd652471cb91c1d302d2"
+  },
+  {
+    "path": "something-gamer-api/migrations/0010_meta.sql",
+    "sha256": "3d3ba839042614c49f83c47ded7b9c83b5e7a743f373f640aeddd927d2bac376"
+  },
+  {
+    "path": "something-gamer-api/migrations/0003_market.sql",
+    "sha256": "e720f3b05f0f3feda97725dde8db54646465906afd20a5bbbae0f18f96ecab62"
+  },
+  {
+    "path": "something-gamer-api/migrations/0016_market_response.sql",
+    "sha256": "49fc3b9705b4c911cdd0017f4a90050a41edd390d8d617e86dad6bf57db102be"
+  },
+  {
+    "path": "something-gamer-api/migrations/0006_limits.sql",
+    "sha256": "a6c0a73d9a8bedc50abebcb6428befd6b4a134f11850919a37688a929de2668a"
+  },
+  {
+    "path": "something-gamer-api/migrations/0015_now_call_sessions.sql",
+    "sha256": "e4b651fe82bbdf143c951f963fc4777125fdb2deba5c81b9cfcf9b4fd10fa033"
+  },
+  {
+    "path": "something-gamer-api/src/payment-domain.js",
+    "sha256": "addb8ae3ee5851927a208cedd4de60a7326ef11a96b14c05a37afa1a839705e2"
+  },
+  {
+    "path": "something-gamer-api/src/firestore-server.js",
+    "sha256": "2866f8ee2ffe3482160392d776efc04661a92ad6da9d285ec473d5ec69eb4f51"
+  },
+  {
+    "path": "something-gamer-api/src/index.js",
+    "sha256": "1682afd30edae26fc7fd311e04bd45083361f7ba31feabceeef7d46627406a71"
+  },
+  {
+    "path": "something-gamer-api/src/community-extras.js",
+    "sha256": "018963122ee916c5997ded3b137461b7445a937267fd455e034c3df7d1a51382"
+  },
+  {
+    "path": "something-gamer-api/src/admin.js",
+    "sha256": "8718d39e1f2ebcbc0a53684ef3e491058509ef5b559e64b741ba92babbe664fc"
+  },
+  {
+    "path": "something-gamer-api/src/limits.js",
+    "sha256": "07d8d20628298244e267d6a2f2c49dc16eeee9ad00df5878c7b0916ac12413a6"
+  },
+  {
+    "path": "something-gamer-api/src/seller-oauth.js",
+    "sha256": "0c639febd286c349fc42861e5d0421cdf5fc98cf830e91a42d9588b5ebdb767c"
+  },
+  {
+    "path": "something-gamer-api/src/private-media.js",
+    "sha256": "284a6c31688977d524f3025c50e43b51c2cf6a08e4c9d1935dc6f13c539a85bc"
+  },
+  {
+    "path": "something-gamer-api/src/community.js",
+    "sha256": "e7b478521ec8c9ba07be8463c3b53a1dea3f3456519c045a222dd4c0bac51178"
+  },
+  {
+    "path": "something-gamer-api/src/media-store.js",
+    "sha256": "cac58f9e4a0c85d48560f59f86d518b2fb1209132b6ca220ba4a6ee0fbf262f2"
+  },
+  {
+    "path": "something-gamer-api/src/market-domain.js",
+    "sha256": "f8dc25e34933c219456ca4d8c4ee88b518c9e551a6d6951d6efde6d2cc088633"
+  },
+  {
+    "path": "something-gamer-api/src/social.js",
+    "sha256": "490c7d6e1a70fc9acc88a5c6cdf82391378d063fbada234fc5df9dbce8d400de"
+  },
+  {
+    "path": "something-gamer-api/src/ads.js",
+    "sha256": "cdcf312c198a13490a096da4d03025211576df3b40b9689ee3c5eef49879fed9"
+  },
+  {
+    "path": "something-gamer-api/src/firestore-store.js",
+    "sha256": "0bf2a4ffce50a00a07754fcf59bc705cf4d61f926aadaa4be02219b68d88f0e3"
+  },
+  {
+    "path": "something-gamer-api/src/payments.js",
+    "sha256": "aaa65ac60317cde5cd2c86019f9a3fabef0af4d87d3165ac389f50a6c6259693"
+  },
+  {
+    "path": "something-gamer-api/src/now-ads-domain.js",
+    "sha256": "b0eaf5d70c73a57ddc2507d9e449bc72ae3bc029d73f0873c85e5c554dfe11bb"
+  },
+  {
+    "path": "something-gamer-api/src/market.js",
+    "sha256": "40d8b071d93a4aaddee6c3def416d06ef2b910d6d8e25c1067f545f53dca7aa5"
+  },
+  {
+    "path": "something-gamer-api/src/now-call.js",
+    "sha256": "e9e2e34101721d0f684fe7bf212a97ce4574ba2fcf654c2efcce3ba8886c27ee"
+  },
+  {
+    "path": "something-gamer-api/src/now-ads.js",
+    "sha256": "42cbb6856b34aca5b49bc51fe039cee7c182bfa7d4e1ad6942d84f0b02daaa91"
+  },
+  {
+    "path": "something-gamer-api/src/market-discovery.js",
+    "sha256": "bc40ffdbe194fc9e2e1164406cc315ee0f2cb66e8651da12a550a293306f5193"
+  },
+  {
+    "path": "something-gamer-api/src/subscriptions.js",
+    "sha256": "b949f39df76b1a6c05a26550c2fc33b0fb5f1ae6bb92944dd58357fcaaabef0d"
+  },
+  {
+    "path": "something-gamer-api/src/security.js",
+    "sha256": "1dc3a3dc4674407bbdb9d57965fcf5c6302d53113b598ed51c5dd22e39a66953"
+  },
+  {
+    "path": "tests/browser/visual.spec.js",
+    "sha256": "80874309b7a52b04d8610622ee2c25adb69b22cdc66fed5c98b2749b8e22acd6"
+  },
+  {
+    "path": ".github/workflows/deploy.yml",
+    "sha256": "b70e5fa352c78671d9e72ed3d452819e0265370e1e191eb91c8fde5dbaa54eaa"
+  },
+  {
+    "path": ".github/workflows/verificar.yml",
+    "sha256": "30f9d6928c18a152bf1018056b6ba74cb6394a3633c16c297fb38945afbdaa69"
+  },
+  {
+    "path": ".github/workflows/build-windows.yml",
+    "sha256": "71e83c0ea8c0e58e7082131471a9e1fad2e827462e06209d0f25b0c5eb0f980b"
+  },
+  {
+    "path": ".github/workflows/build-android.yml",
+    "sha256": "ee0fc2651f9bce73c9b9cc26ab52211a3fca9bfa87383dd0ce4bd296b4258160"
+  }
+]

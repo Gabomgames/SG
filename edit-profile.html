@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar perfil | Something Gamer</title><link rel="icon" type="image/png" href="assets/logo.png"><link rel="apple-touch-icon" href="assets/logo.png">
+    <link rel="stylesheet" href="style.css?v=50"><link rel="stylesheet" href="app-theme.css?v=50"><link rel="stylesheet" href="v51-professional.css?v=51"><script type="module" src="theme.js"></script>
+<link rel="stylesheet" href="v52-ecosystem.css?v=52">
+<link rel="stylesheet" href="v55-professional.css?v=55"><link rel="stylesheet" href="v56-ultra.css?v=56"><link rel="stylesheet" href="v57-pro-complete.css?v=57p"><link rel="stylesheet" href="app-polish-v58.2.css?v=58.2"><link rel="stylesheet" href="v59-professional.css?v=59"><link rel="stylesheet" href="design-system.css?v=60"><link rel="stylesheet" href="profile-v64.css"><link rel="stylesheet" href="sg-v651-repair.css?v=651"><link rel="stylesheet" href="sg-v66.css?v=6602"><script defer src="sg-v65-shell.js?v=66"></script><link rel="stylesheet" href="sg-v67.css?v=6701"><link rel="stylesheet" href="sg-v68-app.css?v=6801"><link rel="stylesheet" href="sg-v69.css?v=6901"></head>
+<body class="profile-editor-page">
+    <header class="profile-editor-topbar">
+        <a class="profile-editor-brand" href="dashboard.html"><img src="assets/logo.png" alt=""><strong>Something Gamer</strong></a>
+        <a href="dashboard.html" class="back-btn">Voltar ao painel</a>
+    </header>
+    <main class="edit-page"><div class="edit-container">
+        <header class="edit-header"><div><h1>Editar perfil</h1><p>Altere seu nome, sua bio, seus jogos e suas contas conectadas.</p></div><div class="profile-completion"><span>Perfil</span><strong id="profileCompletion">Em edição</strong></div></header>
+        <div class="sg69-editor-intro"><span class="sg69-eyebrow">SEU PERFIL / SUA IDENTIDADE</span><p>Seu nome, sua história e suas conexões, do seu jeito.</p><a href="verification.html">✦ Acessar Verificado Gamer e planos →</a></div><div class="profile-editor-layout">
+            <section class="edit-card identity-card">
+                <div class="card-heading"><span>01</span><div><h2>Informações do perfil</h2><p>É assim que outras pessoas verão você.</p></div></div>
+                <div class="profile-live-preview"><div class="preview-cover"></div><div class="avatar-area"><img id="profilePreview" src="assets/logo.png" alt="Prévia da foto de perfil"><div class="avatar-copy"><strong>Sua identidade gamer</strong><p>Imagem quadrada em PNG, JPG ou WEBP. A prévia é atualizada antes de salvar.</p><label class="file-picker" for="profileImage">Trocar foto</label><input type="file" id="profileImage" accept="image/png,image/jpeg,image/webp"></div></div></div>
+                <div class="form-grid profile-fields"><label class="field"><span>Nome</span><input type="text" id="displayName" maxlength="40" placeholder="Seu nome"></label><label class="field"><span>Username</span><input type="text" id="username" maxlength="20" placeholder="seunome"></label><label class="field field-full"><span>Bio</span><textarea id="bio" maxlength="160" placeholder="Conte sobre você, seus jogos e sua comunidade."></textarea><small class="character-count"><span id="bioCount">0</span>/160</small></label></div>
+            </section>
+            <aside class="editor-side">
+                <section class="edit-card compact-card"><div class="card-heading"><span>02</span><div><h2>Jogos em destaque</h2><p>Gerencie a coleção pela biblioteca.</p></div></div><label class="field"><span>Jogos selecionados</span><input type="text" id="games" placeholder="Minecraft, FNAF, CS2..."></label><a class="secondary-link" href="Games/Games.html">Abrir biblioteca <span>→</span></a></section>
+                <section class="edit-card compact-card"><div class="card-heading"><span>03</span><div><h2>Criador e canais</h2><p>Configure sua presença como criador de conteúdo.</p></div></div><label class="creator-toggle"><input type="checkbox" id="creatorAccount"><span>Sou criador de conteúdo</span></label><label class="field badge-theme-field" id="badgeThemeField"><span>Cor do selo verificado</span><select id="verificationBadgeTheme"><option value="blue">Azul oficial</option><option value="purple">Roxo</option><option value="gold">Dourado</option><option value="pink">Rosa</option><option value="green">Verde</option></select><small id="badgeThemeHelp">Disponível somente para criadores verificados. <a href="verification.html">Ver critérios e planos</a>.</small></label><label class="field"><span>Twitch</span><input type="url" id="twitch" placeholder="https://twitch.tv/seucanal"></label><label class="field"><span>YouTube</span><input type="url" id="youtube" placeholder="https://youtube.com/@seucanal"></label></section>
+            </aside>
+        </div>
+        <section class="edit-card platforms-card"><div class="card-heading"><span>04</span><div><h2>Contas gamer</h2><p>Importe jogos, horas jogadas e conquistas do seu perfil oficial.</p></div></div><div class="platform-account-grid">
+            <article class="connected-account steam-account"><img src="assets/steam.png" alt=""><div><strong>Steam</strong><span id="steamStatus">Não conectada</span></div><button type="button" id="editConnectSteam">Conectar</button></article>
+            <article class="connected-account"><span class="account-feature-icon"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M9.3 8.4h5.4a6.1 6.1 0 0 1 6 5l.5 2.7a2.5 2.5 0 0 1-4.6 1.7l-1.3-2.1H8.7l-1.3 2.1a2.5 2.5 0 0 1-4.6-1.7l.5-2.7a6.1 6.1 0 0 1 6-5Z"/><path d="M8.1 11.5v2.4M6.9 12.7h2.4M15.4 12.1h.01M17.4 14h.01"/></svg></span><div><strong>Biblioteca SG</strong><span>Organize seus jogos favoritos</span></div><a href="Games/Games.html">Abrir</a></article>
+            <article class="connected-account"><span class="account-feature-icon"><svg class="ico" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 4h8v5a4 4 0 0 1-8 0Z"/><path d="M8 5.2H5.2A2.8 2.8 0 0 0 8 8M16 5.2h2.8A2.8 2.8 0 0 1 16 8"/><path d="M12 13v4M9.2 20.2h5.6M10.4 17h3.2"/></svg></span><div><strong>Eventos</strong><span>Descubra campeonatos e comunidades</span></div><a href="events.html">Explorar</a></article>
+        </div></section>
+        <footer class="editor-actions"><p id="saveMessage" role="status"></p><button type="button" id="saveProfile" class="primary-btn save-profile">Salvar alterações</button></footer>
+    </div></main>
+    <script type="module" src="edit-profile.js"></script>
+<script type="module" src="app-shell.js?v=50"></script><script type="module" src="experience.js?v=60"></script></body></html>

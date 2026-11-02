@@ -1,0 +1,23 @@
+SOMETHING GAMER V52 — ECOSSISTEMA PROFISSIONAL
+
+NOVO
+- SG Market: anúncios C2C/B2C, catálogo, publicação, compra e destaque pago.
+- SG Ads: criação de campanhas, orçamento, posicionamentos e ativação após pagamento.
+- Monetização: Creator+, Community Pro e Seller Pro.
+- Checkout unificado Mercado Pago no backend; valores críticos recalculados no servidor.
+- Webhook de pagamento ativa campanhas, destaques, planos e conclui compras.
+- Perfil/feed/chat receberam camada visual V52 sem remover as funções existentes.
+- Navegação global passa a exibir Market e SG Ads.
+
+PUBLICAÇÃO
+1. npm ci
+2. Na pasta functions: npm ci
+3. Garanta os secrets já usados pelo projeto:
+   MERCADO_PAGO_ACCESS_TOKEN
+   MERCADO_PAGO_WEBHOOK_SECRET
+4. npm run deploy:all
+
+IMPORTANTE
+- O pagamento real depende dos secrets válidos do Mercado Pago já utilizados pela Verificação Gamer.
+- Configure no Mercado Pago a URL de webhook da função ecosystemPaymentWebhook e eventos de pagamento.
+- Marketplace físico ainda exige definição operacional de frete, disputa, reembolso e split antes de produção comercial em escala.

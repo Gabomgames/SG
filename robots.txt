@@ -1,0 +1,21 @@
+# Something Gamer
+# So as paginas de entrada sao indexaveis. O resto e aplicativo: exige login,
+# nao tem conteudo util para busca e nao deve aparecer em resultado nenhum.
+# A regra que vale e o cabecalho X-Robots-Tag em firebase.json; isto aqui e o
+# pedido educado, que buscador honesto respeita.
+
+User-agent: *
+Allow: /$
+Allow: /index.html
+Allow: /login.html
+Allow: /register.html
+Allow: /regras.html
+Allow: /privacidade.html
+Allow: /assets/
+Allow: /style.css
+Allow: /app-theme.css
+Disallow: /
+
+Sitemap: https://something-gamer.web.app/sitemap.xml
+
+Disallow: /404.html

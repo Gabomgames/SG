@@ -1,0 +1,31 @@
+SOMETHING GAMER V46
+
+PRINCIPAIS CORREÇÕES
+- Comunidade volta a listar perfis públicos antigos que ainda não tinham o campo de visibilidade.
+- Chat mobile ocupa corretamente a tela, com mensagens acima e compositor fixo abaixo.
+- GIFs usam o Worker e tentam a Cloud Function como alternativa.
+- Figurinhas SG ampliadas; cada usuário pode criar figurinhas locais e enviá-las.
+- Menções com @ mostram amigos compatíveis e enviam notificação em servidores.
+- Caixa de notificações separada das Conquistas SG.
+- Publicação de imagem e vídeo mantém o texto da descrição alinhado no início.
+- Painel permite escolher o prazo do selo verificado.
+- Recuperação administrativa por e-mail foi removida.
+- Primeiro acesso e recuperação do painel exigem o código mestre configurado no Worker.
+- Seletor flutuante de idioma não ocupa a tela no celular.
+- Tutorial ampliado para oito etapas.
+
+CONFIGURAÇÃO OBRIGATÓRIA DO WORKER
+1. Abra a pasta something-gamer-api.
+2. Execute: npx wrangler secret put ADMIN_RECOVERY_CODE
+3. Informe um código forte, guardado fora do projeto.
+4. Execute: npx wrangler secret put GIPHY_API_KEY
+5. Informe sua chave GIPHY.
+6. Publique com: npm run deploy:worker
+
+PUBLICAÇÃO DO SITE E DAS REGRAS
+npm run deploy
+
+IMPORTANTE
+- Não coloque ADMIN_RECOVERY_CODE nem GIPHY_API_KEY em config.js, wrangler.jsonc ou GitHub.
+- Ligações usam WebRTC. Em redes restritas, um servidor TURN será necessário para garantir conexão.
+- Firebase CLI atual exige Java 21 para executar o emulador local. O aplicativo Android continua usando Java 17.

@@ -1,0 +1,41 @@
+SOMETHING GAMER V58.2 — POLISH + NOW + MARKET MAP + ADMIN HARDENING
+
+O QUE FOI ALTERADO NESTA RODADA
+- Landing/index redesenhada para aparência mais madura e menos "protótipo".
+- Nova página institucional about-now.html usando a marca NOW enviada pelo proprietário.
+- Rodapé principal: NOW | Saiba mais.
+- Texto institucional: NOW criada por Gabriel Martins, com apresentação profissional do ecossistema.
+- Camada visual app-polish-v58.2.css para perfil, chat, marketplace, landing e mobile.
+- Perfil reorganizado visualmente e opção real de remover amigo.
+- Comunidade/lista de pessoas também permite remover amizade.
+- Now Mark recebeu modo Lista/Mapa, OpenStreetMap/Leaflet, pins, distância, raio, lista sincronizada e botão "Pesquisar nesta área".
+- Novos anúncios salvam latitude/longitude aproximadas quando a localização foi definida.
+- A localização manual tenta resolver cidade usando OpenStreetMap/Nominatim; "Minha localização" usa Geolocation API.
+- Conversar a partir de produto agora abre o chat diretamente com o vendedor e leva productId na URL.
+- Segurança do Admin endurecida: removido fallback público por UID nas Firestore Rules.
+- API administrativa agora exige Custom Claim admin/super_admin; removido bootstrapAdmin público.
+- Criado functions/scripts/set-admin.js para conceder role fora do aplicativo usando Admin SDK/service account.
+- Sistema V58 já existente de advertência, suspensão, banimento, revogação e recursos foi preservado.
+
+ADMIN — IMPORTANTE
+Depois desta versão, possuir apenas o UID conhecido NÃO libera o painel. O usuário precisa de Custom Claim.
+Exemplo local (NUNCA no frontend):
+  cd functions
+  GOOGLE_APPLICATION_CREDENTIALS=/caminho/service-account.json node scripts/set-admin.js SEU_UID super_admin
+Depois o administrador deve sair e entrar novamente para atualizar o token.
+
+MARKET MAP
+O mapa base usa OpenStreetMap + Leaflet e não exige chave para desenvolvimento.
+Para escala comercial, considere Mapbox/Google Maps com geocoding, limites, SLA e faturamento próprios.
+A localização pública do anúncio deve continuar aproximada; nunca exponha endereço residencial exato sem consentimento.
+
+ANTES DE PUBLICAR
+1. npm ci
+2. npm run verificar
+3. npm run build
+4. firebase deploy --only hosting,firestore:rules,firestore:indexes,storage,functions --project something-gamer
+5. Publique também o Worker se necessário para TURN/Call Now.
+6. Teste com duas contas: amizade, remoção de amigo, chat, sanções e Now Mark.
+
+OBSERVAÇÃO
+Recursos que dependem de credenciais externas (Mercado Pago, TURN/SFU, e-mail, Giphy etc.) só funcionam em produção depois que os secrets correspondentes forem configurados.

@@ -1,0 +1,41 @@
+SOMETHING GAMER V59 — PROFESSIONAL COMPLETE
+
+Base: V58.2 completa, preservada.
+
+PRINCIPAIS EVOLUÇÕES
+- Index totalmente refeito, mais limpo, coerente e profissional.
+- Página institucional da NOW refeita em fundo preto, usando a foto real enviada de Gabriel Martins.
+- NOW padronizada como empresa; Something Gamer permanece o produto.
+- Rodapé com "NOW | Saiba mais" e página institucional dedicada.
+- Now Mark com modal de localização profissional, local exato/aproximado, raio sugerido/personalizado e mapa real.
+- Busca por cidade/bairro/CEP/endereço via Nominatim/OpenStreetMap na configuração atual.
+- Local aproximado reduz precisão pública antes de salvar o anúncio.
+- Mapa do Now Mark com raio, pins de preço, distância, lista sincronizada e "Pesquisar nesta área".
+- Now ADS Manager refeito com estrutura Campanha -> Público -> Criativo -> Orçamento -> Revisão.
+- Objetivos, localização/raio, público, criativo, posicionamentos, otimização, cobrança e revisão.
+- Biblioteca funcional de públicos salvos no Firestore.
+- KPIs do ADS usam somente dados reais existentes em metrics; não há números inventados.
+- Todas as melhorias anteriores de chat, Call Now, moderação, sanções, admin seguro, suporte, pagamentos e mobile foram preservadas.
+
+SEGURANÇA ADMIN
+- Acesso administrativo depende de Firebase Auth + Custom Claims + validação server-side + Firestore Rules.
+- Não depende de UID, e-mail, senha ou localStorage no frontend.
+- Leia CONFIGURAR-ADMIN-SEGURO-V58.2.md antes de produção.
+
+PAGAMENTOS
+- Leia CONFIGURAR-PAGAMENTOS-V57-PRO.md.
+- Checkout só deve ser considerado pago após confirmação server-side/webhook.
+
+TURN / CALL NOW
+- Leia CONFIGURAR-TURN-V57-PRO.md.
+- TURN é obrigatório para redes que bloqueiam P2P.
+
+MAPA
+- A V59 funciona com Leaflet + OpenStreetMap + Nominatim.
+- Para escala comercial, geocodificação pesada e SLA, recomenda-se migrar o provider para Mapbox ou Google Maps e manter a mesma interface.
+
+BUILD
+- "npm run verificar" passou.
+- O build minificado não foi concluído neste ambiente porque a instalação do esbuild expirou.
+- Os arquivos atualizados foram sincronizados em dist/ em modo fonte para teste/publicação estática.
+- Em produção, execute npm ci e npm run build antes do deploy final.

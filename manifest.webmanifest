@@ -1,0 +1,86 @@
+{
+  "name": "Something Gamer",
+  "short_name": "SG",
+  "description": "Rede social gamer com comunidades, chat, marketplace, eventos e ecossistema para criadores.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#090814",
+  "theme_color": "#6c4cff",
+  "icons": [
+    {
+      "src": "assets/logo.png",
+      "sizes": "any",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "lang": "pt-BR",
+  "categories": [
+    "social",
+    "games",
+    "entertainment",
+    "shopping"
+  ],
+  "shortcuts": [
+    {
+      "name": "Feed",
+      "url": "./feed.html"
+    },
+    {
+      "name": "Chat",
+      "url": "./chat.html"
+    },
+    {
+      "name": "Comunidades",
+      "url": "./communities.html"
+    },
+    {
+      "name": "Market",
+      "url": "./marketplace.html"
+    },
+    {
+      "name": "Eventos",
+      "url": "./events.html"
+    },
+    {
+      "name": "Call Now",
+      "short_name": "Call Now",
+      "description": "Mensagens e chamadas",
+      "url": "/call-now.html",
+      "icons": [
+        {
+          "src": "/assets/logo.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Now Mark",
+      "short_name": "Now Mark",
+      "description": "Marketplace gamer",
+      "url": "/marketplace.html",
+      "icons": [
+        {
+          "src": "/assets/logo.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Now ADS",
+      "short_name": "Now ADS",
+      "description": "Gerenciador de anúncios",
+      "url": "/ads.html",
+      "icons": [
+        {
+          "src": "/assets/logo.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ]
+}

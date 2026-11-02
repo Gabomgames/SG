@@ -1,0 +1,29 @@
+{
+  "name": "something-gamer-desktop",
+  "version": "1.0.0",
+  "description": "Aplicativo desktop oficial do Something Gamer",
+  "main": "main.js",
+  "author": "NOW",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^38.1.2",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "tech.now.somethinggamer",
+    "productName": "Something Gamer",
+    "artifactName": "Something-Gamer-Setup-${version}.${ext}",
+    "files": ["main.js", "preload.js", "icon.ico"],
+    "win": {"target": "nsis", "icon": "icon.ico"},
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  }
+}

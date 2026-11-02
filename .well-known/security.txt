@@ -1,0 +1,6 @@
+# Encontrou uma falha no Something Gamer? Conta pra gente.
+# Sem e-mail aqui de proposito: e-mail em arquivo publico vira alvo.
+Contact: https://something-gamer.web.app/support.html
+Preferred-Languages: pt-BR, en
+Canonical: https://something-gamer.web.app/.well-known/security.txt
+Policy: https://something-gamer.web.app/support.html

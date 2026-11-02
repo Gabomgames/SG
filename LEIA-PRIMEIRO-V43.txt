@@ -1,0 +1,31 @@
+SOMETHING GAMER V43 COMPLETE
+
+Esta pasta contém o projeto completo do SG, incluindo:
+- Login Google com CSP corrigida
+- Cadastro com reCAPTCHA v2 visível "Não sou um robô" (exige configuração das chaves)
+- Onboarding e publicProfiles corrigidos
+- Chat, GIF/GIPHY, figurinhas, fotos pequenas e áudio sem depender de Firebase Storage
+- Amizade Gamer para liberar mídia e chamadas
+- Chamadas P2P de voz/vídeo (STUN; TURN pode ser necessário em redes restritivas)
+- Painel admin restrito aos UIDs autorizados e botão Sincronizar usuários
+- Xbox/PlayStation removidos da interface e backend ativo
+- Nova tela inicial, loading global e aviso offline
+- PWA + BAIXAR-PRA-PC.html + BAIXAR-PARA-MOBILE.html
+- Detecção automática de PT, EN, ES, FR, DE, IT e JA, com seletor manual
+- Worker com GIPHY, reCAPTCHA e Cloudflare Workers AI
+
+ANTES DE PUBLICAR O RECAPTCHA V2:
+1. Crie chave reCAPTCHA v2 Checkbox para something-gamer.web.app e something-gamer.firebaseapp.com.
+2. Em config.js, substitua COLE_AQUI_A_SITE_KEY_RECAPTCHA_V2 pela Site Key pública.
+3. No Worker: npx wrangler secret put RECAPTCHA_V2_SECRET
+4. Na pasta something-gamer-api: npx wrangler deploy
+
+SITE:
+- npm run verificar
+- npm run build
+- firebase deploy --only hosting,firestore:rules,firestore:indexes
+
+OBSERVAÇÃO:
+- O projeto mantém Firebase Storage fora do fluxo do chat para não exigir configuração paga.
+- Fotos/áudios do chat são limitados para caber com segurança no documento do Firestore.
+- O projeto Electron e Android continuam nas pastas desktop-app/ e android-app/.

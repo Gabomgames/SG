@@ -1,0 +1,11 @@
+/* Telas de login e cadastro minimalistas, preservando Firebase Auth existente. */
+:root{--sg-bg:#101116;--sg-surface:#1b1c23;--sg-border:#30323d;--sg-text:#f2f2f6;--sg-muted:#a5a7b7;--sg-accent:#b19aff;--sg-blue:#b19aff}
+body:has(.login-page){background:#101116!important;color:#f2f2f6!important;font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif!important}
+.login-page{min-height:100dvh!important;display:grid!important;place-items:center!important;padding:24px 16px!important;background:#101116!important}
+.login-box{width:min(445px,100%)!important;max-width:445px!important;border:1px solid #30323d!important;border-radius:15px!important;background:#1b1c23!important;box-shadow:none!important;padding:34px!important}
+.login-box h1{letter-spacing:-1px!important;font-size:27px!important}
+.login-box>p{color:#a5a7b7!important}
+.login-box input{background:#101116!important;color:#f2f2f6!important;border-color:#40414e!important;border-radius:9px!important;min-height:44px!important}
+.login-box button:not(.google-btn){border-radius:9px!important;box-shadow:none!important}
+.login-box :focus-visible{outline:2px solid #b19aff!important;outline-offset:2px!important}
+@media(max-width:480px){.login-box{padding:22px!important}}

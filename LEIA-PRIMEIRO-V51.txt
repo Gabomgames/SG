@@ -1,0 +1,27 @@
+SOMETHING GAMER V51 — CHAT E COMUNIDADE PROFISSIONAL
+
+PRIMEIRA INSTALAÇÃO NO WINDOWS
+1. Abra o PowerShell nesta pasta.
+2. Execute: npm ci
+3. Publique com:
+   powershell.exe -ExecutionPolicy Bypass -File ".\PUBLICAR-V51.ps1"
+
+O QUE MUDOU
+- Chat desktop reorganizado em linhas profissionais, inspirado na clareza do Discord e com identidade SG.
+- Chat mobile em tela cheia, mensagens legíveis e compositor fixo.
+- Tela vazia preenchida com ações e benefícios do chat.
+- Chamadas redesenhadas, com foto do usuário, áudio, vídeo e compartilhamento de tela.
+- Mensagens de voz, fotos, vídeos, links, GIFs, figurinhas próprias e menções continuam disponíveis.
+- Central de notificações movida para o canto superior direito e separada das conquistas.
+- Conquistas reorganizadas em cartões próprios.
+- Editor de perfil modernizado com prévia visual.
+- Publicações de imagem e vídeo não exigem mais título/descrição obrigatórios; a mídia continua obrigatória.
+- Cache offline atualizado para entregar a V51 imediatamente.
+
+IMPORTANTE SOBRE CHAMADAS
+As ligações são P2P e usam servidores STUN gratuitos. Funcionam em redes domésticas e móveis compatíveis.
+Algumas redes corporativas, CGNATs restritivos ou firewalls exigem um servidor TURN. Sem TURN, nenhum
+sistema WebRTC consegue garantir conexão em 100% das redes. A interface agora informa essa situação.
+
+O ZIP NÃO INCLUI node_modules
+Isso evita o erro ELF/esbuild no Windows. Sempre execute npm ci depois de extrair.

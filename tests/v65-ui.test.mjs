@@ -1,0 +1,13 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const read=(file)=>fs.readFileSync(new URL(`../${file}`,import.meta.url),'utf8');
+const pages=['feed.html','social.html','communities.html','chat.html','marketplace.html','dashboard.html','profile.html','settings.html','events.html','companies.html','verification.html','monetization.html'];
+for(const name of pages)test(`V65: ${name} com CSS e navegação unificados`,()=>{const html=read(name);assert.match(html,/sg-v65-ui\.css\?v=65/);assert.match(html,/sg-v65-shell\.js\?v=65/);});
+test('Now ADS mantém seu gerenciador e tema unificado',()=>assert.match(read('ads.html'),/sg-v65-ads\.css\?v=65/));
+test('Criar conta e login permanecem disponíveis',()=>{assert.match(read('index.html'),/data-home-register/);assert.match(read('index.html'),/data-home-login/);assert.match(read('login.html'),/googleLogin/);assert.match(read('register.html'),/googleLogin/)});
+test('Navegação possui URLs existentes',()=>{const js=read('sg-v65-shell.js');for(const name of ['feed.html','chat.html','marketplace.html','ads.html','dashboard.html'])assert.ok(js.includes(name));});
+test('Now Call oferece saída segura e lado direito para mensagens próprias',()=>{assert.match(read('chat.html'),/id="leaveServer"/);assert.match(read('chat.js'),/members:arrayRemove\(me\.uid\)/);assert.match(read('sg-v65-ui.css'),/\.message\.mine \.message-bubble/)});
+test('Regras validam saída individual e bloqueiam proprietário',()=>{const rules=read('firestore.rules');assert.match(rules,/request\.auth\.uid != resource\.data\.ownerUid/);assert.match(rules,/resource\.data\.members\.hasAll\(request\.resource\.data\.members\)/);});
+test('Link de convite público pede consentimento antes de entrar',()=>assert.match(read('chat.js'),/confirm\("Deseja entrar neste servidor/));
+test('Service worker não usa cache privado',()=>{const sw=read('service-worker.js');assert.match(sw,/sg-public-v6[567]/);assert.match(sw,/req\.mode==='navigate'/);});

@@ -1,0 +1,18 @@
+SOMETHING GAMER V45 FIXED
+
+Correções desta versão:
+- GIPHY: remove GIFs fixos quebrados e carrega Trending/Pesquisa pelo Worker com a chave GIPHY existente.
+- GIFs com erro de carregamento somem do grid em vez de ficar quebrados.
+- Tela inicial: todos os textos principais, inclusive demo do chat, links e rodapé, mudam com o idioma automático/seletor.
+- Voz gravada: corrige MIME com codecs (Chrome/Firefox) e suporte a audio/mp4 (Safari/iPhone).
+- Chamadas WebRTC: corrige corrida dos candidatos ICE antes da criação do documento da ligação, uma causa real de chamadas sem áudio/conexão.
+- Chamadas: força reprodução do áudio remoto quando permitido pelo navegador, adiciona fallback se o índice composto ainda não estiver publicado e ignora chamadas antigas.
+- Cache do Service Worker avançado para V45.
+
+PUBLICAR:
+1. Worker: cd something-gamer-api && npx wrangler deploy
+2. Site/regras/índices: npm run verificar && npm run build && firebase deploy --only hosting,firestore:rules,firestore:indexes
+
+IMPORTANTE:
+- A chave GIPHY continua somente como secret GIPHY_API_KEY no Worker. Não coloque a chave no navegador.
+- Chamadas P2P funcionam com STUN na maioria das redes. Redes NAT corporativas/restritivas podem exigir TURN para garantia universal.

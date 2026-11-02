@@ -1,0 +1,84 @@
+SOMETHING GAMER v40
+
+O QUE MUDOU NESTA CORREÇÃO
+--------------------------
+1. O CHAT VOLTOU A FUNCIONAR
+   O chat.js tinha um "}" faltando. Como é módulo, o arquivo inteiro não
+   carregava e a página de chat estava morta: não abria conversa, não enviava
+   mensagem, e nenhum erro aparecia na tela. Corrigido.
+
+2. AS NOTIFICACOES VOLTARAM A CHEGAR
+   A consulta usava limit(30) sem orderBy. O Firestore então ordenava pelo ID
+   do documento, que é aleatório: depois de umas 30 notificações, as novas
+   paravam de aparecer. Agora ordena por data. O painel também: ele buscava 20
+   sorteadas e só depois ordenava.
+   Notificação lida agora fica marcada, e as de mais de 30 dias são apagadas
+   sozinhas por uma função agendada.
+
+3. PRECISA PUBLICAR OS INDICES
+   As consultas novas exigem um índice. Publique assim:
+
+   firebase deploy --only hosting,firestore:rules,firestore:indexes,storage,functions
+
+4. SEGREDO NOVO E OBRIGATORIO
+   firebase functions:secrets:set MERCADO_PAGO_WEBHOOK_SECRET
+
+   Pegue em: Mercado Pago > Suas integrações > sua aplicação > Webhooks >
+   Assinatura secreta. Sem ele o webhook recusa tudo e o pagamento da
+   Verificação Gamer não é confirmado. O endpoint era público e sem conferência
+   de assinatura.
+
+5. ANTES DE PUBLICAR, RODE
+   node scripts/verificar.mjs
+
+   Confere sintaxe, JSON, módulo carregado sem type="module" e consulta com
+   limit() sem orderBy. É o que teria pego o bug do chat em um segundo.
+
+6. APK
+   Agora sai assembleRelease, não mais debug, e a versão vem do build-info.json
+   (v40 -> versionCode 40). Para assinar de verdade e publicar na Play Store,
+   cadastre nos secrets do GitHub: ANDROID_KEYSTORE_BASE64,
+   ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS e ANDROID_KEY_PASSWORD.
+   Sem eles o APK ainda instala para teste, mas nunca mais é depurável.
+
+7. PERMISSAO DE MICROFONE NO CELULAR
+   O app liberava câmera e microfone para qualquer página aberta no WebView, e
+   navegava para qualquer site com a ponte SGAndroidNotifications ligada. Agora
+   só o SG roda dentro do app; o resto abre no navegador do sistema.
+
+JAVA 17 / ERRO DO GRADLE
+------------------------
+Clique com o botão direito em CONFIGURAR-JAVA-17.ps1 e execute com PowerShell.
+Se o Windows bloquear, abra o PowerShell na pasta e rode:
+powershell -ExecutionPolicy Bypass -File .\CONFIGURAR-JAVA-17.ps1
+Depois feche e abra o VS Code e abra somente a pasta android-app.
+
+GIFS DA INTERNET
+----------------
+A chave da GIPHY nao fica mais no navegador. Cadastre-a com:
+
+    firebase functions:secrets:set GIPHY_API_KEY
+
+A busca passa pela Cloud Function searchGifs, com autenticacao, limite de uso e
+App Check. Os GIFs sugeridos continuam disponiveis se a API estiver fora do ar.
+
+AMIZADE GAMER
+-------------
+Primeiro os dois usuários precisam ser amigos comuns, e agora o pedido
+precisa ser aceito de verdade, o que as regras conferem. No chat, um envia o
+convite de Amizade Gamer e o outro aceita. Só então fotos, vídeos, links e
+áudios são liberados.
+
+SERVIDORES
+----------
+O botão de convite abre a lista de amigos dentro do SG. O dono pode tocar em
+um integrante para mutar, desmutar, expulsar ou bloquear. Expulsar agora
+segura: antes a pessoa se readicionava sozinha com o mesmo link. Convidar de
+novo limpa a expulsão.
+
+MODERACAO AUTOMATICA
+--------------------
+Os termos graves são bloqueados antes do envio E nas regras do Firestore.
+Antes a checagem existia só no navegador, então quem usasse o console publicava
+o que quisesse. Banimento automático por palavra isolada continua desligado,
+para evitar falso positivo.

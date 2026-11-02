@@ -1,0 +1,44 @@
+{
+  "name": "something-gamer-api",
+  "main": "src/index.js",
+  "compatibility_date": "2026-09-11",
+  "workers_dev": true,
+
+  "vars": {
+    "APP_URL": "https://something-gamer.web.app",
+    "FIREBASE_API_KEY": "AIzaSyDd43TsFijT8zwyzlWlaikYMdrxNOeOabo",
+    "FIREBASE_PROJECT_NUMBER": "1070139990422",
+    "FIREBASE_WEB_APP_ID": "1:1070139990422:web:45697a1f96ef4d03ae7db7",
+    "APP_CHECK_ENFORCED": "false",
+    "FIREBASE_PROJECT_ID": "something-gamer",
+    "PAYMENT_ENV": "test",
+    "PAYMENTS_ENABLED": "false",
+    "ADMIN_ENABLED": "false",
+    "PUBLIC_MEDIA_ENABLED": "false",
+    "ALLOW_LOCAL_ORIGINS": "false",
+    "API_URL": "https://something-gamer-api.something-gamer-nowtech.workers.dev",
+    "MARKET_CHECKOUT_ENABLED": "false",
+    "MARKETPLACE_APPROVED": "false",
+    "SUBSCRIPTIONS_ENABLED": "false",
+    "ADS_PAYMENTS_ENABLED": "false",
+    "SOCIAL_MEDIA_ENABLED": "false",
+    "CALL_SFU_ENABLED": "false",
+  },
+
+  "kv_namespaces": [
+    {
+      "binding": "SG_AUTH",
+      "id": "88afe720974b427e8ec6553a0bbf2941"
+    }
+  ],
+
+  "ai": {
+    "binding": "AI"
+  },
+
+  "triggers": { "crons": ["* * * * *"] },
+
+  "observability": {
+    "enabled": true
+  }
+}

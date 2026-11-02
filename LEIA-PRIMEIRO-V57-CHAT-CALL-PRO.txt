@@ -1,0 +1,38 @@
+SOMETHING GAMER — V57 CHAT + CALL PRO
+=====================================
+
+Esta versão foi construída sobre o pacote completo enviado pelo usuário.
+
+ALTERAÇÕES PRINCIPAIS
+---------------------
+1. Chat refeito visualmente para leitura clara, com mensagens agrupadas por autor e por dia.
+2. Mensagem de voz com player próprio, barra de progresso e gravação de até 2 minutos.
+3. Mensagem de voz funciona também durante uma ligação, reutilizando uma cópia da trilha do microfone da chamada quando possível.
+4. Servidores agora aceitam texto, GIF, figurinha, imagem, vídeo, link e áudio.
+5. Criação de servidor simplificada: nome + selecionar amigos. Descrição/tags/ícone ficaram opcionais.
+6. Adicionar pessoas ao servidor é o fluxo principal. Link/código continua como alternativa.
+7. Call Now em janela flutuante não modal: é possível conversar normalmente durante a ligação.
+8. Toque de chamada de entrada/saída gerado localmente pelo navegador.
+9. Compartilhamento de tela redesenhado, com 1080p/30 fps ideal, opção de áudio do sistema quando o navegador oferece e botão de tela cheia.
+10. Chamadas de voz reservam vídeo para permitir compartilhar tela sem precisar encerrar a chamada.
+11. Integração Cloudflare Realtime TURN adicionada ao Worker, com credenciais efêmeras protegidas por Firebase Auth + App Check.
+12. Métricas de chamada: RTT, perda de pacotes, bitrate e indicação de uso de TURN.
+13. Recuperação de rede/ICE adicionada: a chamada tenta renegociar uma rota quando a conexão cai ou muda de rede.
+14. Service Worker atualizado para a camada V57 PRO.
+
+OBRIGATÓRIO PARA TURN REAL
+--------------------------
+Configure os dois secrets no Cloudflare Worker:
+
+CLOUDFLARE_TURN_KEY_ID
+CLOUDFLARE_TURN_KEY_API_TOKEN
+
+Veja CONFIGURAR-TURN-V57-PRO.md.
+
+PUBLICAÇÃO
+----------
+- Publique o Cloudflare Worker.
+- Publique firestore.rules.
+- Publique o front-end atualizado / dist.
+
+Sem os secrets TURN a aplicação continua usando STUN, mas redes com CGNAT/firewall restritivo podem bloquear a chamada. Com TURN configurado, essas conexões podem usar relay.

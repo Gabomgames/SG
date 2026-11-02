@@ -1,0 +1,28 @@
+SOMETHING GAMER — V58.1 (complemento ao V58: reações/busca/encaminhar + fotos)
+
+NOVO NESTA PARTE
+- Reações rápidas (👍❤️😂😮😢🔥) nas mensagens, com contagem e realce da sua reação.
+- Copiar, Encaminhar (escolhe um amigo) e Salvar mensagem (fica só neste aparelho).
+- Busca dentro da conversa (filtra as mensagens já carregadas) e filtro "⭐ Salvas".
+- Player de áudio: velocidade 1x / 1,5x / 2x e barra de progresso clicável.
+- Fotos: agora existem DOIS modos ao enviar
+    * Foto normal — fica na conversa e tem botão de baixar.
+    * Visualização única — abre em tela cheia, e depois de aberta mostra "já foi vista"
+      para quem recebeu; sem baixar, sem menu de copiar/salvar/encaminhar nessa foto.
+  Aviso: o navegador não impede print da tela, isso é dito na própria tela do visor.
+- Logo oficial da Now salvo em assets/now-brand-logo.png (ainda não apliquei em nenhuma
+  tela — me diga onde você quer ele: splash, login, cabeçalho, e-mails etc.).
+
+IMPORTANTE (regras do Firestore)
+Reações e visualização única têm regras próprias (reacaoOk / viewOnceOk) que só deixam
+cada pessoa mexer na própria reação, e só deixam "abrir" a foto de visualização única,
+nunca reverter a expiração. Publique firestore.rules ANTES do hosting, senão essas
+funções dão erro de permissão.
+
+PUBLICAR
+1. firebase deploy --only firestore:rules
+2. npm run verificar && npm run build
+3. firebase deploy --only hosting
+
+NÃO TESTADO CONTRA O FIREBASE REAL — só no navegador, isolado. Teste com duas contas
+antes de liberar (reagir, encaminhar, abrir uma foto de visualização única dos dois lados).

@@ -1,0 +1,12 @@
+import {readFileSync} from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+const root = fileURLToPath(new URL('../',import.meta.url));
+const config = JSON.parse(readFileSync(new URL('../firebase.test.json',import.meta.url)));
+if(config.emulators?.firestore?.host !== '127.0.0.1' || config.emulators.firestore.port !== 8085 || config.emulators.ui?.enabled !== false || config.emulators.singleProjectMode !== true) throw new Error('Configuração de teste deve isolar Firestore em 127.0.0.1:8085 com UI desativada.');
+const args=process.argv.slice(2);
+if(args.some(arg=>!['--security','--founders'].includes(arg)) || args.length>1) throw new Error('Somente --security ou --founders é permitido. Projeto fixo: demo-sg.');
+const target=args.includes('--founders')?'tests/founders-emulator.test.mjs':args.includes('--security')?'tests/v69-audit/firestore-boundaries.test.mjs':'tests/firestore.test.js';
+const result=spawnSync(process.execPath,[fileURLToPath(new URL('../node_modules/firebase-tools/lib/bin/firebase.js',import.meta.url)), 'emulators:exec','--only','firestore','--project','demo-sg','--config','firebase.test.json',`node --test --experimental-test-isolation=none ${target}`],{cwd:root,stdio:'inherit',env:{...process.env,GCLOUD_PROJECT:'demo-sg',GOOGLE_CLOUD_PROJECT:'demo-sg',FIRESTORE_EMULATOR_HOST:'127.0.0.1:8085'}});
+if(result.error) throw result.error;
+process.exit(result.status ?? 1);

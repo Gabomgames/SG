@@ -1,0 +1,34 @@
+# Dependências
+node_modules/
+functions/node_modules/
+something-gamer-api/node_modules/
+
+# Segredos e configurações locais
+.env
+.env.*
+!.env.example
+.dev.vars
+.wrangler/
+*.pem
+*.key
+
+# Logs e cache
+*.log
+firebase-debug.log*
+.firebase/
+.cache/
+
+# Build e pacotes
+dist/
+build/
+*.zip
+
+# Sistema e editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+.local/
+test-results/
+playwright-report/
+artifacts/

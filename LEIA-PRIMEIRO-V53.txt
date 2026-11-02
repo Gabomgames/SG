@@ -1,0 +1,22 @@
+SOMETHING GAMER V53 — ECOSSISTEMA PRO
+
+OBJETIVO
+Transformar o SG em uma plataforma gamer integrada: Social + Marketplace + Communities + Ads + Monetização.
+
+ENTREGAS DESTA VERSÃO
+- SG Communities com layout profissional de servidores, canais, membros e chat persistente no Firestore.
+- Marketplace e Ads preservados da V52 e integrados ao ecossistema.
+- Nova camada visual responsiva V53.
+- Regras Firestore para mensagens das comunidades.
+- Pagamentos continuam server-side via Mercado Pago/Cloud Functions; nunca colocar token no navegador.
+- Desktop, Android, PWA, Firebase Hosting e Worker Cloudflare preservados.
+
+PUBLICAÇÃO
+1. npm install na raiz (se ainda não instalado)
+2. npm run verificar
+3. npm run build
+4. firebase deploy --only hosting,firestore:rules,firestore:indexes,storage,functions --project something-gamer
+5. cd something-gamer-api && npm install && npx wrangler deploy
+
+IMPORTANTE
+O tamanho do ZIP não mede qualidade. Não foram adicionados arquivos aleatórios apenas para inflar o pacote. Em produção, node_modules, caches e binários de build normalmente não devem ser versionados.

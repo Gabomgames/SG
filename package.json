@@ -1,0 +1,47 @@
+{
+  "name": "something-gamer",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "test:v65": "node --test tests/v65-ui.test.mjs",
+    "verificar": "node scripts/verificar.mjs",
+    "build": "node scripts/build.mjs",
+    "deploy": "npm run deploy:site",
+    "deploy:site": "npm run verificar && npm run build && firebase deploy --only hosting,firestore:rules,firestore:indexes --project something-gamer",
+    "deploy:worker": "cd something-gamer-api && npx wrangler deploy",
+    "deploy:functions": "firebase deploy --only functions --project something-gamer",
+    "deploy:all": "npm run verificar && npm run build && firebase deploy --only hosting,firestore:rules,firestore:indexes,storage,functions --project something-gamer",
+    "test": "node --test --experimental-test-isolation=none tests/unit.test.js tests/worker.test.js tests/market.test.js tests/features.test.js",
+    "test:rules": "node scripts/test-rules.mjs",
+    "test:e2e": "playwright test",
+    "check": "npm run verificar && npm test && npm run build",
+    "test:sqlite": "python3 tests/sqlite.test.py && python3 tests/market-sql.test.py",
+    "test:runtime": "node --test --experimental-test-isolation=none tests/runtime.test.js",
+    "test:v68": "node --test tests/v68-ui.test.mjs",
+    "test:v69": "node --test tests/v69-regression.test.mjs",
+    "deploy:media": "firebase deploy --only storage --project something-gamer",
+    "test:contracts": "node --test --experimental-test-isolation=none tests/verifier.test.mjs tests/browser-fixture.test.mjs tests/verification-view.test.mjs tests/v69-audit/contracts.test.mjs tests/v69-audit/dev-server.test.mjs",
+    "test:regressions": "npm run build && node --test --experimental-test-isolation=none tests/v65-ui.test.mjs tests/v651-regressions.test.mjs tests/v66-regressions.test.mjs tests/v67-regressions.test.mjs tests/v68-ui.test.mjs tests/v69-regression.test.mjs",
+    "check:fast": "npm run verificar && npm test && npm run test:contracts && npm run test:founders && npm run test:regressions && npm run test:sqlite",
+    "test:rules:security": "node scripts/test-rules.mjs --security",
+    "test:founders": "node --test --experimental-test-isolation=none tests/founders.test.mjs tests/founders-client.test.mjs tests/founders-mirror.test.mjs",
+    "test:rules:founders": "node scripts/test-rules.mjs --founders"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "@playwright/test": "^1.58.2",
+    "acorn": "^8.15.0",
+    "esbuild": "^0.25.0",
+    "firebase": "^13.0.0",
+    "firebase-tools": "^15.33.0",
+    "leaflet": "^1.9.4",
+    "livekit-client": "^2.17.2",
+    "wrangler": "^4.149.0"
+  },
+  "overrides": {
+    "@grpc/grpc-js": "^1.14.6",
+    "basic-ftp": "^6.2.1"
+  }
+}

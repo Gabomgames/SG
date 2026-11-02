@@ -1,0 +1,38 @@
+SOMETHING GAMER V56 — NOW SUITE / PROFESSIONAL UI
+Data: 22/09/2026
+
+O QUE FOI FEITO
+- Base V55 completa preservada.
+- Criada a NOW Suite integrada ao SG:
+  • Call Now: entrada para mensagens, servidores e chamadas já suportadas pelo chat/calls.js.
+  • Now Mark: Marketplace C2C/B2C redesenhado, localização/raio, categorias, detalhes do produto, favoritos, pedidos, loja e integração com Now ADS.
+  • Now ADS: gerenciador redesenhado com visão geral, criação, campanhas, públicos, posicionamentos e central de aprendizado.
+- Comunidades redesenhadas, com descoberta, servidores do usuário, onboarding e integração com Call Now/Now ADS.
+- Chat recebeu uma nova camada visual para corrigir mensagens gigantes, largura, mídia, composer, sidebars e hierarquia.
+- Perfil e Editar Perfil receberam nova hierarquia visual, capa, cards, barra NOW e editor reorganizado.
+- Vice Sunset foi ampliado: gradientes tropicais, neon, palmeiras em silhueta e animação de fundo (respeita “reduzir animações”).
+- Suporte reconstruído com guias por produto, inclusive passo a passo completo do Now ADS.
+- Painel administrativo recebeu visual mais consistente e fallback local protegido para os UIDs administrativos quando a Function de bootstrap não puder ser alcançada em localhost.
+- Verificação Gamer continua com fluxo real: assinatura Mercado Pago -> webhook -> análise -> aprovação -> selo.
+- Marketplace e campanhas continuam usando valores validados no backend; não confiam no preço enviado pelo navegador.
+
+PAGAMENTOS
+Para dinheiro real, configure e publique as Firebase Functions com:
+- MERCADO_PAGO_ACCESS_TOKEN
+- MERCADO_PAGO_WEBHOOK_SECRET
+Também mantenha os demais secrets já usados pelo projeto (Steam, RAWG, Resend, Giphy etc.).
+
+IMPORTANTE SOBRE NOW MARK
+O checkout registra compra, taxa da plataforma e líquido do vendedor. O repasse automático para vendedores exige onboarding/OAuth de Marketplace do provedor de pagamento. Enquanto isso, o projeto mantém payoutStatus=pending_manual para não simular split automático.
+
+PUBLICAÇÃO RECOMENDADA
+1. Instale Node.js compatível.
+2. Abra PowerShell na pasta do projeto.
+3. Execute .\PUBLICAR-V56.ps1
+O script instala dependências se necessário, verifica, gera dist, publica Worker e publica Hosting + Firestore + Storage + Functions.
+
+VALIDAÇÃO DESTA ENTREGA
+- npm run verificar: OK (222+ arquivos do site conferidos; o número pode subir conforme os novos arquivos).
+- node --check nos JS alterados: OK.
+- O build de produção não pôde ser executado neste ambiente porque o node_modules raiz não continha esbuild/javascript-obfuscator. O script de publicação resolve isso com npm ci quando houver internet.
+- dist/ recebeu os novos HTML/CSS e páginas NOW para prévia; a publicação definitiva deve sempre executar npm run build.

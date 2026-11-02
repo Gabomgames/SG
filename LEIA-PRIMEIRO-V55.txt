@@ -1,0 +1,97 @@
+SOMETHING GAMER V55 — ULTRA PROFESSIONAL
+22/09/2026
+
+BASE
+- Esta versão preserva a base completa da V54/V51 e adiciona as melhorias por cima.
+- Web/PWA, Firebase, Cloud Functions, Firestore, Cloudflare Worker, Android e Desktop permanecem no pacote.
+
+PRINCIPAIS EVOLUÇÕES
+1. SOCIAL / FEED
+- Feed redesenhado com proporção visual 4:5, Stories, curtidas, comentários, compartilhamento e salvar.
+- Destaque visual de @menções e #hashtags.
+- Composer de publicação redesenhado para texto, imagem, vídeo e enquete.
+- Slot nativo para campanhas patrocinadas do SG Ads.
+- Perfil público e editor de perfil redesenhados e responsivos.
+
+2. COMUNIDADES E CHAT
+- Nova descoberta de servidores públicos e busca de comunidades.
+- Criação de servidor com visibilidade, tags e convite.
+- Layout do chat reconstruído no padrão de apps modernos de comunidade.
+- Correção do bug que fazia mensagens ocuparem linhas gigantes.
+- DMs, servidores, canais, respostas, reações/mídia, áudio, GIF, stickers, convites e moderação preservados.
+- Atalhos para criar e descobrir comunidades.
+
+3. SG MARKET
+- Marketplace C2C/B2C com busca, categoria, condição, ordenação, favoritos, imagens e localização.
+- Área Minha Loja e histórico de compras/vendas.
+- Checkout criado pelo backend; preço e vendedor são validados no servidor.
+- Webhook cria pedido após pagamento aprovado e marca o anúncio como vendido.
+- Taxa da plataforma e líquido do vendedor ficam registrados no pedido.
+
+IMPORTANTE SOBRE REPASSE AO VENDEDOR
+- O checkout real funciona com a conta Mercado Pago da plataforma quando os secrets estão configurados.
+- O repasse automático/split para vendedores exige onboarding Mercado Pago Marketplace/OAuth de cada vendedor.
+- Nesta V55 o pedido registra payoutStatus=pending_manual até essa integração ser habilitada. Isto evita simular um split que não existe.
+
+4. VERIFICAÇÃO GAMER
+- Fluxo pago real: escolha do plano -> Mercado Pago -> confirmação por webhook -> análise administrativa -> aprovação do selo.
+- Mensal, semestral e anual.
+- Status e cancelamento de assinatura disponíveis ao usuário.
+- O painel não pode aprovar uma verificação paga sem confirmação do pagamento.
+
+5. MONETIZAÇÃO
+- Creator+, Community Pro e Seller Pro com assinaturas recorrentes via Mercado Pago Preapproval.
+- Estado ativo/pendente/cancelado salvo na conta.
+- Cancelamento pelo próprio usuário.
+- Webhook assinado atualiza a assinatura.
+
+6. SG ADS
+- Campanhas para post, produto, comunidade ou perfil.
+- Objetivo, posicionamento, região, interesses, faixa etária, duração e orçamento.
+- Checkout de orçamento validado pelo backend.
+- Campanha só é ativada após confirmação do pagamento.
+- Criativo patrocinado pode aparecer nativamente no Feed.
+
+7. PAINEL ADMINISTRATIVO
+- Interface redesenhada.
+- Removida a antiga trava local de senha secundária.
+- Autorização continua protegida por Firebase Auth + claim/UID administrativo + regras do Firestore.
+- Operação reúne usuários, verificações, empresas, denúncias, marketplace, pedidos, campanhas e pagamentos.
+
+8. SG FOR BUSINESS
+- Área empresarial reconstruída com presença oficial, anúncios, marketplace, comunidades e eventos.
+
+9. TEMAS
+- Padrão SG.
+- Escuro.
+- Claro.
+- Vice Sunset: tema especial tropical neon com pôr do sol e palmeiras, criado para o SG.
+
+PUBLICAÇÃO
+1. Instale as dependências de desenvolvimento na máquina de publicação:
+   npm install
+
+2. Valide:
+   npm run verificar
+
+3. Gere o dist otimizado/ofuscado:
+   npm run build
+
+4. Publique tudo:
+   npm run deploy:all
+
+SECRETS DO MERCADO PAGO
+As Cloud Functions que criam checkout/assinaturas e processam webhooks exigem os secrets já previstos no projeto:
+- MERCADO_PAGO_ACCESS_TOKEN
+- MERCADO_PAGO_WEBHOOK_SECRET
+
+Também publique firestore.rules, firestore.indexes.json, storage.rules e Functions junto com o Hosting.
+
+DIST INCLUÍDO NESTE ZIP
+- O dist/ deste pacote foi sincronizado com os arquivos V55 para não entregar páginas antigas.
+- Neste ambiente não foi possível executar a etapa de bundle/ofuscação porque os pacotes npm de build (esbuild/javascript-obfuscator) não estavam instalados.
+- Em produção, execute npm install && npm run build antes do deploy para gerar o dist final otimizado.
+
+VALIDAÇÃO
+- npm run verificar: aprovado.
+- JavaScript principal e Cloud Functions: verificação de sintaxe aprovada.

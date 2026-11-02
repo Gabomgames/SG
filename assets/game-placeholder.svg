@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 215" role="img" aria-label="Jogo sem capa">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#151824"/><stop offset="1" stop-color="#090a10"/></linearGradient></defs>
+  <rect width="460" height="215" rx="18" fill="url(#g)"/>
+  <path d="M181 89h98c25 0 40 18 45 49l5 29c2 13-14 21-23 11l-24-27H178l-24 27c-9 10-25 2-23-11l5-29c5-31 20-49 45-49Z" fill="none" stroke="#6b6f82" stroke-width="8" stroke-linejoin="round"/>
+  <path d="M184 112v28M170 126h28" stroke="#8c91a8" stroke-width="7" stroke-linecap="round"/><circle cx="278" cy="119" r="6" fill="#745cff"/><circle cx="296" cy="135" r="6" fill="#13b9ee"/>
+</svg>

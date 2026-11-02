@@ -1,0 +1,21 @@
+SOMETHING GAMER — V57 PRO COMPLETE
+Empresa proprietária/operadora na interface: NOW
+
+PRINCIPAIS AJUSTES DESTA ENTREGA
+- Perfil/dashboard polido e reorganizado.
+- Monetização reconstruída com explicação clara de planos, receitas e fluxos.
+- Teste REAL do microfone: nível ao vivo + gravação de 5 segundos + reprodução.
+- Preferências de microfone/saída de áudio passam a ser lidas pelo Call Now.
+- Seleção de saída é aplicada quando o navegador suporta setSinkId.
+- Now Mark e Now ADS receberam ajustes de densidade/layout.
+- Marca "Now Desenvolvimento Tech" substituída por "NOW" nos arquivos de interface/documentação da base.
+- Guia completo de pagamentos incluído em CONFIGURAR-PAGAMENTOS-V57-PRO.md.
+
+ANTES DE PUBLICAR
+1. Leia CONFIGURAR-PAGAMENTOS-V57-PRO.md.
+2. Leia CONFIGURAR-TURN-V57-PRO.md.
+3. Configure secrets no Firebase/Cloudflare.
+4. Rode npm ci onde aplicável.
+5. Gere o build final.
+6. Publique Functions, Firestore/Storage rules, Hosting e Worker.
+7. Teste com duas contas e dois dispositivos reais.

@@ -1,0 +1,17 @@
+/* Painel de moderação do admin (V58) */
+#moderationPanel .mod-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;margin-bottom:28px}
+#moderationPanel .mod-form label{display:grid;gap:6px;font-size:13px;font-weight:600;color:var(--app-muted,#aeb3cc)}
+#moderationPanel .mod-form label.wide,#moderationPanel .mod-form .mod-error,#moderationPanel .mod-form button{grid-column:1/-1}
+#moderationPanel .mod-form label[hidden]{display:none}
+#moderationPanel input,#moderationPanel select,#moderationPanel textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid var(--app-border,rgba(255,255,255,.15));background:rgba(255,255,255,.04);color:inherit;font:inherit}
+#moderationPanel textarea{min-height:76px;resize:vertical}
+#moderationPanel .mod-error{color:#ff8090;min-height:1em;margin:0}
+#moderationPanel h3{margin:26px 0 12px}
+#moderationPanel .mod-item{display:flex;gap:14px;justify-content:space-between;align-items:flex-start;padding:14px;margin-bottom:10px;border:1px solid var(--app-border,rgba(255,255,255,.12));border-radius:14px}
+#moderationPanel .mod-item.revoked{opacity:.6}
+#moderationPanel .mod-item small{display:block;color:var(--app-muted,#8b90ad);margin:2px 0 6px}
+#moderationPanel .mod-item p{margin:4px 0;overflow-wrap:anywhere}
+#moderationPanel .mod-item .mod-revoked{color:#7ee2a8;font-weight:600}
+#moderationPanel .mod-actions{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+#moderationPanel .mod-actions button{padding:7px 10px;border-radius:9px;border:1px solid var(--app-border,rgba(255,255,255,.18));background:rgba(255,255,255,.06);color:inherit;font:inherit;font-size:13px;cursor:pointer}
+@media(max-width:700px){#moderationPanel .mod-form{grid-template-columns:1fr}#moderationPanel .mod-item{flex-direction:column}#moderationPanel .mod-actions{justify-content:flex-start}}

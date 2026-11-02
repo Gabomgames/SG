@@ -1,0 +1,67 @@
+SOMETHING GAMER V48 - PUBLICACAO COMPLETA
+==========================================
+
+POR QUE O VS CODE E O SITE ESTAVAM DIFERENTES?
+O site publicado ainda era a versao de 17/09/2026. A publicacao mais nova nao
+terminou quando a credencial do Firebase expirou. A V48 tambem troca o cache do
+Service Worker, impedindo que o celular continue mostrando arquivos da V47.
+
+ANTES DE PUBLICAR (uma unica vez)
+1. Worker > segredo RECAPTCHA_V2_SECRET: ja configurado.
+2. Worker > segredo ADMIN_RECOVERY_CODE: ja configurado.
+3. Worker > segredo GIPHY_API_KEY: necessario para os GIFs.
+   Entre em something-gamer-api e execute:
+     npx wrangler secret put GIPHY_API_KEY
+   Cole somente a chave GIPHY e depois execute:
+     npx wrangler deploy
+4. A Site Key publica do reCAPTCHA v2 ja esta em config.js.
+
+PUBLICAR A V48 COMPLETA
+Abra o PowerShell na pasta que contem firebase.json e execute:
+
+  powershell.exe -ExecutionPolicy Bypass -File ".\PUBLICAR-V48.ps1"
+
+O script publica, nesta ordem: Worker, Functions, site, regras, indices e
+Storage. Nao feche a janela enquanto um passo estiver em andamento.
+
+SE O PASSO DAS FUNCTIONS PEDIR FATURAMENTO
+As Firebase Functions podem exigir o plano Blaze. Nesse caso, o site e o Worker
+podem ser publicados, mas lista/comandos do painel administrativo, Steam e
+checkout continuarao usando a Function antiga ate esse passo ser concluido.
+
+PRIMEIRO ACESSO AO PAINEL ADMINISTRATIVO
+1. Entre com a conta administradora.
+2. Abra admin.html.
+3. Em cada area, digite uma nova senha com pelo menos 10 caracteres.
+4. Digite o codigo mestre configurado em ADMIN_RECOVERY_CODE.
+5. Nos proximos acessos use somente a senha.
+6. Se esquecer, informe uma nova senha e o codigo mestre novamente.
+Nao existe link publico "Esqueci a senha".
+
+USUARIOS QUE NAO APARECEM
+Depois de publicar as Functions e entrar no painel, abra Usuarios, desbloqueie
+a area Verificacoes e clique em "Sincronizar usuarios". Isso cria/atualiza os
+publicProfiles antigos. Perfis privados continuam ocultos por escolha do dono.
+
+CHAMADAS DE VOZ E VIDEO
+O codigo WebRTC e a permissao de microfone/camera estao prontos. STUN sozinho
+nao atravessa todas as redes. Para chamadas confiaveis entre PC, Wi-Fi, 4G/5G
+e CGNAT ainda e necessario contratar/configurar TURN com credenciais temporarias.
+Nunca coloque uma senha TURN permanente em config.js.
+
+TESTE DEPOIS DA PUBLICACAO
+1. Abra o site e use Ctrl+Shift+R uma vez.
+2. No celular, feche e reabra o app/PWA.
+3. Cadastre uma conta de teste e confirme o reCAPTCHA.
+4. Pesquise um GIF e envie uma figurinha personalizada.
+5. Abra Comunidade e confirme que os perfis publicos aparecem.
+6. Teste uma mensagem, resposta, edicao antes de 2 min e exclusao antes de 5 min.
+7. Teste foto/video/voz com uma Amizade Gamer aceita pelos dois.
+8. Teste o painel com senha + codigo mestre no primeiro acesso.
+
+SEGURANCA
+- Firebase Web API Key no frontend e publica por projeto; a protecao real vem
+  de regras, App Check, dominios autorizados e endpoints autenticados.
+- E-mail administrativo e lista de admins nao ficam no frontend.
+- O codigo mestre, GIPHY e reCAPTCHA secreto ficam apenas no Worker.
+- CSP, HSTS, X-Content-Type-Options e politica de privacidade estao incluidos.

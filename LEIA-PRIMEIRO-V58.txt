@@ -1,0 +1,41 @@
+SOMETHING GAMER — V58 (Chat de verdade + Moderação completa)
+
+FEITO NESTA VERSÃO
+Chat
+- Mensagem aparece na hora; estados: Enviando… -> ✓ Enviada -> ✓✓ Lida (conversas diretas).
+- "Aguardando conexão…" quando estiver offline; envio automático ao reconectar.
+- Cache persistente (IndexedDB) em firebase.js: mensagens na fila sobrevivem a recarregar a aba.
+- Falha ao enviar: bolha vermelha com "Tentar novamente" e "Descartar" (não some mais).
+- Correção grave: o chat lia as 200 PRIMEIRAS mensagens (asc + limit). Agora lê as 50 ÚLTIMAS
+  (limitToLast) e carrega mais ao subir a conversa. Fim do "mensagem nova não aparece".
+- Redesenho da lista só quando algo muda (sem piscar). Polling caiu de 2,5 s (200 leituras) para 30 s.
+- Divisor "Novas mensagens", separadores Hoje/Ontem/data, agrupamento por autor.
+- "Fulano está digitando…" e recibo de leitura (conversations.reads / conversations.typing).
+- Teclado no celular: viewport dinâmica (visualViewport + interactive-widget) — o campo não fica coberto.
+
+Moderação (advertência / suspensão / banimento)
+- Tela obrigatória em todas as páginas (sanction-gate.js + sanction-ui.js):
+  * Advertência: motivo, regra, data, caso, "Entendi", "Acho que houve um erro". Depois de "Entendi" a pessoa segue usando o app.
+  * Suspensão: início, término, tempo restante ao vivo, bloqueia o app; só permite ver, ajuda, recurso, acompanhar recurso e sair. Libera sozinha ao terminar.
+  * Banimento: permanente ou não, recurso, ajuda e sair.
+- Recurso: motivo, explicação, links de evidência; status Enviado / Em análise / Info. solicitadas / Aceito / Negado; a pessoa responde pedidos de informação na mesma tela.
+- Painel admin (aba "Moderação"): usuário, ação, regra violada, motivo, duração, observação interna (privada), evidências,
+  histórico, Reverter (sem apagar — marca como revogada com quem/quando/por quê), Alterar duração, fila de recursos.
+- Auditoria em adminAuditLogs (moderation.suspension.revoked etc., com valor anterior/novo).
+- Nota interna e evidências ficam em sanctions/{id}/private/details (só admin lê).
+
+PUBLICAR (ORDEM IMPORTA)
+1. firebase deploy --only firestore:rules   (OBRIGATÓRIO: recursos, leitura/digitando e "Entendi" dependem das novas regras)
+2. npm run verificar && npm run build
+3. firebase deploy --only hosting
+4. Testar com DUAS contas em dois aparelhos (enviar offline, punir, recorrer, reverter).
+
+NÃO FEITO NESTA VERSÃO (precisa de backend/credenciais ou é grande demais para uma entrega só)
+- Entregue (dois tiques), contadores de não lidas, busca na conversa, reações/encaminhar/fixar/preview de links/galeria.
+- Mensagem de voz nível WhatsApp (deslizar p/ cancelar, travar, waveform real, velocidade 1,5x/2x).
+- Call Now: SFU (Cloudflare Realtime), estados/diagnóstico de qualidade, troca de dispositivos.
+- Níveis administrativos (Super Admin/Moderador/Suporte/Financeiro) com permissões por cargo.
+- Mapa do Now Mark (Mapbox/Google), geohash, filtros por distância; avaliações; OAuth Mercado Pago.
+- Now ADS (campanha>conjunto>anúncio), Central Financeira, tickets completos no suporte.
+- Reescrita do Design System (ainda há CSS empilhado v51..v58), Vice Sunset com parallax.
+- Amigos: seguir sem ser amigo, amigos em comum/online/jogando.

@@ -1,0 +1,17 @@
+{
+  "roots": [
+    "/workspace/SG"
+  ],
+  "errors": [],
+  "explicit_runtime_or_dependency_exclusions": [
+    "/workspace/.codex",
+    "/workspace/.aws",
+    "/workspace/.agents",
+    "/workspace/toolchains",
+    "/workspace/node22-dependencies-incomplete",
+    "/workspace/.git (reserved empty runtime marker)",
+    "/workspace/phase1-input/Something-Gamer-V69-PROFISSIONAL-VERIFICADO/Something-Gamer-V69/node_modules",
+    "/workspace/SG/node_modules",
+    "/workspace/SG/functions/node_modules"
+  ]
+}

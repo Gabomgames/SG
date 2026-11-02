@@ -1,0 +1,27 @@
+SOMETHING GAMER V54 — FULL PROFESSIONAL ECOSYSTEM
+
+BASE
+- Esta versão usa a V51 ORIGINAL COMPLETA como base.
+- Nenhum diretório da V51 foi removido: dist, Android, Desktop, Functions, Worker, PWA, assets e dependências permanecem no pacote.
+- As evoluções V52/V53 foram aplicadas por cima da base original.
+
+ECOSSISTEMA
+1. SG SOCIAL: feed, perfil, criação de conteúdo e camada visual profissional.
+2. SG MARKET: marketplace C2C/B2C, catálogo, destaque e monetização.
+3. SG COMMUNITIES: comunidades/canais com experiência inspirada em apps modernos de comunidade.
+4. SG ADS: campanhas para posts, produtos, criadores e comunidades.
+5. MONETIZAÇÃO: Creator+, Community Pro, Seller Pro e fluxos de checkout.
+
+PAGAMENTOS
+- A integração real depende das credenciais/secrets do Mercado Pago e da publicação das Functions/webhooks.
+- Nunca coloque token privado no frontend.
+- Antes de operação comercial real, valide split/repasse, estorno, disputa, frete, impostos e regras de marketplace.
+
+PUBLICAÇÃO
+- Faça backup da versão publicada.
+- Configure os secrets do ambiente.
+- Publique regras/índices/Functions conforme a infraestrutura do projeto.
+- Teste login, criação de posts, chat, checkout, webhook, permissões e responsividade antes de produção.
+
+IMPORTANTE
+Tamanho de ZIP não mede qualidade. Esta versão mantém a base integral e acrescenta os módulos profissionais sem arquivos artificiais para inflar tamanho.

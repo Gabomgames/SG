@@ -1,0 +1,9 @@
+/* NOW ADS V65: harmoniza com o SG, preservando tabelas, formulários e funcionalidades. */
+body.now-manager{--nm-bg:#101116;--nm-panel:#1b1c23;--nm-border:#30323d;--nm-text:#f2f2f6;--nm-muted:#a5a7b7;--nm-accent:#b19aff;background:var(--nm-bg)}
+body.now-manager .manager-header,body.now-manager .manager-sidebar{background:#15161d}
+body.now-manager .manager-card,body.now-manager .ads-kpi-grid article,body.now-manager .ads-performance>div{box-shadow:none;border-radius:10px}
+body.now-manager .manager-sidebar button.active{background:#302a41;color:#dacdff}
+body.now-manager .manager-table th{background:#23252c;color:#b7b8c6}
+body.now-manager .manager-table td{border-color:#30323d}
+body.now-manager .button.primary{background:#b19aff;border-color:#b19aff;color:#17141f}
+body.now-manager .manager-title h1{font-size:clamp(23px,2.5vw,29px)}

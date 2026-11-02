@@ -1,0 +1,33 @@
+{
+  "modified": [
+    "admin.html",
+    "firestore.rules",
+    "admin.js",
+    "package.json",
+    "firebase.js",
+    "config.js",
+    "verification.js",
+    "call-now.html",
+    "scripts/verificar.mjs",
+    "scripts/build.mjs",
+    "tests/firestore.test.js",
+    "tests/v67-regressions.test.mjs",
+    "functions/index.js",
+    "something-gamer-api/src/firestore-server.js",
+    "something-gamer-api/src/admin.js",
+    "something-gamer-api/src/firestore-store.js",
+    "tests/browser/visual.spec.js",
+    ".github/workflows/deploy.yml",
+    ".github/workflows/verificar.yml"
+  ],
+  "missing": [],
+  "generated_and_historical_exclusions": [
+    "dist/",
+    "artifacts/",
+    "test-results/",
+    "playwright-report/",
+    "node_modules/",
+    ".local/"
+  ],
+  "old_commits_recovered": false
+}

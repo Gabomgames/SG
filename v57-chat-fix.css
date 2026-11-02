@@ -1,0 +1,162 @@
+/* =====================================================================
+   V57 — Correção do chat (carregar POR ÚLTIMO em chat.html)
+
+   Causas encontradas:
+   1) style.css tem uma regra global  header{position:fixed;top:0;left:0;
+      width:100%;height:78px;z-index:1000;background:...}  pensada para o
+      menu do site. O chat usa <header> dentro de CADA balão de mensagem, e
+      também no topo do chat e da barra lateral. Resultado: o cabeçalho
+      ("Você", selos, hora) virava uma faixa fixa e translúcida por cima do
+      texto (por isso "Top" e "Tá funcionando" ficavam quase invisíveis), os
+      selos empilhavam e o resto do layout se sobrepunha.
+   2) v56-ultra.css força, em telas <= 820px,
+      grid-template-columns:64px 250px 1fr no .discord-shell. No celular isso
+      reserva 314px para barra lateral/servidores e espreme (ou empurra para
+      fora da tela) a conversa. A barra lateral deve ser uma gaveta.
+   ===================================================================== */
+
+/* ---------- 1) Neutraliza o header global dentro do chat ---------- */
+.chat-page .discord-shell header{
+  position:relative!important;
+  inset:auto!important;
+  width:auto!important;
+  z-index:auto!important;
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+/* o topo do chat precisa ocupar a coluna inteira e ficar acima da lista */
+.chat-page .discord-chat>header{width:100%!important;z-index:5!important;box-sizing:border-box!important}
+.chat-page .discord-sidebar>header{width:100%!important;box-sizing:border-box!important}
+
+/* cabeçalho de cada mensagem (nome + selos + hora) */
+.chat-page .message-bubble>header{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:2px 8px!important;
+  height:auto!important;
+  min-height:0!important;
+  padding:0!important;
+  margin:0 0 3px!important;
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+}
+.chat-page .message-bubble>header b{
+  display:inline-flex!important;
+  flex-wrap:nowrap!important;
+  align-items:center!important;
+  gap:4px!important;
+  max-width:100%;
+  min-width:0;
+}
+.chat-page .message-bubble>header b img{flex:0 0 auto;width:18px!important;height:18px!important;margin:0!important;vertical-align:baseline!important}
+.chat-page .message-bubble>header time{white-space:nowrap}
+
+/* texto sempre legível (nunca herda cor do fundo) */
+.chat-page .message-bubble p{color:#e6e8f5!important;opacity:1!important}
+.chat-page .message-bubble{overflow-wrap:anywhere}
+.chat-page .message-bubble>small:empty{display:none!important}
+
+/* figurinha (emoji) antiga sem imagem — ver messageBody() em chat.js */
+.chat-page .chat-sticker{display:block;padding:2px 0;font-size:64px;line-height:1.1}
+.chat-page .chat-media-missing{display:inline-flex;align-items:center;gap:6px;padding:8px 10px;border:1px dashed rgba(255,255,255,.22);border-radius:10px;color:#aeb3cc;font-size:13px}
+
+/* ---------- 2) Celular / tablet estreito: gaveta em vez de 3 colunas ---------- */
+@media (max-width:820px){
+  .chat-page{height:100dvh!important;overflow:hidden!important}
+  .chat-page .sg-header{display:none!important}
+
+  .chat-page .discord-shell,
+  .chat-page .discord-shell.show-spaces,
+  .chat-page .discord-shell:not(.show-spaces){
+    position:fixed!important;inset:0!important;
+    width:100%!important;max-width:none!important;
+    height:100dvh!important;max-height:none!important;
+    margin:0!important;border:0!important;border-radius:0!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:minmax(0,1fr)!important;
+    overflow:hidden!important;
+  }
+  .chat-page .discord-shell .discord-chat,
+  .chat-page .discord-shell.show-spaces .discord-chat{
+    display:grid!important;
+    grid-column:1!important;grid-row:1!important;
+    width:100%!important;max-width:100%!important;min-width:0!important;
+    grid-template-rows:58px minmax(0,1fr) auto!important;
+  }
+
+  .chat-page .discord-shell .server-rail,
+  .chat-page .discord-shell .discord-sidebar,
+  .chat-page .discord-shell:not(.show-spaces) .server-rail,
+  .chat-page .discord-shell:not(.show-spaces) .discord-sidebar{
+    position:fixed!important;top:0!important;bottom:0!important;
+    height:auto!important;
+    z-index:130!important;
+    transform:translateX(-110%)!important;
+    transition:transform .22s ease!important;
+    box-shadow:none!important;
+  }
+  .chat-page .discord-shell .server-rail{display:flex!important;flex-direction:column!important;left:0!important;right:auto!important;width:68px!important;padding:10px 8px!important;overflow-y:auto!important}
+  .chat-page .discord-shell .discord-sidebar{display:grid!important;left:68px!important;right:auto!important;width:min(300px,calc(100vw - 68px))!important;border-radius:0!important}
+  /* a gaveta fica em left:68px, então precisa sair 100% + 68px para sumir de vez */
+  .chat-page .discord-shell .discord-sidebar,
+  .chat-page .discord-shell:not(.show-spaces) .discord-sidebar{transform:translateX(calc(-100% - 80px))!important}
+  .chat-page .discord-shell.show-spaces .server-rail,
+  .chat-page .discord-shell.show-spaces .discord-sidebar{transform:translateX(0)!important}
+  .chat-page .discord-shell.show-spaces .discord-sidebar{box-shadow:24px 0 60px rgba(0,0,0,.6)!important}
+  .chat-page .discord-shell.show-spaces::after{content:"";position:fixed;inset:0;z-index:120;background:rgba(0,0,0,.56)}
+
+  /* lista de mensagens usa a largura toda e rola por dentro */
+  .chat-page .message-list{padding:12px 10px!important;min-height:0!important;overflow-y:auto!important;overflow-x:hidden!important}
+  .chat-page .message{max-width:100%!important;grid-template-columns:34px minmax(0,1fr)!important;gap:8px!important;padding:6px 4px!important;margin:0!important}
+  .chat-page .message-avatar{width:34px!important;height:34px!important}
+  .chat-page .message-bubble,
+  .chat-page .message.mine .message-bubble{max-width:100%!important;width:auto!important}
+  .chat-page .chat-media{max-width:100%!important;height:auto!important}
+
+  /* barra de digitação sempre dentro da tela: uma linha só, texto ocupa o resto */
+  .chat-page .message-form{
+    position:relative!important;
+    display:flex!important;flex-wrap:wrap!important;align-items:flex-end!important;
+    gap:2px!important;
+    width:auto!important;max-width:none!important;height:auto!important;min-height:52px!important;max-height:none!important;
+    margin:0 8px max(8px,env(safe-area-inset-bottom))!important;
+    padding:6px!important;
+    box-sizing:border-box!important;
+    grid-template-columns:none!important;
+  }
+  .chat-page .message-form{align-items:center!important}
+  .chat-page .message-form>.reply-composer:not([hidden]){flex:0 0 100%!important}
+  .chat-page .message-form>.emoji-wrap{flex:0 0 auto!important;display:flex!important;align-items:center!important}
+  .chat-page .message-form .composer-tool,
+  .chat-page .message-form .emoji-button,
+  .chat-page .message-form .send-message{
+    flex:0 0 32px!important;width:32px!important;min-width:32px!important;height:40px!important;
+    display:inline-grid!important;place-items:center!important;
+    margin:0!important;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;
+    font-size:14px!important;line-height:1!important;
+  }
+  .chat-page .message-form #emojiButton,
+  .chat-page .message-form #stickerButton,
+  .chat-page .message-form #gifButton,
+  .chat-page .message-form #mediaButton,
+  .chat-page .message-form #voiceButton{width:32px!important;min-width:32px!important;height:40px!important;border:0!important;background:transparent!important}
+  .chat-page .message-form #mediaButton:disabled,
+  .chat-page .message-form #voiceButton:disabled{opacity:.55}
+  .chat-page .message-form .send-message{flex-basis:40px!important;width:40px!important;min-width:40px!important;border-radius:10px!important;background:var(--sg-gradient,linear-gradient(135deg,#25c4ff,#7057ff))!important;color:#fff!important}
+  .chat-page .message-form .send-message:disabled{opacity:.45}
+  .chat-page .message-form>textarea{flex:1 1 120px!important;width:auto!important;min-width:0!important;height:40px!important;min-height:40px!important;box-sizing:border-box!important;padding:10px 6px!important;font-size:16px!important;line-height:20px!important}
+  .chat-page .message-form>textarea::placeholder{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+}
+
+/* balão das minhas mensagens: respiro interno e largura pelo conteúdo */
+.chat-page .message.mine .message-bubble{
+  width:fit-content!important;max-width:100%!important;
+  padding:7px 12px 8px!important;
+  border-radius:12px!important;
+}
+.chat-page .message:has(.chat-sticker-image) .message-bubble,
+.chat-page .message:has(.chat-sticker) .message-bubble{padding:0!important;background:transparent!important;border:0!important}

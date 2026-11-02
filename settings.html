@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Configurações | Something Gamer</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="assets/logo.png">
+<link rel="stylesheet" href="style.css?v=50">
+<link rel="stylesheet" href="app-theme.css?v=50">
+<link rel="stylesheet" href="v55-professional.css?v=55"><link rel="stylesheet" href="v56-ultra.css?v=56"><link rel="stylesheet" href="v57-pro-complete.css?v=57p"><link rel="stylesheet" href="app-polish-v58.2.css?v=58.2"><link rel="stylesheet" href="v59-professional.css?v=59"><link rel="stylesheet" href="design-system.css?v=60"><link rel="stylesheet" href="sg-v65-ui.css?v=65"><script defer src="sg-v65-shell.js?v=65"></script><link rel="stylesheet" href="sg-v651-repair.css?v=651"><link rel="stylesheet" href="sg-v66.css?v=6602"><link rel="stylesheet" href="sg-v67.css?v=6701"></head>
+<body class="settings-page">
+<header class="app-header">
+<a class="app-brand" href="feed.html">
+<img src="assets/logo.png" alt="">
+<strong>Something Gamer</strong>
+</a>
+<nav>
+<a href="feed.html">Feed</a>
+<a href="dashboard.html">Perfil</a>
+<a class="active" href="settings.html">Configurações</a>
+<a href="support.html">Suporte</a>
+<a href="now.html">NOW</a></nav>
+<a class="app-outline-button" href="dashboard.html">Voltar</a>
+</header>
+<main class="settings-main">
+<header class="settings-heading">
+<h1>Preferências do aplicativo</h1>
+<p>Estas escolhas ficam salvas neste dispositivo e não alteram a identidade oficial da plataforma.</p>
+</header>
+<form id="appearanceForm" class="settings-grid">
+<section class="settings-card language-settings">
+<h2>Idioma</h2>
+<p>Escolha o idioma usado pelo Something Gamer neste dispositivo.</p>
+<label class="settings-field">Idioma da interface
+<select id="interfaceLanguage">
+<option value="pt-BR">Português (Brasil)</option>
+<option value="en">English</option>
+<option value="es">Español</option>
+<option value="fr">Français</option>
+<option value="de">Deutsch</option>
+<option value="it">Italiano</option>
+<option value="ja">日本語</option>
+</select>
+</label>
+</section>
+<section class="settings-card">
+<h2>Tema</h2>
+<p>Escolha a aparência da interface.</p>
+<div class="choice-grid theme-options">
+<label class="theme-choice">
+<input type="radio" name="theme" value="default">
+<span>
+<i class="theme-swatch default">
+</i>
+<strong>Padrão SG</strong>
+<small>Azul e violeta</small>
+</span>
+</label>
+<label class="theme-choice">
+<input type="radio" name="theme" value="dark">
+<span>
+<i class="theme-swatch dark">
+</i>
+<strong>Escuro</strong>
+<small>Preto discreto</small>
+</span>
+</label>
+<label class="theme-choice">
+<input type="radio" name="theme" value="light">
+<span>
+<i class="theme-swatch light">
+</i>
+<strong>Claro</strong>
+<small>Leitura iluminada</small>
+</span>
+</label>
+<label class="theme-choice">
+<input type="radio" name="theme" value="vice">
+<span>
+<i class="theme-swatch vice"></i>
+<strong>Vice Sunset</strong>
+<small>Neon tropical, pôr do sol, palmeiras animadas e gradientes</small>
+</span>
+</label>
+</div>
+</section>
+<section class="settings-card">
+<h2>Logo na interface</h2>
+<p>Altere apenas a apresentação local da marca.</p>
+<div class="choice-grid logo-choices">
+<label>
+<input type="radio" name="logo" value="color">
+<span>
+<img src="assets/logo.png" alt="">
+<strong>Colorida</strong>
+</span>
+</label>
+<label>
+<input type="radio" name="logo" value="mono">
+<span>
+<img src="assets/logo.png" alt="">
+<strong>Monocromática</strong>
+</span>
+</label>
+<label>
+<input type="radio" name="logo" value="minimal">
+<span>
+<img src="assets/logo.png" alt="">
+<strong>Somente símbolo</strong>
+</span>
+</label>
+</div>
+</section>
+<section class="settings-card">
+<h2>Conforto</h2>
+<div class="setting-row">
+<div>
+<strong>Interface compacta</strong>
+<small>Reduz espaços entre os elementos.</small>
+</div>
+<input id="compactMode" type="checkbox">
+</div>
+<div class="setting-row">
+<div>
+<strong>Reduzir animações</strong>
+<small>Recomendado para celulares mais lentos.</small>
+</div>
+<input id="reduceMotion" type="checkbox">
+</div>
+</section>
+<section class="settings-card chat-colors">
+<h2>Cores das conversas</h2><p>Estas cores aparecem somente para você.</p>
+<div class="color-pickers"><label><span>Outras pessoas</span><input id="incomingBubble" type="color" value="#17345f"><small id="incomingHex">#17345F</small></label><label><span>Suas mensagens</span><input id="outgoingBubble" type="color" value="#1565b8"><small id="outgoingHex">#1565B8</small></label></div>
+<div class="bubble-preview"><span>Mensagem recebida</span><span>Minha mensagem</span></div>
+</section>
+<section class="settings-card notification-settings">
+<h2>Notificações</h2>
+<p>Escolha como o SG avisa quando uma mensagem chega.</p>
+<label class="settings-field">Som<select id="notificationSound"><option value="sg">Som padrão do SG</option><option value="url">Som da internet</option><option value="device">Arquivo deste dispositivo</option><option value="silent">Sem som</option></select></label>
+<label id="notificationUrlWrap" class="settings-field" hidden>Link do áudio<input id="notificationSoundUrl" type="url" placeholder="https://exemplo.com/som.mp3"></label>
+<label id="notificationFileWrap" class="settings-field" hidden>Arquivo de áudio<input id="notificationSoundFile" type="file" accept="audio/*"><small>Até 700 KB. Fica salvo somente neste dispositivo.</small></label>
+<label class="setting-row"><span><strong>Vibrar o celular</strong><small>Disponível em aparelhos compatíveis.</small></span><input id="notificationVibration" type="checkbox"></label>
+<div class="notification-actions"><button id="enableNotifications" type="button">Ativar notificações</button><button id="testNotification" type="button">Testar som e vibração</button></div>
+</section>
+
+<section class="settings-card audio-pro-card">
+<h2>Call Now · Áudio e voz</h2><p>Escolha seus dispositivos e teste o microfone antes de entrar em uma chamada. Estas preferências ficam salvas neste dispositivo.</p>
+<div class="audio-grid"><label class="audio-device"><strong>Microfone</strong><select id="callMicDevice"><option value="">Padrão do sistema</option></select></label><label class="audio-device"><strong>Saída de áudio</strong><select id="callOutputDevice"><option value="">Padrão do sistema</option></select><small>Alguns navegadores não permitem escolher a saída.</small></label></div>
+<div class="audio-toggles"><label class="audio-toggle"><span><b>Cancelamento de eco</b><small>Reduz retorno de caixas de som.</small></span><input id="callEcho" type="checkbox" checked></label><label class="audio-toggle"><span><b>Redução de ruído</b><small>Ajuda com ventilador e teclado.</small></span><input id="callNoise" type="checkbox" checked></label><label class="audio-toggle"><span><b>Ganho automático</b><small>Normaliza o volume quando suportado.</small></span><input id="callGain" type="checkbox" checked></label></div>
+<div class="mic-tester"><strong>Teste real do microfone</strong><p class="mic-status" id="micTestStatus">Clique em testar. O navegador pedirá permissão e o nível reagirá à sua voz.</p><div class="mic-meter"><i id="micLevelBar"></i></div><small id="micDbLabel">Aguardando</small><div class="mic-test-actions"><button class="primary" id="testMicButton" type="button">Testar microfone</button><button id="recordMicButton" type="button">Gravar 5 s e ouvir</button></div><audio id="micPlayback" controls hidden style="width:100%;margin-top:12px"></audio></div>
+</section>
+<section class="settings-card account-links">
+<h2>Ajuda e conta</h2>
+<a href="tutorial.html">Rever tutorial do SG <span>→</span>
+</a>
+<a href="support.html">Central de suporte <span>→</span>
+</a>
+<a href="termos.html">Termos de Uso <span>→</span>
+</a>
+<a href="regras.html">Regras da Comunidade <span>→</span>
+</a>
+<a href="privacidade.html">Política de Privacidade <span>→</span>
+</a>
+<a href="edit-profile.html">Editar meu perfil <span>→</span>
+</a>
+</section>
+<div id="sg66AccountControls" style="grid-column:1/-1"></div><footer class="settings-actions">
+<button type="button" id="resetAppearance">Restaurar padrão</button>
+<button type="submit" class="app-primary-button">Salvar preferências</button>
+</footer>
+</form>
+</main>
+<div class="app-toast" id="appToast" role="status">
+</div>
+<script type="module" src="settings.js">
+</script>
+<script type="module" src="app-shell.js?v=50"></script><script type="module" src="audio-settings.js?v=57p"></script><script type="module" src="experience.js?v=60"></script><script type="module" src="privacy-controls.js?v=60"></script><script type="module" src="sg-v66-account.js"></script></body>
+</html>

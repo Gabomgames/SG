@@ -1,0 +1,10 @@
+# Something Gamer — Beta 0.1
+
+Trabalhe no checkout existente da tarefa isolada; não crie worktree sem pedido.
+A fonte é a V69 anexada, preservada por manifest em docs/phase1. Os commits antigos não foram recuperados: este é um histórico inicial novo.
+
+Empresa: NOW. Slogan NOW: "O futuro é agora ;)". Slogan SG: "Yes, Something for you ;)". Preserve preços 1490/7990/14990 centavos por 30/180/365 dias, análise administrativa e todos os recursos existentes. A promoção automática dos primeiros 50 elegíveis por 365 dias foi implementada conforme docs/phase1/FOUNDERS.md, mas permanece desativada e sem homologação em emulador. Nunca a ative em produção sem autorização.
+
+Não faça push sem confirmar privacidade do destino e obter autorização explícita posterior. Não faça merge na main, deploy, cobranças reais, gravações remotas ou avanço à Fase 2.
+
+Use Node 24.19.0 da .node-version; Functions declaram Node 20. Testes Firestore somente em demo-sg e 127.0.0.1:8085; navegador com fixtures e rede externa bloqueada. Nunca declare teste bloqueado aprovado. Não imprima ou versione segredos. Preserve fontes, IDs, contratos e funções legadas.

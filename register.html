@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Criar conta | Something Gamer</title><link rel="icon" type="image/png" href="assets/logo.png"><link rel="apple-touch-icon" href="assets/logo.png">
+
+    <link rel="stylesheet" href="style.css?v=50">
+    <link rel="stylesheet" href="app-theme.css?v=50">
+<link rel="stylesheet" href="app-polish-v58.2.css?v=58.2"><link rel="stylesheet" href="design-system.css?v=60"><link rel="stylesheet" href="sg-v65-auth.css?v=65"><link rel="stylesheet" href="sg-v66.css?v=6602"><link rel="stylesheet" href="sg-v67.css?v=6701"></head>
+
+<body>
+
+    <main class="login-page">
+
+        <div class="login-box">
+
+            <!-- BRAND -->
+
+            <a href="index.html" class="login-brand">
+
+                <img
+                    src="assets/logo.png"
+                    alt="Something Gamer">
+
+                <span>
+                    Something Gamer
+                </span>
+
+            </a>
+
+
+            <!-- TAG -->
+
+
+
+
+            <!-- TITLE -->
+
+            <h1>
+                Crie sua conta.
+            </h1>
+
+
+            <!-- DESCRIPTION -->
+
+            <p>
+                Crie sua conta e depois personalize
+                seu perfil dentro do Something Gamer.
+            </p>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="registerMessage"
+                class="auth-message">
+            </div>
+
+
+            <!-- GOOGLE -->
+
+            <button
+                type="button"
+                class="google-btn"
+                id="googleLogin">
+
+                <span class="google-icon">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        aria-hidden="true">
+
+                        <path
+                            fill="#4285F4"
+                            d="M21.35 12.27c0-.79-.07-1.55-.2-2.27H12v4.3h5.22a4.46 4.46 0 0 1-1.94 2.93v2.43h3.14c1.84-1.69 2.93-4.18 2.93-7.39z">
+                        </path>
+
+                        <path
+                            fill="#34A853"
+                            d="M12 21.96c2.63 0 4.84-.87 6.45-2.36l-3.14-2.43c-.87.58-1.98.92-3.31.92-2.54 0-4.69-1.72-5.46-4.03H3.29v2.5A9.74 9.74 0 0 0 12 21.96z">
+                        </path>
+
+                        <path
+                            fill="#FBBC05"
+                            d="M6.54 14.06A5.86 5.86 0 0 1 6.23 12c0-.72.12-1.42.31-2.06v-2.5H3.29A9.98 9.98 0 0 0 2.24 12c0 1.61.39 3.13 1.05 4.56l3.25-2.5z">
+                        </path>
+
+                        <path
+                            fill="#EA4335"
+                            d="M12 5.91c1.43 0 2.71.49 3.72 1.45l2.79-2.79C16.83 2.98 14.63 2.04 12 2.04a9.74 9.74 0 0 0-8.71 5.4l3.25 2.5C7.31 7.63 9.46 5.91 12 5.91z">
+                        </path>
+
+                    </svg>
+
+                </span>
+
+                Continuar com Google
+
+            </button>
+
+
+            <!-- DIVIDER -->
+
+            <div class="login-divider">
+
+                <span></span>
+
+                <p>ou</p>
+
+                <span></span>
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <form id="registerForm">
+
+                <label for="registerEmail">
+                    E-mail
+                </label>
+
+                <input
+                    type="email"
+                    id="registerEmail"
+                    placeholder="seu@email.com"
+                    autocomplete="email"
+                    required>
+
+                <label for="registerBirthDate">Data de nascimento</label>
+                <input type="date" id="registerBirthDate" autocomplete="bday" required>
+                <small class="birth-privacy">Usamos esta informação somente para confirmar a idade mínima. Ela não aparece no perfil.</small>
+
+
+                <label for="registerPassword">
+                    Senha
+                </label>
+
+                <div class="sg67-password-field"><input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Crie uma senha"
+                    autocomplete="new-password"
+                    minlength="6"
+                    required><button type="button" class="sg67-password-toggle" aria-label="Mostrar senha" aria-pressed="false" title="Mostrar senha" data-sg67-password><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg></button></div>
+
+                <label class="register-safety-consent"><input type="checkbox" id="registerSafetyConsent" required><span>Li e aceito os <a href="termos.html" target="_blank" rel="noopener">Termos de Uso</a> e as <a href="regras.html" target="_blank" rel="noopener">Regras da Comunidade</a>, e declaro ter lido a <a href="privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>.</span></label>
+
+                <div class="register-recaptcha-area" aria-label="Verificação de segurança">
+                    <div id="registerRecaptcha"></div>
+                    <small id="registerRecaptchaHelp">Marque “Não sou um robô” para criar sua conta.</small>
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="primary-btn login-submit"
+                    id="registerSubmit">
+
+                    <span>
+                        Criar minha conta
+                    </span>
+
+                </button>
+
+            </form>
+
+
+            <!-- LOGIN -->
+
+            <div class="login-footer">
+
+                <span>
+                    Já possui uma conta?
+                </span>
+
+                <a href="login.html">
+                    Entrar
+                </a>
+
+            </div>
+
+
+            <!-- BACK -->
+
+            <a
+                href="index.html"
+                class="back-home">
+
+                <svg class="ico" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M19.2 12H4.8M10.8 6 4.8 12l6 6"/></svg> Voltar para o Something Gamer
+
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <script src="https://www.google.com/recaptcha/api.js?render=explicit" async defer></script>
+    <script type="module" src="script.js"></script>
+
+<script type="module" src="app-shell.js?v=50"></script><script type="module" src="experience.js?v=60"></script><script src="sg-v67-password.js" defer></script></body>
+
+</html>

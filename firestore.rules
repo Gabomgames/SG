@@ -1,0 +1,1029 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ---------- identidade ----------
+    // A autoridade administrativa vem EXCLUSIVAMENTE de Custom Claims do Firebase Auth.
+    // Nenhum UID/e-mail administrativo fica liberado diretamente nas regras públicas.
+    // A claim deve ser concedida fora do aplicativo por uma rotina privilegiada/Admin SDK.
+    function isAdmin() {
+      return false; // Administração somente via backend autorizado (Admin SDK).
+    }
+
+    function userData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    function currentTermsVersion() { return '2026-09-16'; }
+    function currentPrivacyVersion() { return '2026-09-16'; }
+    function currentCommunityRulesVersion() { return '2026-09-16'; }
+    function legalOk(legal) {
+      return legal is map
+        && legal.keys().hasOnly(['termsAccepted', 'termsVersion', 'privacyVersion', 'communityRulesVersion', 'acceptedAt'])
+        && legal.termsAccepted == true
+        && legal.termsVersion == currentTermsVersion()
+        && legal.privacyVersion == currentPrivacyVersion()
+        && legal.communityRulesVersion == currentCommunityRulesVersion()
+        && legal.acceptedAt == request.time;
+    }
+    function hasAcceptedTerms() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/users/$(request.auth.uid))
+        && userData().get('legal', {}).get('termsAccepted', false) == true
+        && userData().get('legal', {}).get('termsVersion', '') == currentTermsVersion()
+        && userData().get('legal', {}).get('privacyVersion', '') == currentPrivacyVersion()
+        && userData().get('legal', {}).get('communityRulesVersion', '') == currentCommunityRulesVersion();
+    }
+    function moderationOk() {
+      return userData().get('moderation', {}).get('status', 'active') == 'active'
+        || (
+          userData().get('moderation', {}).get('status', 'active') == 'suspended'
+          && userData().get('moderation', {}).get('suspendedUntil', timestamp.date(1970, 1, 1)) <= request.time
+        );
+    }
+    function canAct() {
+      return request.auth != null && (isAdmin() || (hasAcceptedTerms() && moderationOk()));
+    }
+
+    function notBlocked(a, b) {
+      return !exists(/databases/$(database)/documents/users/$(a)/blocks/$(b))
+        && !exists(/databases/$(database)/documents/users/$(b)/blocks/$(a));
+    }
+    function dmAllowed(conversationId) {
+      let c = get(/databases/$(database)/documents/conversations/$(conversationId)).data;
+      return request.auth != null && request.auth.uid in c.members
+        && notBlocked(c.members[0], c.members[1]);
+    }
+    function messageShapeOk(m) {
+      return m.keys().hasOnly(['uid','authorName','authorUsername','authorPhoto','authorVerified','authorAccountType',
+        'authorBadgeTheme','authorBadges','type','text','mediaUrl','clientCreatedAt','createdAt','replyTo','clientId','viewOnce'])
+        && m.get('clientId','') is string && m.get('clientId','').size() <= 80
+        && (!m.keys().hasAny(['replyTo']) || (m.replyTo is map
+          && m.replyTo.keys().hasOnly(['id','authorName','text'])
+          && texto(m.replyTo.get('id',''),80) && texto(m.replyTo.get('authorName',''),60) && texto(m.replyTo.get('text',''),120)))
+        && ((m.type == 'text' && textoObrigatorio(m.text,1000) && m.mediaUrl == '')
+          || (m.type == 'gif' && m.mediaUrl.matches('https://something-gamer-api[.]something-gamer-nowtech[.]workers[.]dev/giphy/media/[a-zA-Z0-9_-]+'))
+          || (m.type == 'sticker' && midiaOk(m.mediaUrl))
+          || (m.type in ['image','video','audio']
+            && m.mediaUrl.matches('https://something-gamer-api[.]something-gamer-nowtech[.]workers[.]dev/private-media/[a-f0-9-]{36}')
+            && !m.keys().hasAny(['viewOnce'])));
+    }
+    match /users/{ownerId}/blocks/{blockedId} {
+      allow read: if request.auth != null && request.auth.uid == ownerId;
+      allow create: if canAct() && request.auth.uid == ownerId && blockedId != ownerId
+        && request.resource.data.keys().hasOnly(['createdAt']) && request.resource.data.createdAt == request.time;
+      allow delete: if request.auth != null && request.auth.uid == ownerId;
+      allow update: if false;
+    }
+    match /users/{ownerId}/chatPreferences/{preferenceId} {
+      allow read: if request.auth != null && request.auth.uid == ownerId;
+      allow create, update: if canAct() && request.auth.uid == ownerId
+        && request.resource.data.keys().hasOnly(['path','muted','archived','hiddenIds','updatedAt'])
+        && request.resource.data.path is string && request.resource.data.path.size() <= 300
+        && request.resource.data.muted is bool && request.resource.data.archived is bool
+        && request.resource.data.hiddenIds is list && request.resource.data.hiddenIds.size() <= 1000
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if request.auth != null && request.auth.uid == ownerId;
+    }
+    match /serverInvites/{inviteId} {
+      allow read: if request.auth != null && request.auth.uid == resource.data.toUid;
+      allow create: if canAct() && request.resource.data.keys().hasOnly(['serverId','toUid','createdAt','expiresAt'])
+        && get(/databases/$(database)/documents/servers/$(request.resource.data.serverId)).data.ownerUid == request.auth.uid
+        && inviteId == request.resource.data.serverId + '_' + request.resource.data.toUid
+        && request.resource.data.createdAt == request.time && request.resource.data.expiresAt > request.time
+        && request.resource.data.expiresAt <= request.time + duration.value(7,'d');
+      allow update: if false;
+      allow delete: if request.auth != null && (request.auth.uid == resource.data.toUid
+        || get(/databases/$(database)/documents/servers/$(resource.data.serverId)).data.ownerUid == request.auth.uid);
+    }
+    // reação a mensagem: cada pessoa mexe só na própria chave do mapa `reactions`
+    function reacaoOk() {
+      return request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reactions'])
+        && request.resource.data.reactions is map
+        && request.resource.data.reactions.size() <= 100
+        && request.resource.data.reactions.diff(resource.data.get('reactions', {})).affectedKeys().hasOnly([request.auth.uid])
+        && (!(request.auth.uid in request.resource.data.reactions)
+            || (request.resource.data.reactions[request.auth.uid] is string && request.resource.data.reactions[request.auth.uid].size() <= 8));
+    }
+
+    // abrir uma foto de visualização única: só marca que foi vista, nunca desfaz a expiração
+    function viewOnceOk() {
+      return resource.data.get('type', '') == 'image' && resource.data.get('viewOnce', false) == true
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['viewOnceOpenedBy', 'viewOnceExpired'])
+        && request.resource.data.viewOnceOpenedBy.size() <= resource.data.get('viewOnceOpenedBy', []).size() + 1
+        && request.resource.data.viewOnceOpenedBy.toSet().difference(resource.data.get('viewOnceOpenedBy', []).toSet()) == [request.auth.uid].toSet()
+        && (resource.data.get('viewOnceExpired', false) == false || request.resource.data.viewOnceExpired == true)
+        && (request.auth.uid == resource.data.uid || request.resource.data.viewOnceExpired == true);
+    }
+
+    // ---------- conteudo: espelha o safety.js, agora tambem no servidor ----------
+    function semTermoGrave(valor) {
+      return !valor.lower().matches('(?s).*(heil hitler|white power|exterminar (negros|judeus|gays)|matar (negros|judeus|gays)|pedofil|estupr|vou te matar).*');
+    }
+    function texto(valor, maximo) {
+      return valor is string && valor.size() <= maximo && semTermoGrave(valor);
+    }
+    function textoObrigatorio(valor, maximo) {
+      return valor is string && valor.size() > 0 && valor.size() <= maximo && semTermoGrave(valor);
+    }
+
+    // ---------- URLs ----------
+    // Um valor como javascript:alert(1) nao tem nenhum dos caracteres que o
+    // escape de HTML troca, entao atravessa o escape inteiro e vira XSS ao
+    // clicar no link. O esquema precisa ser recusado aqui, na escrita.
+    function urlOk(valor) {
+      return valor is string && (valor == '' || valor.matches('https://.*'));
+    }
+    function midiaOk(valor) {
+      return valor is string && (valor == '' || valor.matches('(https://|data:image/|data:audio/|data:video/).*'));
+    }
+
+    // ---------- frequencia de escrita ----------
+    // O Firestore nao tem rate limiting. Sem isto, um script posta em laco.
+    // O cliente grava o conteudo e o carimbo de tempo no MESMO lote; a regra
+    // exige o carimbo com getAfter e confere que o anterior ja saiu da janela.
+    // Sem carimbo a regra recusa; com carimbo repetido, tambem.
+    function carimbo(chave) {
+      return getAfter(/databases/$(database)/documents/limites/$(request.auth.uid)).data.get(chave, timestamp.date(1970, 1, 1));
+    }
+    function carimboAnterior(chave) {
+      return exists(/databases/$(database)/documents/limites/$(request.auth.uid))
+        ? get(/databases/$(database)/documents/limites/$(request.auth.uid)).data.get(chave, timestamp.date(1970, 1, 1))
+        : timestamp.date(1970, 1, 1);
+    }
+    function respeitaIntervalo(chave, segundos) {
+      return carimbo(chave) == request.time
+        && carimboAnterior(chave) < request.time - duration.value(segundos, 's');
+    }
+
+    // ---------- selos e tipo de conta ----------
+    // publicProfiles e escrito pelo proprio usuario. Como accountType,
+    // verification e badges moram ai e a interface desenha o selo a partir
+    // deles, sem esta trava qualquer conta se marcava como oficial ou
+    // verificada, e ainda passava a poder publicar evento oficial.
+    function perfilPrivado(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data;
+    }
+    function naoEscalaSelo(userId) {
+      // Campos de autoridade no perfil público devem refletir exatamente o
+      // documento privado. O navegador nunca cria selo, verificação ou tipo
+      // oficial por conta própria; essas mudanças são feitas pelo Admin SDK.
+      return request.resource.data.get('accountType', 'gamer') == perfilPrivado(userId).get('accountType', 'gamer')
+        && request.resource.data.get('verification', {}) == perfilPrivado(userId).get('verification', {})
+        && request.resource.data.get('verificationBadgeTheme', 'blue') == perfilPrivado(userId).get('verificationBadgeTheme', 'blue')
+        && request.resource.data.get('badges', {}) == perfilPrivado(userId).get('badges', {});
+    }
+    function nomeProprio(valor) {
+      return valor == userData().get('name', '')
+        || valor == userData().get('username', '')
+        || (userData().get('name', '') == '' && userData().get('username', '') == '' && valor == 'Gamer');
+    }
+    function fotoPropria(valor) {
+      return valor == userData().get('photoURL', '');
+    }
+    function snapshotDeAutorOk(data) {
+      return nomeProprio(data.get('authorName', ''))
+        && data.get('authorUsername', '') == userData().get('username', '')
+        && fotoPropria(data.get('authorPhoto', ''))
+        && data.get('authorVerified', false) == (userData().get('verification', {}).get('status', 'none') == 'active')
+        && data.get('authorAccountType', 'gamer') == userData().get('accountType', 'gamer')
+        && data.get('authorBadgeTheme', 'blue') == userData().get('verificationBadgeTheme', 'blue')
+        && data.get('authorBadges', {}) == userData().get('badges', {});
+    }
+
+    // ---------- relacoes ----------
+    function amizadeExiste(outro) {
+      return exists(/databases/$(database)/documents/friendships/$(request.auth.uid + '_' + outro))
+        || exists(/databases/$(database)/documents/friendships/$(outro + '_' + request.auth.uid));
+    }
+    function amizadeCom(userId) {
+      return request.auth != null
+        && request.auth.uid != userId
+        && (
+          exists(/databases/$(database)/documents/friendships/$(request.auth.uid + '_' + userId))
+          || exists(/databases/$(database)/documents/friendships/$(userId + '_' + request.auth.uid))
+        );
+    }
+    function segue(outro) {
+      return exists(/databases/$(database)/documents/follows/$(request.auth.uid + '_' + outro));
+    }
+
+    match /users/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow create: if request.auth != null
+        && request.auth.uid == userId
+        && request.resource.data.uid == userId
+        && legalOk(request.resource.data.get('legal', {}))
+        && request.resource.data.ageVerified == true
+        && request.resource.data.birthDate is string
+        && request.resource.data.birthDate.size() == 10
+        && texto(request.resource.data.get('name', ''), 60)
+        && texto(request.resource.data.get('username', ''), 30)
+        && texto(request.resource.data.get('bio', ''), 300)
+        && !request.resource.data.keys().hasAny([
+          'verification', 'paidVerification', 'founderGrant', 'isAdmin', 'role', 'monetization', 'entitlements', 'moderation', 'badges', 'accountType', 'verificationBadgeTheme',
+          'steamConnected', 'steamProfile', 'steamGames', 'steamRecentGames',
+          'steamAchievements', 'steamUpdatedAt'
+        ]);
+      // Aceitar uma nova versão jurídica é a única atualização permitida
+      // antes de o usuário recuperar as permissões normais de participação.
+      allow update: if request.auth != null && request.auth.uid == userId && (
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['legal', 'updatedAt'])
+          && legalOk(request.resource.data.get('legal', {}))
+          && request.resource.data.updatedAt == request.time)
+        ||
+        (canAct()
+          && request.resource.data.get('legal', {}) == resource.data.get('legal', {})
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'name', 'username', 'bio', 'games', 'twitch', 'youtube',
+            'steam',
+            'profileCompleted', 'welcomeSeen', 'updatedAt',
+            'accountType', 'verificationBadgeTheme',
+            'profileVisibility', 'mentionPolicy', 'pendingPhotoURL', 'photoModeration'
+          ])
+          && urlOk(request.resource.data.get('pendingPhotoURL', ''))
+          && request.resource.data.get('accountType', 'gamer') in ['gamer', 'creator']
+          && request.resource.data.get('mentionPolicy', 'auto') in ['auto','approval','none']
+          && (
+            !request.resource.data.diff(resource.data).affectedKeys().hasAny(['username'])
+            || getAfter(/databases/$(database)/documents/usernames/$(request.resource.data.username)).data.uid == request.auth.uid
+          )
+          && texto(request.resource.data.get('name', ''), 60)
+          && texto(request.resource.data.get('username', ''), 30)
+          && texto(request.resource.data.get('bio', ''), 300)
+          && (
+            !request.resource.data.diff(resource.data).affectedKeys().hasAny(['photoModeration'])
+            || request.resource.data.photoModeration.status in ['pending', 'none']
+          )
+          && (
+            !request.resource.data.diff(resource.data).affectedKeys().hasAny(['verificationBadgeTheme'])
+            || request.resource.data.verificationBadgeTheme == 'blue'
+            || (
+              resource.data.get('verification', {}).get('status', 'none') == 'active'
+              && request.resource.data.accountType == 'creator'
+              && request.resource.data.verificationBadgeTheme in ['blue', 'purple', 'gold', 'pink', 'green']
+            )
+          )
+        )
+      );
+      allow delete: if false;
+      allow read, create, update: if isAdmin();
+    }
+
+    match /publicProfiles/{userId} {
+      // a consulta de lista precisa filtrar visibility == 'public' (veja social.js).
+      allow get: if resource.data.visibility == 'public'
+        || (request.auth != null && request.auth.uid == userId)
+        || amizadeCom(userId)
+        || isAdmin();
+      allow list: if resource.data.visibility == 'public';
+      allow create, update: if request.auth != null
+        && request.auth.uid == userId
+        && canAct()
+        && request.resource.data.uid == userId
+        && request.resource.data.photoURL == get(/databases/$(database)/documents/users/$(userId)).data.photoURL
+        && texto(request.resource.data.get('name', ''), 60)
+        && texto(request.resource.data.get('username', ''), 30)
+        && texto(request.resource.data.get('bio', ''), 300)
+        && urlOk(request.resource.data.get('photoURL', ''))
+        && naoEscalaSelo(userId)
+        && request.resource.data.keys().hasOnly([
+          'uid', 'name', 'username', 'bio', 'photoURL', 'accountType',
+          'verification', 'verificationBadgeTheme', 'badges', 'visibility', 'updatedAt'
+        ]);
+      allow delete: if request.auth != null && request.auth.uid == userId;
+      allow read, create, update: if isAdmin();
+    }
+
+    // Founder counters, eligibility, identities and risk decisions are backend-only.
+    match /founderCampaigns/{campaignId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+    match /founderGrants/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if false;
+    }
+    match /founderEmails/{identity} {
+      allow read, write: if false;
+    }
+    match /founderRisk/{userId} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+
+    match /verificationRequests/{userId} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow create, update: if false; // fila somente por confirmação financeira no backend
+      allow delete: if false;
+    }
+
+    match /follows/{followId} {
+      allow read: if request.auth != null;
+      allow create: if canAct()
+        && followId == request.auth.uid + '_' + request.resource.data.toUid
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.toUid != request.auth.uid;
+      allow delete: if canAct() && resource.data.fromUid == request.auth.uid;
+      allow update: if false;
+    }
+
+    // Somente as Functions geram pedidos; o usuário afetado só pode consultá-los.
+    match /mentionRequests/{requestId} {
+      allow get, list: if request.auth != null && resource.data.toUid == request.auth.uid;
+      allow create, update, delete: if false;
+    }
+
+    match /notifications/{notificationId} {
+      allow read, delete: if request.auth != null && resource.data.toUid == request.auth.uid;
+      // o destinatario so marca como lida; nao reescreve o conteudo.
+      allow update: if request.auth != null
+        && resource.data.toUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read', 'readAt'])
+        && request.resource.data.read == true;
+      allow create: if canAct()
+        && request.resource.data.toUid != request.auth.uid
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.read == false
+        && notBlocked(request.auth.uid, request.resource.data.toUid)
+        && request.resource.data.createdAt == request.time
+        && (request.resource.data.type != 'message'
+          || !exists(/databases/$(database)/documents/users/$(request.resource.data.toUid)/chatPreferences/$(request.resource.data.conversationId))
+          || get(/databases/$(database)/documents/users/$(request.resource.data.toUid)/chatPreferences/$(request.resource.data.conversationId)).data.muted != true)
+        && request.resource.data.keys().hasOnly([
+          'toUid', 'fromUid', 'type', 'title', 'message',
+          'special', 'read', 'createdAt', 'conversationId', 'serverId'
+        ])
+        && textoObrigatorio(request.resource.data.title, 120)
+        && texto(request.resource.data.message, 300)
+        && (
+          // entre usuarios: precisa existir relacao de verdade. Avisos oficiais
+          // sao criados pelo Admin SDK nas Cloud Functions e ignoram estas regras.
+          (request.resource.data.type in ['message', 'gamer_friend', 'server_invite', 'mention', 'mention_request']
+            && amizadeExiste(request.resource.data.toUid))
+          || (request.resource.data.type == 'message'
+            && exists(/databases/$(database)/documents/conversations/$(request.resource.data.conversationId))
+            && get(/databases/$(database)/documents/conversations/$(request.resource.data.conversationId)).data.get('kind','') == 'market'
+            && request.auth.uid in get(/databases/$(database)/documents/conversations/$(request.resource.data.conversationId)).data.members
+            && request.resource.data.toUid in get(/databases/$(database)/documents/conversations/$(request.resource.data.conversationId)).data.members)
+          ||
+          (request.resource.data.type == 'follow' && segue(request.resource.data.toUid))
+        );
+    }
+
+    match /usernames/{username} {
+      allow read: if request.auth != null;
+      allow create: if canAct() && request.resource.data.uid == request.auth.uid;
+      // o dono pode liberar o @ que reservou
+      allow delete: if canAct() && resource.data.uid == request.auth.uid;
+      allow update: if false;
+    }
+
+    match /posts/{postId} {
+      // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+      allow read: if request.auth != null;
+      allow create: if canAct()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.type in ['text', 'image', 'video', 'poll', 'news']
+        && snapshotDeAutorOk(request.resource.data)
+        && request.resource.data.createdAt == request.time
+        && texto(request.resource.data.get('title', ''), 200)
+        && texto(request.resource.data.get('description', ''), 3000)
+        && urlOk(request.resource.data.get('mediaUrl', ''))
+        && respeitaIntervalo('post', 20);
+      // O app não oferece edição de publicação; impedir update evita que
+      // snapshots de selo/autor sejam adulterados depois da criação.
+      allow update: if false;
+      allow delete: if canAct() && resource.data.uid == request.auth.uid;
+
+      match /likes/{userId} {
+        allow read: if request.auth != null;
+        allow create, delete: if canAct() && request.auth.uid == userId;
+      }
+
+      match /comments/{commentId} {
+        // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+        allow read: if request.auth != null;
+        allow create: if canAct()
+          && request.resource.data.uid == request.auth.uid
+          && nomeProprio(request.resource.data.get('authorName', ''))
+          && request.resource.data.createdAt == request.time
+          && textoObrigatorio(request.resource.data.text, 1000)
+          && respeitaIntervalo('comentario', 5);
+        allow update: if false;
+        allow delete: if canAct() && resource.data.uid == request.auth.uid;
+      }
+
+      match /votes/{userId} {
+        allow read: if request.auth != null;
+        allow create, update, delete: if canAct() && request.auth.uid == userId;
+      }
+    }
+
+    match /friendRequests/{requestId} {
+      allow read: if request.auth != null && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
+      allow create: if canAct()
+        && requestId == request.auth.uid + '_' + request.resource.data.toUid
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.toUid != request.auth.uid
+        && request.resource.data.status == 'pending';
+      allow update: if canAct()
+        && resource.data.toUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'respondedAt'])
+        && request.resource.data.status == 'accepted';
+      allow delete: if canAct() && (resource.data.fromUid == request.auth.uid || resource.data.toUid == request.auth.uid);
+    }
+
+    match /friendships/{friendshipId} {
+      allow read: if request.auth != null && request.auth.uid in resource.data.members;
+      // exige pedido ACEITO e id = uids ordenados; antes bastava o pedido existir.
+      allow create: if canAct()
+        && request.resource.data.keys().hasOnly(['members', 'createdAt'])
+        && request.resource.data.members.size() == 2
+        && request.auth.uid in request.resource.data.members
+        && request.resource.data.members[0] < request.resource.data.members[1]
+        && request.resource.data.createdAt == request.time
+        && friendshipId == request.resource.data.members[0] + '_' + request.resource.data.members[1]
+        && (
+          (exists(/databases/$(database)/documents/friendRequests/$(request.resource.data.members[0] + '_' + request.resource.data.members[1]))
+            && get(/databases/$(database)/documents/friendRequests/$(request.resource.data.members[0] + '_' + request.resource.data.members[1])).data.status == 'accepted')
+          ||
+          (exists(/databases/$(database)/documents/friendRequests/$(request.resource.data.members[1] + '_' + request.resource.data.members[0]))
+            && get(/databases/$(database)/documents/friendRequests/$(request.resource.data.members[1] + '_' + request.resource.data.members[0])).data.status == 'accepted')
+        );
+      allow delete: if canAct() && request.auth.uid in resource.data.members;
+      allow update: if canAct()
+        && request.auth.uid in resource.data.members
+        && request.resource.data.members == resource.data.members
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'gamerStatus', 'gamerRequestedBy', 'gamerAcceptedBy', 'gamerUpdatedAt'
+        ])
+        && (
+          (request.resource.data.gamerStatus == 'pending'
+            && request.resource.data.gamerRequestedBy == request.auth.uid
+            && (!resource.data.keys().hasAny(['gamerStatus']) || resource.data.gamerStatus != 'accepted'))
+          ||
+          (resource.data.gamerStatus == 'pending'
+            && resource.data.gamerRequestedBy != request.auth.uid
+            && request.resource.data.gamerStatus == 'accepted'
+            && request.resource.data.gamerAcceptedBy == request.auth.uid)
+        );
+    }
+
+    match /conversations/{conversationId} {
+      // Queries provam membership; não podem provar bloqueios pelo índice de membros.
+      // Resumos novos não contêm o corpo de mensagens. O histórico aplica dmAllowed.
+      allow list: if request.auth != null && request.auth.uid in resource.data.members;
+      allow get: if request.auth != null && request.auth.uid in resource.data.members && notBlocked(resource.data.members[0], resource.data.members[1]);
+      allow create: if canAct()
+        && request.resource.data.keys().hasOnly(['members', 'updatedAt'])
+        && request.resource.data.members is list
+        && request.resource.data.members.size() == 2
+        && notBlocked(request.resource.data.members[0], request.resource.data.members[1])
+        && request.auth.uid in request.resource.data.members
+        && exists(/databases/$(database)/documents/friendships/$(conversationId))
+        && request.resource.data.members == get(/databases/$(database)/documents/friendships/$(conversationId)).data.members;
+      allow update: if canAct()
+        && request.auth.uid in resource.data.members
+        && notBlocked(resource.data.members[0], resource.data.members[1])
+        && request.resource.data.members == resource.data.members
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt', 'lastMessage', 'lastSenderUid'])
+        && request.resource.data.get('lastSenderUid', request.auth.uid) == request.auth.uid
+        && texto(request.resource.data.get('lastMessage', ''), 200);
+      // recibo de leitura e indicador de digitação: cada pessoa mexe só na própria chave
+      allow update: if canAct()
+        && request.auth.uid in resource.data.members
+        && notBlocked(resource.data.members[0], resource.data.members[1])
+        && request.resource.data.members == resource.data.members
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['reads', 'typing'])
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['reads'])
+            || (request.resource.data.get('reads', {}).diff(resource.data.get('reads', {})).affectedKeys().hasOnly([request.auth.uid])
+              && request.resource.data.reads[request.auth.uid] == request.time))
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['typing'])
+            || (request.resource.data.get('typing', {}).diff(resource.data.get('typing', {})).affectedKeys().hasOnly([request.auth.uid])
+              && request.resource.data.typing[request.auth.uid] == request.time));
+      allow delete: if false;
+
+      match /messages/{messageId} {
+        allow read: if request.auth != null
+          && dmAllowed(conversationId);
+        allow create: if canAct()
+          && request.resource.data.uid == request.auth.uid
+          && messageShapeOk(request.resource.data)
+          && dmAllowed(conversationId)
+          && (exists(/databases/$(database)/documents/friendships/$(conversationId))
+            || get(/databases/$(database)/documents/conversations/$(conversationId)).data.get('kind','') == 'market')
+          && request.resource.data.createdAt == request.time
+          && snapshotDeAutorOk(request.resource.data)
+          && texto(request.resource.data.text, 1000)
+          && midiaOk(request.resource.data.get('mediaUrl', ''))
+          && urlOk(request.resource.data.get('authorPhoto', ''))
+          && (
+            request.resource.data.type in ['text', 'gif', 'sticker', 'audio']
+            || (request.resource.data.type in ['image', 'video', 'link']
+              && (!request.resource.data.keys().hasAny(['viewOnce']) || (request.resource.data.type == 'image' && request.resource.data.viewOnce is bool))
+              && (get(/databases/$(database)/documents/conversations/$(conversationId)).data.get('kind','') == 'market'
+                || get(/databases/$(database)/documents/friendships/$(conversationId)).data.gamerStatus == 'accepted'))
+          );
+        allow delete: if false;
+        allow update: if canAct() && reacaoOk()
+          && dmAllowed(conversationId);
+        allow update: if canAct() && viewOnceOk()
+          && dmAllowed(conversationId);
+        allow update: if canAct() && resource.data.uid == request.auth.uid
+          && dmAllowed(conversationId)
+          && (
+            (resource.data.type == 'text'
+              && request.time < resource.data.createdAt + duration.value(2, 'm')
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'edited', 'editedAt'])
+              && textoObrigatorio(request.resource.data.text, 1000)
+              && request.resource.data.edited == true)
+            ||
+            (request.time < resource.data.createdAt + duration.value(5, 'm')
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deleted', 'deletedAt', 'text', 'mediaUrl'])
+              && request.resource.data.deleted == true
+              && request.resource.data.text == '' && request.resource.data.mediaUrl == '')
+          );
+      }
+    }
+
+    // ---------- ligações WebRTC P2P ----------
+    match /calls/{callId} {
+      function callFriendship() {
+        return get(/databases/$(database)/documents/friendships/$(request.resource.data.conversationId));
+      }
+      allow read: if request.auth != null && (request.auth.uid == resource.data.callerUid || request.auth.uid == resource.data.calleeUid);
+      allow create: if canAct()
+        && request.resource.data.keys().hasOnly([
+          'callerUid', 'calleeUid', 'members', 'conversationId', 'type', 'status', 'offer', 'createdAt', 'updatedAt'
+        ])
+        && request.resource.data.callerUid == request.auth.uid
+        && request.resource.data.calleeUid != request.auth.uid
+        && notBlocked(request.auth.uid, request.resource.data.calleeUid)
+        && request.resource.data.members.size() == 2
+        && request.resource.data.members[0] < request.resource.data.members[1]
+        && request.auth.uid in request.resource.data.members
+        && request.resource.data.callerUid in request.resource.data.members
+        && request.resource.data.calleeUid in request.resource.data.members
+        && request.resource.data.conversationId == request.resource.data.members[0] + '_' + request.resource.data.members[1]
+        && request.resource.data.type in ['audio', 'video']
+        && request.resource.data.status == 'ringing'
+        && request.resource.data.offer is map
+        && exists(/databases/$(database)/documents/friendships/$(request.resource.data.conversationId))
+        && callFriendship().data.members == request.resource.data.members
+        && callFriendship().data.get('gamerStatus', '') == 'accepted'
+        && request.resource.data.createdAt == request.time
+        && request.resource.data.updatedAt == request.time;
+      allow update: if canAct()
+        && request.auth.uid in resource.data.members
+        && request.resource.data.members == resource.data.members
+        && request.resource.data.callerUid == resource.data.callerUid
+        && request.resource.data.calleeUid == resource.data.calleeUid
+        && request.resource.data.conversationId == resource.data.conversationId
+        && request.resource.data.type == resource.data.type
+        && request.resource.data.offer == resource.data.offer
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'status', 'answer', 'acceptedBy', 'acceptedAt', 'endedBy', 'updatedAt',
+          'restartOffer', 'restartSeq', 'restartBy', 'restartAnswer', 'restartAnswerSeq',
+          'restartRequestSeq', 'restartRequestedBy'
+        ])
+        && (
+          (resource.data.status == 'ringing'
+            && request.auth.uid == resource.data.calleeUid
+            && request.resource.data.status == 'active'
+            && request.resource.data.answer is map
+            && request.resource.data.acceptedBy == request.auth.uid)
+          ||
+          (resource.data.status == 'ringing'
+            && request.auth.uid == resource.data.calleeUid
+            && request.resource.data.status == 'rejected')
+          ||
+          (resource.data.status in ['ringing', 'active']
+            && request.resource.data.status == 'ended'
+            && request.resource.data.endedBy == request.auth.uid)
+          ||
+          (resource.data.status == 'active'
+            && request.resource.data.status == 'active'
+            && request.auth.uid == resource.data.callerUid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['restartOffer', 'restartSeq', 'restartBy', 'updatedAt'])
+            && request.resource.data.restartOffer is map
+            && request.resource.data.restartBy == request.auth.uid)
+          ||
+          (resource.data.status == 'active'
+            && request.resource.data.status == 'active'
+            && request.auth.uid == resource.data.calleeUid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['restartRequestSeq', 'restartRequestedBy', 'updatedAt'])
+            && request.resource.data.restartRequestedBy == request.auth.uid)
+          ||
+          (resource.data.status == 'active'
+            && request.resource.data.status == 'active'
+            && request.auth.uid == resource.data.calleeUid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['restartAnswer', 'restartAnswerSeq', 'updatedAt'])
+            && request.resource.data.restartAnswer is map)
+        );
+      allow delete: if false;
+
+      match /callerCandidates/{candidateId} {
+        allow read: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/calls/$(callId)).data.members;
+        allow create: if canAct()
+          && request.auth.uid == get(/databases/$(database)/documents/calls/$(callId)).data.callerUid;
+        allow update, delete: if false;
+      }
+      match /calleeCandidates/{candidateId} {
+        allow read: if request.auth != null
+          && request.auth.uid in get(/databases/$(database)/documents/calls/$(callId)).data.members;
+        allow create: if canAct()
+          && request.auth.uid == get(/databases/$(database)/documents/calls/$(callId)).data.calleeUid;
+        allow update, delete: if false;
+      }
+    }
+
+    function channelAccess(serverId,channelId) {
+      let server = get(/databases/$(database)/documents/servers/$(serverId)).data;
+      let channel = get(/databases/$(database)/documents/servers/$(serverId)/channels/$(channelId)).data;
+      return request.auth != null && request.auth.uid in server.members
+        && !(request.auth.uid in server.get('bannedUids', []))
+        && (channel.get('audience','all') == 'all' || server.ownerUid == request.auth.uid
+          || server.get('roles',{}).get(request.auth.uid,'member') == 'moderator');
+    }
+    match /communityAudit/{id} { allow read: if request.auth != null && get(/databases/$(database)/documents/servers/$(resource.data.serverId)).data.ownerUid == request.auth.uid; allow write: if false; }
+    match /serverJoinRequests/{id} { allow read: if request.auth != null && (resource.data.uid == request.auth.uid || get(/databases/$(database)/documents/servers/$(resource.data.serverId)).data.ownerUid == request.auth.uid); allow write: if false; }
+    match /servers/{serverId} {
+      allow read: if request.auth != null && (request.auth.uid in resource.data.members || resource.data.get('visibility', 'private') == 'public');
+      allow create: if canAct()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.members == [request.auth.uid]
+        && textoObrigatorio(request.resource.data.name, 40)
+        && texto(request.resource.data.get('description', ''), 120)
+        && midiaOk(request.resource.data.get('icon', ''));
+      allow update: if canAct() && (
+        (resource.data.ownerUid == request.auth.uid
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+            'name', 'description', 'icon', 'members', 'mutedUids', 'bannedUids', 'kickedUids', 'visibility', 'tags', 'updatedAt'
+          ])
+          && textoObrigatorio(request.resource.data.name, 40)
+          && texto(request.resource.data.get('description', ''), 120)
+          && midiaOk(request.resource.data.get('icon', ''))
+          && request.resource.data.get('visibility', 'private') in ['private', 'public']
+          && request.resource.data.get('tags', []).size() <= 5
+          && resource.data.ownerUid in request.resource.data.members
+          && resource.data.members.hasAll(request.resource.data.members)
+          && request.resource.data.members.size() <= 100)
+        ||
+        // Saída voluntária: único membro removido é o próprio usuário.
+        (request.auth.uid != resource.data.ownerUid
+          && request.auth.uid in resource.data.members
+          && !(request.auth.uid in request.resource.data.members)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members', 'updatedAt'])
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          && resource.data.members.hasAll(request.resource.data.members)
+          && request.resource.data.members.size() == resource.data.members.size() - 1)
+        ||
+        // Público ou convite individual emitido pelo dono e não expirado.
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['members', 'updatedAt'])
+          && request.resource.data.ownerUid == resource.data.ownerUid
+          && ((resource.data.get('visibility','private') == 'public' && resource.data.get('joinMode','open') == 'open')
+            || (exists(/databases/$(database)/documents/serverInvites/$(serverId + '_' + request.auth.uid))
+              && get(/databases/$(database)/documents/serverInvites/$(serverId + '_' + request.auth.uid)).data.expiresAt > request.time))
+          && request.resource.data.members.size() <= 100
+          && !(request.auth.uid in resource.data.members)
+          && request.auth.uid in request.resource.data.members
+          && request.resource.data.members.hasAll(resource.data.members)
+          && request.resource.data.members.size() == resource.data.members.size() + 1
+          && (!resource.data.keys().hasAny(['bannedUids']) || !(request.auth.uid in resource.data.bannedUids))
+          && (!resource.data.keys().hasAny(['kickedUids']) || !(request.auth.uid in resource.data.kickedUids)))
+      );
+      allow delete: if canAct() && resource.data.ownerUid == request.auth.uid;
+
+      match /channels/{channelId} {
+        allow read: if request.auth != null && request.auth.uid in get(/databases/$(database)/documents/servers/$(serverId)).data.members && !(request.auth.uid in get(/databases/$(database)/documents/servers/$(serverId)).data.get('bannedUids',[]));
+        allow create: if canAct()
+          && get(/databases/$(database)/documents/servers/$(serverId)).data.ownerUid == request.auth.uid
+          && request.resource.data.keys().hasOnly(['name', 'createdAt'])
+          && request.resource.data.createdAt == request.time
+          && textoObrigatorio(request.resource.data.name, 30);
+        allow update: if canAct()
+          && get(/databases/$(database)/documents/servers/$(serverId)).data.ownerUid == request.auth.uid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name', 'updatedAt'])
+          && textoObrigatorio(request.resource.data.name, 30);
+        allow delete: if canAct() && get(/databases/$(database)/documents/servers/$(serverId)).data.ownerUid == request.auth.uid;
+
+        match /botGames/{uid} { allow read, write: if false; }
+        match /scores/{uid} { allow read: if channelAccess(serverId,channelId); allow write: if false; }
+        match /polls/{pollId} { allow read: if channelAccess(serverId,channelId); allow write: if false; match /votes/{uid} { allow read: if channelAccess(serverId,channelId) && request.auth.uid == uid; allow write: if false; } }
+        match /voice/{roomId} { allow read: if channelAccess(serverId,channelId); allow write: if false; }
+        match /voiceSignals/{signalId} {
+          function activeVoice(uid,session) {
+            let room=get(/databases/$(database)/documents/servers/$(serverId)/channels/$(channelId)/voice/room).data;
+            return room.members.get(uid,{}).get('session','') == session && room.members.get(uid,{}).get('expiresAt',0) > request.time.toMillis();
+          }
+          allow read: if channelAccess(serverId,channelId) && resource.data.toUid == request.auth.uid && activeVoice(request.auth.uid,resource.data.toSession);
+          allow create: if canAct() && channelAccess(serverId,channelId)
+            && !(request.auth.uid in get(/databases/$(database)/documents/servers/$(serverId)).data.get('mutedUids',[]))
+            && request.resource.data.keys().hasOnly(['fromUid','toUid','fromSession','toSession','kind','payload','createdAt'])
+            && request.resource.data.fromUid == request.auth.uid && request.resource.data.toUid != request.auth.uid
+            && request.resource.data.kind in ['offer','answer','ice'] && texto(request.resource.data.payload,12000)
+            && activeVoice(request.auth.uid,request.resource.data.fromSession) && activeVoice(request.resource.data.toUid,request.resource.data.toSession)
+            && request.resource.data.createdAt == request.time;
+          allow update: if false;
+          allow delete: if request.auth != null && resource.data.toUid == request.auth.uid;
+        }
+        match /messages/{messageId} {
+          allow read: if channelAccess(serverId,channelId);
+          allow create: if canAct()
+            && request.resource.data.uid == request.auth.uid
+            && messageShapeOk(request.resource.data)
+            && channelAccess(serverId,channelId)
+            && get(/databases/$(database)/documents/servers/$(serverId)).data.get('roles',{}).get(request.auth.uid,'member') != 'observer'
+            && (!get(/databases/$(database)/documents/servers/$(serverId)).data.keys().hasAny(['mutedUids'])
+              || !(request.auth.uid in get(/databases/$(database)/documents/servers/$(serverId)).data.mutedUids))
+            && (!get(/databases/$(database)/documents/servers/$(serverId)).data.keys().hasAny(['bannedUids'])
+              || !(request.auth.uid in get(/databases/$(database)/documents/servers/$(serverId)).data.bannedUids))
+            && request.resource.data.createdAt == request.time
+            && snapshotDeAutorOk(request.resource.data)
+            && texto(request.resource.data.text, 1000)
+            && midiaOk(request.resource.data.get('mediaUrl', ''))
+            && urlOk(request.resource.data.get('authorPhoto', ''))
+            && request.resource.data.type in ['text', 'gif', 'sticker', 'image', 'video', 'link', 'audio'];
+          // Exclusão direta fica reservada ao dono do servidor para limpeza
+          // administrativa. O autor apaga para todos por soft-delete e somente
+          // dentro da janela de 5 minutos validada no bloco update abaixo.
+          allow delete: if canAct()
+            && get(/databases/$(database)/documents/servers/$(serverId)).data.ownerUid == request.auth.uid;
+          allow update: if canAct() && reacaoOk()
+            && channelAccess(serverId,channelId);
+          allow update: if canAct() && viewOnceOk()
+            && channelAccess(serverId,channelId);
+          allow update: if canAct() && (
+            (resource.data.uid == request.auth.uid && resource.data.type == 'text'
+              && request.time < resource.data.createdAt + duration.value(2, 'm')
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['text', 'edited', 'editedAt'])
+              && textoObrigatorio(request.resource.data.text, 1000)
+              && request.resource.data.edited == true)
+            ||
+            (resource.data.uid == request.auth.uid
+              && request.time < resource.data.createdAt + duration.value(5, 'm')
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deleted', 'deletedAt', 'text', 'mediaUrl'])
+              && request.resource.data.deleted == true
+              && request.resource.data.text == '' && request.resource.data.mediaUrl == '')
+            ||
+            (get(/databases/$(database)/documents/servers/$(serverId)).data.ownerUid == request.auth.uid
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['deleted', 'deletedAt', 'text', 'mediaUrl'])
+              && request.resource.data.deleted == true)
+          );
+        }
+      }
+
+      match /moderationEvents/{eventId} {
+        // Registro oficial de moderação: clientes não fabricam histórico.
+        allow read: if isAdmin() || (request.auth != null
+          && request.auth.uid == get(/databases/$(database)/documents/servers/$(serverId)).data.ownerUid);
+        allow create, update, delete: if false;
+      }
+    }
+
+    match /interests/{interestId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create, update: if canAct() && request.resource.data.uid == request.auth.uid;
+      allow delete: if canAct() && resource.data.uid == request.auth.uid;
+    }
+
+    match /events/{eventId} {
+      // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+      allow read: if request.auth != null;
+      allow create: if canAct()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.status == 'published'
+        && request.resource.data.createdAt == request.time
+        && nomeProprio(request.resource.data.get('organizerName', ''))
+        && fotoPropria(request.resource.data.get('organizerPhoto', ''))
+        && request.resource.data.get('organizerAccountType', 'gamer') == userData().get('accountType', 'gamer')
+        && request.resource.data.get('organizerVerified', false) == (userData().get('verification', {}).get('status', 'none') == 'active')
+        && request.resource.data.get('organizerBadges', {}) == userData().get('badges', {})
+        && request.resource.data.official == (userData().get('accountType', 'gamer') in ['official_sg', 'official_now'])
+        && textoObrigatorio(request.resource.data.title, 120)
+        && texto(request.resource.data.get('description', ''), 2000)
+        && urlOk(request.resource.data.get('organizerPhoto', ''));
+      allow update: if canAct()
+        && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == resource.data.ownerUid
+        && request.resource.data.official == resource.data.official
+        && request.resource.data.get('organizerName', '') == resource.data.get('organizerName', '')
+        && request.resource.data.get('organizerPhoto', '') == resource.data.get('organizerPhoto', '')
+        && request.resource.data.get('organizerAccountType', 'gamer') == resource.data.get('organizerAccountType', 'gamer')
+        && request.resource.data.get('organizerVerified', false) == resource.data.get('organizerVerified', false)
+        && request.resource.data.get('organizerBadges', {}) == resource.data.get('organizerBadges', {})
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly([
+          'title', 'game', 'type', 'locationType', 'location', 'description', 'capacity', 'attendeeCount', 'status', 'startsAt', 'updatedAt'
+        ])
+        && texto(request.resource.data.get('title', ''), 120)
+        && texto(request.resource.data.get('description', ''), 2000);
+      allow delete: if canAct()
+        && resource.data.ownerUid == request.auth.uid;
+    }
+
+    match /eventAttendance/{attendanceId} {
+      // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+      allow read: if request.auth != null;
+      allow create: if canAct()
+        && request.resource.data.uid == request.auth.uid
+        && attendanceId == request.resource.data.eventId + '_' + request.auth.uid;
+      allow delete: if canAct() && resource.data.uid == request.auth.uid;
+      allow update: if false;
+    }
+
+    match /companies/{companyId} {
+      allow read: if resource.data.status == 'approved' || isAdmin();
+      allow write: if false;
+    }
+
+    match /companyApplications/{applicationId} {
+      allow create: if canAct()
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && texto(request.resource.data.get('name', ''), 120)
+        && texto(request.resource.data.get('goal', ''), 1200)
+        && urlOk(request.resource.data.get('website', ''));
+      allow read: if request.auth != null
+        && (resource.data.uid == request.auth.uid || isAdmin());
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /reports/{reportId} {
+      allow create: if canAct()
+        && request.resource.data.fromUid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && respeitaIntervalo('denuncia', 60);
+      allow read: if isAdmin();
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /sanctions/{sanctionId} {
+      allow create, delete: if false;
+      // a pessoa punida só pode marcar "Entendi" (acknowledgedAt); o resto é do admin
+      allow update: if request.auth != null
+        && resource.data.targetUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['acknowledgedAt'])
+        && request.resource.data.acknowledgedAt == request.time;
+      allow read: if isAdmin() || (request.auth != null && resource.data.targetUid == request.auth.uid);
+    }
+
+    match /supportTickets/{ticketId} {
+      // Um recurso contra punição precisa funcionar justamente quando canAct() é falso
+      // (conta suspensa/banida). Por isso tem ramo próprio, com campos fixos e checagem
+      // de que a punição é da própria pessoa.
+      function recursoOk() {
+        return request.resource.data.get('category', '') == 'appeal'
+          && request.resource.data.keys().hasOnly(['uid', 'category', 'title', 'message', 'status', 'sanctionId', 'caseNumber', 'reasonType', 'evidence', 'createdAt', 'updatedAt'])
+          && request.resource.data.sanctionId is string
+          && request.resource.data.evidence is list
+          && request.resource.data.evidence.size() <= 5
+          && get(/databases/$(database)/documents/sanctions/$(request.resource.data.sanctionId)).data.targetUid == request.auth.uid;
+      }
+      allow create: if request.auth != null
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'open'
+        && texto(request.resource.data.get('title', ''), 200)
+        && texto(request.resource.data.get('message', ''), 3000)
+        && (canAct() || recursoOk());
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      // responder ao pedido de informações da equipe
+      allow update: if request.auth != null
+        && resource.data.uid == request.auth.uid
+        && resource.data.get('category', '') == 'appeal'
+        && resource.data.status == 'info_requested'
+        && request.resource.data.status == 'open'
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['userReply', 'status', 'updatedAt'])
+        && texto(request.resource.data.get('userReply', ''), 2000);
+      allow delete: if false;
+    }
+
+    // uma reserva por pessoa: a baixa no estoque so passa junto com o comprovante
+    match /promotionClaims/{claimId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow create: if canAct()
+        && claimId == request.resource.data.promotionId + '_' + request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && exists(/databases/$(database)/documents/promotions/$(request.resource.data.promotionId))
+        && get(/databases/$(database)/documents/promotions/$(request.resource.data.promotionId)).data.remainingQuantity > 0
+        && getAfter(/databases/$(database)/documents/promotions/$(request.resource.data.promotionId)).data.remainingQuantity
+          == get(/databases/$(database)/documents/promotions/$(request.resource.data.promotionId)).data.remainingQuantity - 1;
+      allow update, delete: if false;
+    }
+
+    match /promotions/{promotionId} {
+      // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+      allow read: if request.auth != null;
+      allow create, delete: if false;
+      allow update: if canAct()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['remainingQuantity'])
+        && resource.data.remainingQuantity > 0
+        && request.resource.data.remainingQuantity == resource.data.remainingQuantity - 1
+        && existsAfter(/databases/$(database)/documents/promotionClaims/$(promotionId + '_' + request.auth.uid))
+        && !exists(/databases/$(database)/documents/promotionClaims/$(promotionId + '_' + request.auth.uid));
+    }
+
+    // Carimbos usados pelo rate limit. O cliente só pode avançar um dos
+    // campos conhecidos para request.time; nunca pode voltar o relógio para
+    // contornar a janela de espera.
+    match /limites/{uid} {
+      function campoValido(chave) {
+        return !request.resource.data.keys().hasAny([chave])
+          || request.resource.data.get(chave, request.time) == request.time;
+      }
+      function campoNaoRetrocede(chave) {
+        return !request.resource.data.diff(resource.data).affectedKeys().hasAny([chave])
+          || (
+            request.resource.data.get(chave, request.time) == request.time
+            && resource.data.get(chave, timestamp.date(1970, 1, 1)) < request.time
+          );
+      }
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow create: if canAct()
+        && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['post', 'comentario', 'denuncia'])
+        && campoValido('post') && campoValido('comentario') && campoValido('denuncia');
+      allow update: if canAct()
+        && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['post', 'comentario', 'denuncia'])
+        && campoNaoRetrocede('post') && campoNaoRetrocede('comentario') && campoNaoRetrocede('denuncia');
+      allow delete: if false;
+    }
+
+    match /steamAuthStates/{state} {
+      allow read, write: if false;
+    }
+    match /passwordResetCodes/{codeId} {
+      allow read, write: if false;
+    }
+
+
+    // ---------- V52: Marketplace, Ads e monetização ----------
+    function listingValid(m) {
+      return m.keys().hasOnly(['sellerUid','sellerName','title','price','category','condition','description','location','imageUrl',
+        'lat','lng','locationRadius','locationPrecision','locationCity','status','featured','featuredUntil','createdAt','updatedAt'])
+        && textoObrigatorio(m.get('title',''),90) && texto(m.get('description',''),1000)
+        && texto(m.get('sellerName',''),60) && texto(m.get('location',''),80)
+        && m.price is number && m.price > 0 && m.price <= 50000
+        && m.category in ['Hardware','Games','Consoles','Acessórios','Digital','Colecionáveis','PC Gamer','Periféricos','Jogos','Serviços','Outros', 'console','pc','peripheral','game','collectible','service','other']
+        && m.condition in ['Novo','Usado','Seminovo','Digital','new','used','like_new','digital']
+        && urlOk(m.get('imageUrl',''))
+        && m.get('locationPrecision','approximate') == 'approximate'
+        && (m.get('lat',null) == null || (m.lat is number && m.lat >= -90 && m.lat <= 90))
+        && (m.get('lng',null) == null || (m.lng is number && m.lng >= -180 && m.lng <= 180));
+    }
+    match /marketListings/{listingId} {
+      allow read: if request.auth != null;
+      allow create: if canAct() && listingValid(request.resource.data)
+        && request.resource.data.sellerUid == request.auth.uid
+        && request.resource.data.status == 'active' && request.resource.data.get('featured',false) == false
+        && !request.resource.data.keys().hasAny(['featuredUntil'])
+        && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time;
+      allow update: if canAct() && resource.data.sellerUid == request.auth.uid
+        && listingValid(request.resource.data)
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title','price','category','condition','description','location','imageUrl','lat','lng','locationRadius','locationPrecision','locationCity','updatedAt'])
+        && request.resource.data.updatedAt == request.time;
+      allow delete: if canAct() && resource.data.sellerUid == request.auth.uid && resource.data.status == 'active';
+    }
+    match /adCampaigns/{campaignId} {
+      allow read: if request.auth != null && (resource.data.ownerUid == request.auth.uid || resource.data.status == 'active' || isAdmin());
+      allow create: if canAct() && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.status == 'draft'
+        && request.resource.data.keys().hasOnly(['ownerUid','name','objective','targetType','targetId','creativeText','headline','cta','placement','placements','region','locationRadius','locationMode','interests','ageRange','gender','audienceType','optimization','billingModel','durationDays','budget','status','metrics','createdAt','updatedAt'])
+        && request.resource.data.metrics == {'impressions':0,'reach':0,'clicks':0,'conversions':0,'spend':0}
+        && request.resource.data.createdAt == request.time && request.resource.data.updatedAt == request.time
+        && request.resource.data.durationDays is int && request.resource.data.durationDays >= 1 && request.resource.data.durationDays <= 90
+        && request.resource.data.budget is number && request.resource.data.budget >= 10 && request.resource.data.budget <= 50000
+        && textoObrigatorio(request.resource.data.get('name',''),80);
+      allow update, delete: if false;
+    }
+    match /adAudiences/{audienceId} {
+      allow read: if request.auth != null && (resource.data.ownerUid == request.auth.uid || isAdmin());
+      allow create: if canAct() && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.type == 'saved'
+        && textoObrigatorio(request.resource.data.get('name',''),70);
+      allow delete: if request.auth != null && resource.data.ownerUid == request.auth.uid;
+      allow update: if canAct() && resource.data.ownerUid == request.auth.uid
+        && request.resource.data.ownerUid == resource.data.ownerUid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name','region','radius','ageRange','interests','updatedAt']);
+    }
+    match /communityMessages/{messageId} {
+      allow read, write: if false; // legado público sem membership: migrar aos canais autorizados
+      allow read: if false;
+      allow create: if false;
+      allow update: if false;
+      allow delete: if canAct() && resource.data.uid == request.auth.uid;
+    }
+    match /ecosystemPurchases/{purchaseId} {
+      allow read: if request.auth != null && (resource.data.uid == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+    match /marketOrders/{orderId} {
+      allow read: if request.auth != null && (resource.data.buyerUid == request.auth.uid || resource.data.sellerUid == request.auth.uid || isAdmin());
+      allow write: if false;
+    }
+  }
+}

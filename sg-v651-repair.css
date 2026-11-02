@@ -1,0 +1,131 @@
+/* SG V65.1: corrective design layer. Source of truth for spacing, containment and readable interactions.
+   Scoped to affected pages; no authorization or application logic is changed here. */
+:root { --sg651-bg:#101116;--sg651-panel:#1b1d24;--sg651-border:#31333d;--sg651-ink:#f3f3f8;--sg651-secondary:#a9aab7;--sg651-accent:#b4a0ff }
+html,body{max-width:100%}*,*::before,*::after{box-sizing:border-box}
+body{overflow-x:clip}
+/* FEED — a single vertical stream instead of two competing cards and a cramped right column */
+body.sg-v65.feed-page .feed-shell{width:min(100%,1110px)!important;max-width:1110px!important;margin:0 auto!important;padding:30px 26px 80px!important;min-width:0!important}
+body.sg-v65.feed-page .feed-page-title{padding:0 0 22px!important;margin:0!important;display:flex!important;flex-wrap:wrap!important;gap:12px!important;align-items:center!important}
+body.sg-v65.feed-page .feed-page-title h1{font-size:27px!important;line-height:1.2!important;letter-spacing:-.8px!important;margin:0 0 3px!important}
+body.sg-v65.feed-page .feed-page-title p{font-size:13px!important;margin:0!important}
+body.sg-v65.feed-page .feed-create-link{margin-left:auto!important;max-width:100%;padding:12px 14px!important;font-size:13px!important}
+body.sg-v65.feed-page .feed-layout{display:grid!important;grid-template-columns:minmax(0,630px) minmax(230px,260px)!important;gap:24px!important;align-items:start!important;justify-content:center!important;width:100%!important;min-width:0!important}
+body.sg-v65.feed-page .feed-layout>div:first-child{display:flex!important;flex-direction:column!important;gap:15px!important;min-width:0!important;width:100%!important;grid-column:1!important;grid-row:1!important}
+body.sg-v65.feed-page .feed-layout>.community-sidebar{grid-column:2!important;grid-row:1!important;position:sticky!important;top:18px!important;min-width:0!important;width:100%!important}
+body.sg-v65.feed-page #feedList{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important;width:100%!important;grid-column:unset!important;grid-row:unset!important;min-width:0!important;position:static!important}
+body.sg-v65.feed-page #feedList .feed-post{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;float:none!important;position:relative!important}
+body.sg-v65.feed-page #feedList .feed-post>header{padding:14px 16px!important;min-height:68px!important;display:grid!important;grid-template-columns:42px minmax(0,1fr) auto!important;align-items:center!important;gap:10px!important}
+body.sg-v65.feed-page #feedList .feed-post .feed-copy{padding:12px 16px 16px!important;min-width:0!important}
+body.sg-v65.feed-page #feedList .feed-post footer{display:flex!important;flex-wrap:wrap!important;gap:4px!important;justify-content:space-between!important;padding:10px 12px!important}
+body.sg-v65.feed-page #feedList .feed-post footer .feed-action{flex:0 1 auto!important;min-width:max-content!important;padding:9px 8px!important;font-size:12px!important}
+body.sg-v65.feed-page #feedList .feed-post .feed-media{max-width:100%!important;width:100%!important;max-height:620px!important;object-fit:contain!important}
+body.sg-v65.feed-page .feed-toolbar{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:12px!important;width:100%!important;margin:0!important;padding:0 0 3px!important;min-width:0!important}
+body.sg-v65.feed-page .feed-toolbar h2{font-size:18px!important;margin:0!important}
+body.sg-v65.feed-page .feed-filters{display:flex!important;align-items:center!important;flex-wrap:nowrap!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:thin!important;border:0!important;background:transparent!important;padding:2px 0 6px!important;gap:6px!important;border-radius:0!important}
+body.sg-v65.feed-page .feed-filter{flex:0 0 auto!important;white-space:nowrap!important;min-height:38px!important;min-width:0!important;font-size:12px!important;border:1px solid var(--sg651-border)!important;background:var(--sg651-panel)!important;border-radius:8px!important;padding:7px 12px!important}
+body.sg-v65.feed-page .feed-filter.active{background:#342b50!important;border-color:#66528f!important;color:#e0d7ff!important}
+body.sg-v65.feed-page .sg-story-rail[hidden]{display:none!important}
+body.sg-v65.feed-page .v651-compose{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 16px;border:1px solid var(--sg651-border);background:var(--sg651-panel);border-radius:12px;color:var(--sg651-secondary);font-size:13px}
+body.sg-v65.feed-page .v651-compose a{display:inline-flex;align-items:center;text-align:center;justify-content:center;color:#17121e;background:var(--sg651-accent);padding:10px 13px;min-height:38px;white-space:nowrap;border-radius:8px;text-decoration:none;font-weight:700;font-size:12px}
+body.sg-v65.feed-page .sidebar-card{margin:0 0 13px!important;padding:17px!important}
+body.sg-v65.feed-page .community-sidebar .sidebar-card h3{font-size:15px!important}
+/* CHAT — full-height workspace; center its actual dialogs, never clip controls */
+body.sg-v65.chat-page{min-width:0!important}
+body.sg-v65.chat-page .discord-shell{height:calc(100dvh - 58px)!important;min-height:500px!important;overflow:hidden!important;display:grid!important}
+body.sg-v65.chat-page .discord-chat,body.sg-v65.chat-page .discord-sidebar{min-width:0!important;overflow:hidden!important}
+body.sg-v65.chat-page .discord-chat{height:100%!important;display:flex!important;flex-direction:column!important}
+body.sg-v65.chat-page .message-list{min-height:0!important;flex:1 1 auto!important;overflow-y:auto!important;max-width:100%!important}
+body.sg-v65.chat-page .chat-welcome{width:min(100%,550px)!important;min-width:0!important;margin:auto!important;padding:20px!important;gap:14px!important}
+body.sg-v65.chat-page .chat-welcome h1,body.sg-v65.chat-page .chat-welcome h2{font-size:21px!important;line-height:1.25!important;letter-spacing:-.5px!important}
+body.sg-v65.chat-page .chat-welcome p{font-size:13px!important;line-height:1.55!important}
+body.sg-v65.chat-page .chat-welcome-features{display:none!important}
+body.sg-v65.chat-page .chat-welcome img{max-width:48px!important;max-height:48px!important}
+body.sg-v65.chat-page .message-form{flex:0 0 auto!important;width:100%!important;min-width:0!important;padding:10px 14px!important}
+body.sg-v65.chat-page .chat-search-wrap{width:auto!important;max-width:100%!important;min-width:0!important}
+body.sg-v65.chat-page .chat-search-wrap input{max-width:100%!important;width:100%!important;min-width:0!important}
+body.sg-v65.chat-page .discord-sidebar header{overflow:visible!important;min-width:0!important}
+body.sg-v65.chat-page .message .message-bubble{max-width:min(82%,640px)!important;overflow-wrap:anywhere!important}
+body.sg-v65.chat-page dialog.server-dialog,body.sg-v65.chat-page dialog.server-quick-dialog{position:fixed!important;inset:0!important;top:0!important;left:0!important;right:0!important;bottom:0!important;transform:none!important;margin:auto!important;width:min(560px,calc(100vw - 28px))!important;min-width:0!important;max-width:calc(100vw - 28px)!important;height:fit-content!important;max-height:calc(100dvh - 28px)!important;padding:0!important;overflow-y:auto!important;overflow-x:hidden!important;border-radius:14px!important;z-index:9000!important}
+body.sg-v65.chat-page dialog.server-dialog .server-dialog-card{width:100%!important;max-width:100%!important;min-width:0!important;margin:0!important;max-height:none!important;overflow:visible!important;padding:22px!important;border:0!important;border-radius:14px!important;box-shadow:none!important}
+body.sg-v65.chat-page dialog.server-dialog .server-create-card{display:block!important}
+body.sg-v65.chat-page dialog.server-dialog .server-create-core{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:12px!important;min-width:0!important}
+body.sg-v65.chat-page dialog.server-dialog label,body.sg-v65.chat-page dialog.server-dialog input,body.sg-v65.chat-page dialog.server-dialog select,body.sg-v65.chat-page dialog.server-dialog button{min-width:0!important;max-width:100%!important}
+body.sg-v65.chat-page dialog.server-dialog #serverFriendChoices{max-height:180px!important;overflow-y:auto!important}
+body.sg-v65.chat-page dialog.server-dialog .server-friend-picker{min-width:0!important;max-width:100%!important}
+body.sg-v65.chat-page dialog.server-dialog .server-create-note{flex-wrap:wrap!important}
+/* PROFILE — no negative overlays, and actual information outranks marketing strips */
+body.sg-v65.dashboard-page .dashboard{width:min(100%,1130px)!important;max-width:1130px!important;min-width:0!important;margin:0 auto!important;padding:22px 24px 100px!important}
+body.sg-v65.dashboard-page .now-profile-strip{display:none!important}
+body.sg-v65.dashboard-page .profile-card{border:1px solid var(--sg651-border)!important;border-radius:14px!important;background:var(--sg651-panel)!important;overflow:visible!important;margin:0 0 22px!important;box-shadow:none!important}
+body.sg-v65.dashboard-page .profile-background{height:130px!important;min-height:0!important;position:relative!important;border-radius:13px 13px 0 0!important;overflow:hidden!important}
+body.sg-v65.dashboard-page .profile-main{position:relative!important;display:grid!important;grid-template-columns:98px minmax(0,1fr) auto!important;align-items:center!important;gap:17px!important;padding:18px 24px 22px!important;min-height:130px!important;overflow:visible!important;flex-wrap:nowrap!important}
+body.sg-v65.dashboard-page .profile-avatar{position:relative!important;width:94px!important;height:94px!important;margin:-45px 0 0!important;border-radius:50%!important;border:5px solid var(--sg651-panel)!important;overflow:hidden!important;grid-row:1/3!important;align-self:start!important}
+body.sg-v65.dashboard-page .profile-info{grid-column:2!important;min-width:0!important;max-width:100%!important;padding:0!important;margin:0!important;align-self:center!important}
+body.sg-v65.dashboard-page .profile-info h1{font-size:26px!important;line-height:1.23!important;overflow:visible!important;text-overflow:ellipsis!important;max-width:100%!important;margin:5px 0!important}
+body.sg-v65.dashboard-page .profile-main>.edit-profile-btn,body.sg-v65.dashboard-page .profile-main>.share-profile-btn{margin:0!important;min-width:0!important;max-width:100%!important}
+body.sg-v65.dashboard-page .profile-main>.edit-profile-btn{grid-column:3!important;grid-row:1!important;align-self:center!important}
+body.sg-v65.dashboard-page .profile-main>.share-profile-btn{grid-column:3!important;grid-row:2!important;align-self:start!important}
+body.sg-v65.dashboard-page .stats-grid{min-width:0!important;gap:10px!important}
+body.sg-v65.dashboard-page .achievement-list{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;min-width:0!important}
+body.sg-v65.dashboard-page .achievement-card{display:flex!important;align-items:center!important;gap:12px!important;min-width:0!important;padding:13px 15px!important;border-radius:10px!important;border:1px solid var(--sg651-border)!important;background:var(--sg651-panel)!important;box-shadow:none!important;min-height:74px!important}
+body.sg-v65.dashboard-page .v651-ach-icon{display:grid!important;place-items:center!important;flex:0 0 27px!important;width:27px!important;height:27px!important;border-radius:50%!important;border:1px solid #585078!important;background:#302943!important;color:#d7caff!important;font-size:14px!important;font-weight:700!important}
+body.sg-v65.dashboard-page .achievement-card strong{font-size:13px!important;line-height:1.4!important}
+body.sg-v65.dashboard-page .achievement-card p{font-size:11px!important;line-height:1.5!important;opacity:.85!important;margin:2px 0 0!important}
+/* EDIT PROFILE — right column and form remain inside viewport; no clipped title */
+body.profile-editor-page .profile-editor-topbar{position:relative!important;height:62px!important;min-height:62px!important;padding:0 24px!important;margin:0!important;max-width:100%!important}
+body.profile-editor-page .edit-page{width:min(1190px,calc(100% - 48px))!important;max-width:1190px!important;min-width:0!important;margin:0 auto!important;padding:28px 0 90px!important;overflow:visible!important}
+body.profile-editor-page .edit-container{max-width:100%!important;min-width:0!important;overflow:visible!important}
+body.profile-editor-page .edit-header{display:flex!important;flex-wrap:wrap!important;align-items:center!important;gap:20px!important;margin:0 0 22px!important;min-width:0!important;overflow:visible!important}
+body.profile-editor-page .edit-header h1{font-size:30px!important;font-weight:750!important;line-height:1.25!important;letter-spacing:-.6px!important;margin:0 0 6px!important;padding:0!important;overflow:visible!important}
+body.profile-editor-page .edit-header p{font-size:13px!important;line-height:1.5!important}
+body.profile-editor-page .profile-editor-layout{display:grid!important;grid-template-columns:minmax(0,1.45fr) minmax(275px,.75fr)!important;align-items:start!important;gap:16px!important;min-width:0!important}
+body.profile-editor-page .edit-card{padding:20px!important;border-radius:12px!important;min-width:0!important;max-width:100%!important;overflow:visible!important;box-shadow:none!important}
+body.profile-editor-page .editor-side{min-width:0!important;display:grid!important;grid-template-columns:1fr!important;gap:14px!important}
+body.profile-editor-page .profile-live-preview{min-height:0!important;margin:12px 0 20px!important;overflow:hidden!important;border-radius:11px!important}
+body.profile-editor-page .preview-cover{height:70px!important;min-height:0!important}
+body.profile-editor-page .avatar-area{display:grid!important;grid-template-columns:82px minmax(0,1fr)!important;gap:14px!important;align-items:center!important;margin:-26px 0 0!important;padding:0 16px 16px!important}
+body.profile-editor-page .avatar-area #profilePreview{width:82px!important;height:82px!important;margin:0!important;max-width:100%!important}
+body.profile-editor-page .avatar-copy{padding:24px 0 0!important;min-width:0!important;overflow-wrap:anywhere!important}
+body.profile-editor-page .profile-fields{min-width:0!important}
+body.profile-editor-page .field input,body.profile-editor-page .field textarea,body.profile-editor-page .field select{min-width:0!important;max-width:100%!important}
+body.profile-editor-page .editor-actions{position:static!important;bottom:auto!important;z-index:auto!important;margin:18px 0 0!important;padding:14px!important;border-radius:12px!important;box-shadow:none!important}
+body.profile-editor-page .platform-account-grid{grid-template-columns:repeat(auto-fit,minmax(245px,1fr))!important;gap:10px!important}
+/* ADMIN: never assume an auth problem is a wrong UID; expose actionable diagnostic. */
+body.admin-page .admin-main{max-width:1280px!important;width:calc(100% - 36px)!important;min-width:0!important;margin-inline:auto!important}
+body.admin-page .app-header{flex-wrap:wrap!important;min-height:65px!important;gap:10px!important}
+body.admin-page .app-header nav{display:flex!important;flex-wrap:wrap!important;gap:6px!important;overflow:visible!important}
+body.admin-page .admin-heading{display:flex!important;flex-wrap:wrap!important;gap:20px!important}
+body.admin-page .admin-table-wrap{max-width:100%!important;overflow-x:auto!important}
+.v651-admin-error{padding:20px;margin:20px 0;border:1px solid #775c5c;border-radius:12px;background:#271d22;color:#f7e7e7;max-width:850px}
+.v651-admin-error h2{font-size:18px;margin:0 0 8px}.v651-admin-error p{font-size:13px;line-height:1.6;margin:0 0 12px}.v651-admin-error code{display:block;white-space:pre-wrap;overflow-wrap:anywhere;padding:10px 12px;background:#191519;border:1px solid #45313a;border-radius:8px;font-size:11px;color:#e7c8c8;margin-bottom:14px}
+.v651-admin-error a{display:inline-block;text-decoration:none;padding:10px 13px;border-radius:7px;background:#493445;color:white}
+@media(max-width:1100px){
+ body.sg-v65.feed-page .feed-layout{grid-template-columns:minmax(0,660px)!important}
+ body.sg-v65.feed-page .feed-layout>.community-sidebar{display:none!important}
+ body.sg-v65.dashboard-page .profile-main{grid-template-columns:94px minmax(0,1fr)!important}
+ body.sg-v65.dashboard-page .profile-main>.edit-profile-btn,body.sg-v65.dashboard-page .profile-main>.share-profile-btn{grid-column:2!important;grid-row:auto!important;justify-self:start!important}
+ body.profile-editor-page .profile-editor-layout{grid-template-columns:minmax(0,1fr)!important}
+ body.profile-editor-page .editor-side{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:700px){
+ body.sg-v65.feed-page .feed-shell{padding:18px 12px 90px!important}
+ body.sg-v65.feed-page .feed-layout{grid-template-columns:minmax(0,1fr)!important;gap:16px!important}
+ body.sg-v65.feed-page .feed-create-link{margin-left:0!important}
+ body.sg-v65.feed-page .v651-compose{flex-wrap:wrap!important}
+ body.sg-v65.feed-page .v651-compose a{width:100%!important}
+ body.sg-v65.chat-page .discord-shell{height:calc(100dvh - 125px)!important;min-height:360px!important}
+ body.sg-v65.chat-page dialog.server-dialog .server-dialog-card{padding:15px!important}
+ body.sg-v65.dashboard-page .dashboard{padding:14px 12px 96px!important}
+ body.sg-v65.dashboard-page .profile-main{grid-template-columns:74px minmax(0,1fr)!important;gap:12px!important;padding:14px!important}
+ body.sg-v65.dashboard-page .profile-avatar{width:74px!important;height:74px!important;margin-top:-28px!important;grid-row:1/2!important}
+ body.sg-v65.dashboard-page .profile-info h1{font-size:21px!important}
+ body.sg-v65.dashboard-page .achievement-list{grid-template-columns:minmax(0,1fr)!important}
+ body.profile-editor-page .edit-page{width:calc(100% - 24px)!important;padding:20px 0 96px!important}
+ body.profile-editor-page .edit-header h1{font-size:27px!important}
+ body.profile-editor-page .editor-side{grid-template-columns:1fr!important}
+ body.profile-editor-page .platform-account-grid{grid-template-columns:1fr!important}
+ body.profile-editor-page .avatar-area{grid-template-columns:66px minmax(0,1fr)!important}
+ body.profile-editor-page .avatar-area #profilePreview{width:66px!important;height:66px!important}
+ body.profile-editor-page .edit-card{padding:15px!important}
+ body.admin-page .admin-main{width:calc(100% - 20px)!important}
+}

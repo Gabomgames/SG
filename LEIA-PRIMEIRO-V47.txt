@@ -1,0 +1,42 @@
+SOMETHING GAMER V47
+
+CORRECOES PRINCIPAIS
+- Comunidade com consulta compativel com as regras do Firestore.
+- Perfis privados fora da busca publica, mas acessiveis aos amigos.
+- Chat mobile com bolhas compactas, compositor fixo e midias proporcionais.
+- Busca GIPHY pelo Worker e proxy de GIF com cache.
+- 24 figurinhas SG e criacao de figurinha personalizada.
+- Videos reproduzidos dentro do chat.
+- Links, fotos, videos e audio somente depois da Amizade Gamer aceita.
+- Marcacoes pesquisam perfis publicos e amigos.
+- WebRTC preparado para configuracao de TURN.
+- Primeiro acesso e recuperacao do admin com codigo mestre.
+- Prazo de verificacao escolhido pelo administrador.
+- Notificacoes e conquistas em areas separadas.
+- Publicacoes com previa de imagem/video e descricao alinhada.
+- Tutorial com oito etapas.
+
+CONFIGURACAO OBRIGATORIA
+1. Worker Cloudflare:
+   npx wrangler secret put GIPHY_API_KEY
+   npx wrangler secret put ADMIN_RECOVERY_CODE
+   npx wrangler deploy
+
+2. Firebase:
+   firebase deploy --only firestore:rules,firestore:indexes,hosting --project something-gamer
+
+3. Painel administrativo:
+   As acoes em functions/index.js exigem as Firebase Functions publicadas.
+   Sem isso, a interface abre, mas nao consegue alterar contas.
+
+4. Chamadas:
+   STUN esta configurado. Para funcionar em todas as redes, configure um TURN
+   temporario em APP_CONFIG.rtcIceServers. Sem TURN, WebRTC nao e garantido.
+
+TESTES
+   npm ci
+   npm run verificar
+   npm run build
+
+ANDROID
+   O Gradle Android 8.7.3 exige JDK 17. Java 8 nao compila o APK.

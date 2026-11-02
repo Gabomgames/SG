@@ -1,0 +1,59 @@
+SOMETHING GAMER V42 — SG SHIELD / PULSE
+
+O que esta versão adiciona:
+- SG Shield: moderação automática por IA no Cloudflare Worker usando OPENAI_API_KEY.
+- Moderação de texto em posts, comentários, chat, nome, username e bio.
+- Moderação de imagens em posts e fotos enviadas no chat.
+- Filtro local continua como fallback quando o serviço de IA estiver indisponível.
+- reCAPTCHA Enterprise / Firebase App Check integrado no frontend e verificado pelo Cloudflare Worker quando o token é enviado.
+- GIFs: busca via Cloudflare Worker quando GIPHY_API_KEY estiver configurada; fallback para GIFs SG existentes.
+- Mensagens de voz com microfone, redução de ruído e upload no Firebase Storage em vez de base64 no Firestore.
+- Fotos do chat armazenadas no Firebase Storage, com regra privada por conversa.
+- Ligações de voz e vídeo P2P via WebRTC entre Amigos Gamers.
+- Novas regras Firestore para ligações, amizade/conversa e promoções.
+- Regras de Storage para mídia privada do chat.
+- Visual do chat/call reforçado sem trocar a identidade do SG.
+
+IMPORTANTE — SEM CHAVES NO CÓDIGO
+A OPENAI_API_KEY NÃO está neste ZIP. Ela já deve ficar como Secret do Worker:
+  npx wrangler secret put OPENAI_API_KEY
+
+GIF PESQUISÁVEL (opcional)
+Para pesquisa completa de GIFs pelo Worker, coloque a chave GIPHY como Secret:
+  cd something-gamer-api
+  npx wrangler secret put GIPHY_API_KEY
+Sem ela, o seletor continua funcionando com a biblioteca de GIFs de fallback.
+
+RECAPTCHA / APP CHECK
+O código está integrado no frontend e o Worker valida os tokens do Firebase App Check.
+1. Cadastre a chave Web do reCAPTCHA Enterprise no Firebase App Check.
+2. Coloque SOMENTE a site key pública em config.js:
+     recaptchaEnterpriseSiteKey: "SUA_SITE_KEY_PUBLICA"
+3. Faça o deploy e teste primeiro com APP_CHECK_ENFORCED="false" no wrangler.jsonc.
+4. Quando o App Check estiver emitindo tokens normalmente, troque para:
+     APP_CHECK_ENFORCED: "true"
+   e publique o Worker novamente.
+Nunca coloque secret key do reCAPTCHA no frontend.
+
+CLOUDFLARE WORKER
+OPENAI_API_KEY fica somente como Secret do Worker. Para pesquisa online de GIFs, GIPHY_API_KEY também deve ficar como Secret.
+Depois de colocar os secrets:
+  cd something-gamer-api
+  npx wrangler deploy
+
+O Worker também contém FIREBASE_PROJECT_NUMBER e FIREBASE_WEB_APP_ID, que são identificadores públicos usados para conferir o token App Check.
+
+FIREBASE
+As novas ligações e mídia dependem das novas firestore.rules, storage.rules e firestore.indexes.json.
+Publique essas regras antes de testar chamadas.
+
+LIGAÇÕES
+As chamadas usam WebRTC P2P e STUN gratuito. Isso evita servidor de mídia e custo adicional.
+Em redes/NAT muito restritivas, chamadas P2P podem não conectar sem um servidor TURN. TURN não foi incluído para manter o projeto sem custo obrigatório.
+
+SEGURANÇA DE SENHA
+As senhas internas do painel usam PBKDF2-SHA256 com 310.000 iterações e sal aleatório de 32 bytes por senha. Hashes antigos continuam migrando automaticamente após login válido.
+
+VALIDAÇÃO
+Execute na raiz:
+  npm run verificar

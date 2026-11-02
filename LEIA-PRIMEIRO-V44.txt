@@ -1,0 +1,21 @@
+SOMETHING GAMER V44 FIXED
+
+Correções desta versão:
+- Banner offline redesenhado e com CSS crítico embutido: não volta a aparecer como texto/botão padrão.
+- Seletor de idioma redesenhado e protegido contra cache antigo.
+- Cache do Service Worker avançado para V44.
+- Publicações: texto sempre fica no topo do conteúdo, alinhado à esquerda, antes da mídia.
+- Upload real de imagens e vídeos de publicação sem Firebase Storage: usa o Worker + KV SG_AUTH já existente.
+- Preview de imagem/vídeo antes de publicar.
+- Imagens grandes são otimizadas no navegador antes do upload.
+- Chat: foto, vídeo e áudio enviados pelo mesmo backend de mídia, mantendo a exigência de Amizade Gamer.
+- GIPHY, chamadas e demais recursos anteriores preservados.
+
+IMPORTANTE PARA PUBLICAR AS CORREÇÕES DE MÍDIA:
+1. Worker: cd something-gamer-api && npx wrangler deploy
+2. Site/regras: npm run verificar && npm run build && firebase deploy --only hosting,firestore:rules,firestore:indexes
+
+O upload de mídia usa o binding SG_AUTH já existente; não precisa criar Firebase Storage. Para volume alto de mídia, a evolução recomendada é migrar este armazenamento para Cloudflare R2.
+
+reCAPTCHA v2 visível:
+- continua exigindo sua Site Key em config.js e o secret RECAPTCHA_V2_SECRET no Worker.

@@ -1,0 +1,48 @@
+plugins { id 'com.android.application' }
+
+// A versão vem do build-info.json da raiz: um lugar só, em vez de repetir o número.
+// v40 -> versionName "40", versionCode 40.
+def infoDoBuild = new groovy.json.JsonSlurper().parse(file("../../build-info.json"))
+def nomeDaVersao = (infoDoBuild.version ?: "v40").toString().replaceFirst(/^v/, "")
+def codigoDaVersao = Integer.parseInt(nomeDaVersao.replaceAll(/[^0-9]/, ""))
+
+// Assinatura de verdade quando as variáveis existem (CI com os secrets configurados).
+def caminhoDaChave = System.getenv("ANDROID_KEYSTORE_PATH")
+def temChavePropria = caminhoDaChave != null && !caminhoDaChave.isEmpty() && file(caminhoDaChave).exists()
+
+android {
+    namespace 'com.somethinggamer.app'
+    compileSdk 35
+
+    defaultConfig {
+        applicationId 'com.somethinggamer.app'
+        minSdk 24
+        targetSdk 35
+        versionCode codigoDaVersao
+        versionName nomeDaVersao
+    }
+
+    signingConfigs {
+        release {
+            if (temChavePropria) {
+                storeFile file(caminhoDaChave)
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled false
+            if (temChavePropria) signingConfig signingConfigs.release
+            else signingConfig signingConfigs.debug
+        }
+        debug {
+            versionNameSuffix '-debug'
+            signingConfig signingConfigs.debug
+        }
+    }
+}

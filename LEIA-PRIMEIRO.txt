@@ -1,0 +1,669 @@
+=======================================================
+  SOMETHING GAMER v40 - VERSAO REVISADA E CORRIGIDA
+=======================================================
+
+Esta e a sua pasta da v40 com as correcoes aplicadas.
+Leia isto antes de publicar qualquer coisa.
+
+
+1. O CHAT ESTAVA QUEBRADO NA VERSAO QUE VOCE MANDOU
+---------------------------------------------------
+O chat.js tinha um "}" faltando (linha do openSafetyReport, no
+bloco "report"). Como e modulo ES, o navegador nao carregava o
+arquivo INTEIRO. Resultado: a pagina de chat nao abria conversa,
+nao mandava mensagem, nao fazia nada - e nenhum erro aparecia
+na tela.
+
+Confirme voce mesmo, na SUA pasta antiga:
+
+    node --input-type=module --check < chat.js
+
+Ela responde "SyntaxError: Unexpected token )". Na pasta nova,
+nao responde nada (que e o certo).
+
+
+2. AS NOTIFICACOES PARAVAM DEPOIS DE ~30
+-----------------------------------------
+A consulta usava limit(30) sem orderBy. Sem orderBy o Firestore
+ordena pelo ID do documento, que e aleatorio. Entao depois de
+umas 30 notificacoes, as novas simplesmente nao entravam mais na
+lista. Nunca dava erro.
+
+O mesmo problema estava em mais 4 lugares - inclusive nas
+DENUNCIAS e nos PEDIDOS DE EMPRESA do painel. Uma denuncia nova
+podia nunca aparecer para voce.
+
+
+3. OS USUARIOS NAO APARECIAM NA COMUNIDADE
+
+Quem entrou com o Google nunca aparecia na lista da Comunidade.
+
+A regra do Firestore exige que publicProfiles.photoURL seja IGUAL a
+users/{uid}.photoURL:
+
+    request.resource.data.photoURL ==
+        get(/databases/$(database)/documents/users/$(userId)).data.photoURL
+
+E o onboarding grava users/{uid}.photoURL = "" de proposito: a foto
+enviada vai para pendingPhotoURL e passa por moderacao antes de virar
+publica.
+
+So que o dashboard.js montava o perfil publico assim:
+
+    photoURL: profile.photoURL || user.photoURL || ""
+
+Para quem entrou com e-mail e senha, user.photoURL e nulo, cai no "",
+bate com a regra e funciona. Para quem entrou com o Google,
+user.photoURL e o endereco do avatar da conta Google - diferente de ""
+- e o Firestore RECUSA a escrita. Sem publicProfiles, a pessoa nao
+aparece em lugar nenhum: o social.js lista com
+where(visibility,==,public) nessa colecao.
+
+Pior: esse await estava sem try e antes de tudo no loadDashboard, entao
+a recusa tambem parava o resto da montagem da pagina Meu perfil.
+
+Duas correcoes:
+- a foto do perfil publico agora sai so de users/{uid}, como no
+  edit-profile.js (que sempre esteve certo). De quebra, isso fecha um
+  furo: publicar o avatar do Google direto pulava a moderacao de foto
+  que o app faz questao de ter;
+- a sincronizacao ficou dentro de try, entao uma falha nao derruba mais
+  a pagina inteira.
+
+COMO CONFERIR EM 10 SEGUNDOS, antes de aplicar: entre no site com uma
+conta Google, abra Meu perfil, aperte F12 e olhe o console. Se aparecer
+permission-denied em publicProfiles, e exatamente isto.
+
+Quem ja estava quebrado volta sozinho: basta a pessoa abrir Meu perfil
+uma vez com a correcao no ar. Quem tinha salvo o perfil em Editar
+perfil alguma vez ja aparecia, porque aquele caminho sempre usou a
+foto certa - e por isso alguns usuarios apareciam e outros nao.
+
+
+4. O QUE MAIS MUDOU
+-------------------
+- Moderacao agora vale no servidor (antes so no navegador: quem
+  abrisse o console publicava o que quisesse).
+- Amizade exige o pedido ACEITO (antes dava para se auto-adicionar
+  e mandar DM para quem nao aceitou).
+- Notificacao exige relacao real e tem tamanho limitado (antes
+  qualquer conta mandava qualquer texto para qualquer pessoa, e
+  isso virava notificacao do sistema no celular).
+- Dados da Steam so o servidor grava (antes dava para inventar
+  biblioteca e conquistas).
+- Expulsar de servidor agora segura (antes a pessoa se
+  readicionava sozinha com o mesmo link).
+- Webhook do Mercado Pago exige assinatura.
+- Senha do painel: SHA-256 sem sal -> PBKDF2 com sal.
+- WebView do Android nao libera mais camera/microfone para
+  qualquer site.
+- APK sai em release, nao mais em debug.
+- CSP e headers de seguranca no firebase.json.
+
+O fluxo da Steam estava duplicado (Cloud Functions + Worker).
+Ficou so o das Cloud Functions. O Worker agora so cuida do painel.
+
+
+5. O VISUAL
+-----------
+Duas coisas: tirei o que denunciava pagina gerada por IA, e depois
+dei um sistema ao que sobrou. A segunda parte era a que faltava.
+
+5.1 O QUE SAIU (os sinais de IA)
+
+- a pilula "O ECOSSISTEMA GAMER" acima do titulo da home, e mais 36
+  rotulos em CAIXA ALTA espalhados pelas paginas, que so repetiam o
+  titulo logo abaixo ("PAINEL EXCLUSIVO" em cima de "Painel
+  administrativo", "AGORA" em cima de "Atividade recente");
+- palavra com gradiente colorido dentro do titulo;
+- os brilhos radiais roxos atras das paginas, e a grade quadriculada
+  de fundo;
+- os tres cards identicos da home;
+- a seta que ficava DENTRO dos botoes (7 no onboarding);
+- os dois brilhos que varriam o botao da esquerda para a direita no
+  hover (entrar e continuar);
+- os numeros decorativos 01/02/03 nos cartoes de beneficio da
+  verificacao e da pagina de empresas.
+
+Ficaram de proposito: o gradiente do logo e dos selos (e a marca), as
+bolhas do chat, o brilho vermelho do aviso de banimento (ali a cor
+comunica gravidade), os rotulos "01 / SUA IDENTIDADE" do onboarding e
+o 01-02-03 dos eventos (Publique > Receba > Organize), porque ali a
+ordem e a informacao.
+
+5.2 UMA PALETA SO
+
+O app tinha 361 cores diferentes em 699 usos. Quase todas eram o
+mesmo preto ou o mesmo cinza escritos de um jeito ligeiramente
+diferente: 75 pretos de fundo, 29 verdes, 21 cianos, 17 vermelhos.
+
+Agora sao 38, e a maioria e identidade (o gradiente do logo, as
+bolhas do chat). O resto virou uma rampa unica, no topo do
+app-theme.css:
+
+    fundo -> fundo-2 -> painel -> painel-2 -> painel-3
+    linha -> linha-forte -> linha-2
+    tinta-fraca -> tinta-media -> tinta-alta -> tinta
+    marca-escura -> marca -> marca-clara
+    ok / erro / aviso / info, cada uma com claro e escuro
+
+A troca respeitou a claridade de cada cor: a maior diferenca foi de 8
+pontos de luminosidade, entao nada ficou mais escuro ou mais claro do
+que era. A mesma rampa esta repetida no style.css, porque a home nao
+carrega o app-theme.css.
+
+5.3 O QUE A RAMPA CONSERTOU DE QUEBRA
+
+- TEMA CLARO. Ele existia mas estava quebrado desde antes: a regra
+  geral dos botoes pinta o texto de branco com !important, entao no
+  tema claro o botao ficava branco no branco (1.01:1 de contraste).
+  Agora o tema claro e a mesma rampa com os valores virados, num
+  bloco so.
+- FUNDOS TRANSLUCIDOS. 156 veus brancos e 37 superficies escuras
+  estavam escritos em rgba() fixo, fora do alcance do tema. Viraram
+  rgb(var(--veu-rgb) / alfa).
+- COR DE BORDA USADA COMO COR DE TEXTO em 34 lugares (rotulo de
+  campo, contador, rodape). Eram cinzas medios que, virados, ficavam
+  ilegiveis.
+
+5.4 TIPOGRAFIA E TAMANHOS
+
+- FONTE DE TITULO: Archivo Expanded, na home e no app. Testei seis
+  (Archivo, Archivo Expanded, Space Grotesk, Bricolage, Sora e
+  Familjen) renderizando o titulo de verdade, no tamanho de verdade, na
+  pagina de verdade. Escolha do Gabom entre as duas finalistas.
+  E a mesma familia de antes, so que na largura expandida: o titulo
+  ocupa a linha e ganha presenca, sem trocar a identidade da marca.
+  Os pesos vao de 500 a 800, entao os titulos seguem em 800.
+  Ha um font-synthesis-weight: none nos titulos: sem ele, uma regra que
+  pedisse um peso fora do que carregamos faria o navegador engrossar o
+  traco na marra e a letra borraria.
+  O texto corrido continua Inter.
+
+- 31 textos estavam em 8px ou 9px e 39 em 10px. O piso agora e 12px.
+  Entre eles: rotulo de formulario, nome de conversa no chat e texto
+  de botao.
+- O campo "O que voce quer compartilhar?" estava em 10px numa caixa
+  de 38px. Virou 15px em 46px: e o campo principal da tela.
+
+5.5 UM BUG DE BOTAO QUE VALIA PARA O APP INTEIRO
+
+A regra que estiliza todos os botoes nao tinha padding horizontal.
+O texto encostava na borda e botoes como "Ver todos" e "Conectar"
+apareciam espremidos dentro de um quadradinho. Uma linha resolveu em
+todas as telas. Na mesma regra faltava tambem dizer o fundo, entao o
+Chrome pintava o botao com o cinza dele (#f0f0f0) e o botao
+"Gerenciar assinatura" sumia.
+
+5.6 ICONES DE VERDADE
+
+A interface usava emoji no lugar de icone: o controle e o trofeu nos
+cartoes de conta, o cadeado no painel admin, o microfone no chat. E
+usava caracteres de texto para o resto: check, seta, coracao, lupa,
+engrenagem, avial de enviar.
+
+Isso da problema de dois jeitos. Emoji tem desenho proprio em cada
+sistema (no Windows e um, no Android e outro, no iPhone e outro) e
+nao aceita cor: fica sempre colorido, fora da paleta. E caractere de
+texto muda de tamanho e de peso conforme a fonte instalada, e nao
+alinha com a linha de texto ao lado.
+
+Agora existe um icones.js com 30 icones em um traco so: 24x24, linha
+de 1.8, ponta redonda, tudo em currentColor. Como e currentColor, o
+icone herda a cor do texto ao lado e acompanha o tema claro sozinho.
+
+O emoji continua onde ele e conteudo: o seletor de emoji do chat e a
+arte das figurinhas. Ali ele deve ser emoji mesmo.
+
+5.7 ACABAMENTO
+
+- PAGINA 404. Agora existe 404.html. O Firebase serve esse arquivo
+  sozinho em qualquer endereco que nao exista; nao precisa de rewrite.
+  Os caminhos dentro dela sao a partir da raiz (/style.css) de
+  proposito: ela pode ser servida em /Games/qualquer-coisa, e caminho
+  relativo quebraria o CSS ali.
+
+- BARRA DE ROLAGEM. A do sistema e cinza clara e aparecia como um
+  corte branco no meio da tela escura. A nova sai da rampa, entao
+  acompanha o tema claro sozinha.
+
+- O MENU MARCA ONDE VOCE ESTA. landing.js, so na home: enquanto voce
+  rola, o item da faixa atual fica aceso no menu e no herói. Ele
+  tambem limpa o "#events" da barra de endereco depois do clique, para
+  o botao Voltar do navegador nao virar uma fila de ancoras.
+
+  A rolagem suave em si NAO e script: e scroll-behavior: smooth no
+  CSS, com scroll-margin-top para o cabecalho fixo nao cobrir o titulo
+  da faixa. Quem liga "reduzir movimento" no sistema continua sem
+  animacao, e de proposito.
+
+5.8 CONTRASTE
+
+Medi o contraste real de cada texto de cada pagina, compondo a
+transparencia dos fundos. No tema escuro, que e o padrao, as 19
+paginas dao ZERO textos abaixo de AA. No tema claro a maioria das
+paginas tambem zerou, mas ele ainda nao esta fechado: sobram casos em
+Verificacao e na Biblioteca. Meu medidor deu resultados inconsistentes
+nessas duas, entao prefiro te avisar a afirmar que esta pronto.
+
+5.9 PASSADA DE DESIGNER
+
+Tres coisas que nao eram gosto, eram numero:
+
+- ANEL DE FOCO. Quem navega por teclado nao via onde estava no login:
+  os campos apagam o contorno com seletor de ID (#loginForm input), e a
+  regra de foco so existia no app-theme.css, que o login nao carrega.
+  Agora existe tambem no style.css, com seletor de ID onde precisa
+  ganhar. Conferido em navegador: os quatro elementos do login recebem
+  anel de 2px.
+
+- O CARTAO NAO SUBIA DO FUNDO, NO TEMA CLARO. No escuro o cartao se
+  destaca 21 pontos do fundo; no claro eram 12, e a pagina se confundia
+  com o cartao. O fundo do tema claro escureceu um passo (#f7f6fd ->
+  #f1f0fa) e agora os dois temas tem a mesma profundidade. O texto
+  continua em 16:1.
+
+- COR DE ACAO NO TEMA CLARO. O violeta com texto claro por cima dava
+  4,75: passava raspando. Passou a usar o --marca-escura da rampa
+  (#4b31d6), que da 7,22. Nao inventei cor nova.
+
+5.10 A VARREDURA DAS 23 PAGINAS
+
+Medi todas, nos dois temas: contraste texto a texto, anel de foco nos
+elementos interativos e vazamento horizontal a 390px.
+
+Resultado final: 0 falha de contraste no escuro, 0 no claro, anel de
+foco em 100% dos elementos, nenhuma pagina vazando no celular.
+
+Na primeira passada eram 7 falhas no tema claro e 1 vazamento. As
+causas, que sao mais interessantes que os numeros:
+
+- VIRADA DUPLA. Existia um bloco antigo do tema claro escrito assim:
+  --app-text: var(--fundo). Fazia sentido quando --fundo era sempre
+  escuro: apontar para o oposto era o jeito de dizer "use a cor
+  contraria". Depois que a rampa inteira passou a virar com o tema,
+  esse bloco virava de novo, e o texto ficava claro sobre claro. Era
+  isso que sumia com a marca do tutorial. O mesmo valia para --app-bg
+  e --app-panel: superficie escura no tema claro.
+
+- REGRA CEGA MINHA. Eu tinha escrito "no tema claro, todo botao tem
+  texto escuro" para consertar um botao sem classe em Configuracoes.
+  Isso atingiu tambem os botoes sobre fundo colorido: o "Continuar" do
+  onboarding virou texto escuro sobre violeta (2,36). Agora a regra e
+  so do botao daquela tela.
+
+- VERDE CLARO DEMAIS. "Ao vivo" no chat e "ECONOMIZE 16%" na
+  verificacao usavam o verde de apoio, que no branco dava 3. Escureceu.
+
+- box-sizing. admin-reset.html nao carrega o style.css, e o reset mora
+  la. Sem ele, os 35px de padding somavam por fora e a pagina vazava
+  26px no celular.
+
+- --escuro. Alguns textos sobre fundo claro usavam color:var(--fundo)
+  para ficarem escuros - de novo o truque de apontar para o oposto.
+  Agora existe --escuro, par fixo do --claro: os dois nao viram com o
+  tema, porque sao para texto sobre cor.
+
+5.11 CELULAR
+-------------
+Medi as paginas publicas em 390px de largura, que e a tela de um
+iPhone comum. Tres coisas estavam erradas, e nenhuma delas da para
+ver no monitor:
+
+- CAMPO DE FORMULARIO EM 13px. O Safari do iPhone da zoom sozinho
+  quando a pessoa toca num campo com menos de 16px, e a pagina fica
+  torta. Acontecia no login e no cadastro. Agora todo campo vai a
+  16px no celular. Este projeto ja fazia isso no formulario de
+  suporte e no campo do chat, pelo mesmo motivo: so faltava aqui.
+
+- ALVO DE TOQUE. O minimo para dedo e 44px de altura. Os links do
+  rodape tinham 17, o "Criar conta" tinha 15, e a caixinha de "Li e
+  aceito as regras" tinha 17. Todos passaram de 44. A caixinha foi
+  para 22px e a linha inteira do aceite virou alvo: tocar no texto
+  marca.
+
+- LETRA DE 11px nos rotulos dos campos e no aviso da data de
+  nascimento.
+
+Tudo isto esta dentro de @media (max-width: 760px). No computador
+nada mudou.
+
+Medicao final nas paginas publicas: nenhuma rolagem lateral, nenhum
+texto cortado, nenhum alvo de toque abaixo de 44px.
+
+Ficaram de proposito os links que moram no meio de uma frase ("regras
+de seguranca da comunidade", "Fale com o suporte"). Aumentar eles
+quebraria a linha do texto, e a propria norma abre excecao para link
+dentro de frase.
+
+
+5.12 TRAVESSAO
+---------------
+Tirei os travessoes do projeto inteiro. A maioria era pontuacao e
+virou dois-pontos ou virgula, o que nao muda nada para quem usa.
+
+Seis nao eram pontuacao: eram o que aparece na tela quando o campo
+esta vazio. Nesses entrou palavra:
+
+    admin, os tres contadores     vira "..." enquanto carrega
+    admin, versao do build        vira "..."
+    admin, tabela de usuarios     "@-" vira "sem username"
+    admin, tabela de usuarios     "-" vira "sem e-mail"
+    onboarding, resumo            "-" vira "Sem nome"
+    onboarding, resumo            "@-" vira "Sem username"
+
+Um traco solto nao diz nada para quem le, e "@-" nao se le de jeito
+nenhum.
+
+O rotulo da etapa do onboarding virou "01 / SUA IDENTIDADE". A barra
+nao e invencao minha: o contador no canto superior da mesma tela ja
+era "01 / 07".
+
+Tres assuntos de e-mail e a descricao da cobranca no Mercado Pago
+tambem perderam o travessao, porque chegam no usuario:
+"Pagamento confirmado no Something Gamer", e assim por diante.
+
+
+6. QUALQUER UM BAIXAVA TODO O CONTEUDO, SEM TER CONTA
+
+Sete regras diziam allow read: if true. Isso vale para a API inteira,
+nao so para o site: dava para baixar todas as publicacoes, todos os
+comentarios, todos os eventos e todas as promocoes sem nunca criar uma
+conta. Nome do autor, uid e texto junto.
+
+    firestore:  posts, comments, events, eventAttendance, promotions
+    storage:    posts, profiles
+
+Conferi contra o zip original: ja era assim, nao veio da revisao.
+
+Agora as sete exigem request.auth != null. Nao tira nada de ninguem:
+todas as paginas que leem essas colecoes ja mandavam para o login
+(events.js, feed.js, dashboard.js, companies.js). As imagens tambem
+continuam abrindo, porque elas carregam pela URL do getDownloadURL, que
+leva token proprio e nao passa por essas regras.
+
+DUAS LEITURAS CONTINUAM ABERTAS, DE PROPOSITO:
+
+- publicProfiles, filtrado por visibility == public. E o link de
+  perfil que a pessoa compartilha; fechar quebraria isso. Quem nao quer
+  aparecer muda a visibilidade em Editar perfil.
+- companies, filtrado por status == approved. E o diretorio publico
+  de empresas: existir para quem nao tem conta e o objetivo dele.
+
+Se voce quiser fechar essas duas tambem, sao duas linhas - mas ai o
+perfil deixa de ser compartilhavel fora do app.
+
+
+7. E-MAIL COM ERRO DE DEDO CRIAVA CONTA IMPOSSIVEL DE RECUPERAR
+
+O campo era so <input type="email">. O navegador nao olha o final do
+dominio: "alguem@gmail.com3" passa por ele, passa pelo Firebase, e a
+conta nasce. Dai a pessoa nao recebe a confirmacao, nao recebe a
+redefinicao de senha, e nao tem como voltar - so na mao, no painel.
+
+Agora o cadastro confere antes de chamar o Firebase (safety.js,
+validateEmail):
+
+- recusa final de dominio invalido: "gmail.com3", ".x", sem ponto,
+  duas arrobas. Dominio internacional (xn--) continua passando;
+- quando o dominio esta a um erro de um provedor conhecido, pergunta
+  antes: "gmail.con", "hotmial.com", "outlok.com". Duas letras trocadas
+  de lugar contam como um erro so.
+
+Um cuidado que custou uma correcao: uol.com.br e bol.com.br estao a um
+caractere um do outro, e os DOIS existem. A sugestao so aparece quando
+o que a pessoa digitou ainda nao e um provedor de verdade - senao o
+aviso estragaria e-mail correto.
+
+O login e a recuperacao de senha NAO foram travados de proposito: se
+alguem ja criou conta com endereco estranho antes desta correcao,
+prender ali deixaria a pessoa ainda mais sem saida.
+
+
+8. AS REGRAS NAO EXISTIAM EM LUGAR NENHUM
+
+O cadastro fazia a pessoa aceitar "as regras de seguranca da
+comunidade". Procurei por regra, conduta, termos e diretriz nas 23
+paginas: zero. Nao havia o que ler.
+
+E o app cobra essas regras: bloqueia cinco categorias de conteudo
+antes de publicar, adverte, suspende e bane. Ou seja, punia por regra
+que ninguem podia consultar. Se alguem contestasse um banimento, nao
+havia o que mostrar.
+
+Agora existe regras.html, escrita a partir do que o codigo ja aplica -
+nada inventado:
+
+- idade minima 13, do validateBirthDate;
+- as cinco categorias, direto dos padroes do safety.js;
+- os limites de frequencia (20s por publicacao, 5s por comentario,
+  60s por denuncia), das regras do Firestore;
+- os limites de tamanho (2000 na publicacao, 1000 na mensagem, 240 no
+  comentario, 300 na bio);
+- a moderacao de foto, que segura a imagem ate alguem aprovar;
+- a denuncia com ate 3 arquivos de 20 MB;
+- a escada de punicao exata do admin.js: advertencia, 3 advertencias
+  viram suspensao de 2 dias, primeira suspensao 2 dias, segunda 7, e
+  depois de duas suspensoes a proxima bane.
+
+A pagina esta linkada da caixa de consentimento (que voltou a poder
+dizer "Li"), do rodape da home e do 404, e entrou no sitemap.
+
+A CAIXA DO CADASTRO TAMBEM MUDOU. Ela dizia "Tenho pelo menos 13 anos
+E aceito as regras": duas coisas numa marcacao so, e a idade ja estava
+provada pela data logo acima. Ficou so o aceite das regras.
+
+E UM ACHADO DE QUEBRA: o link que eu coloquei nessa caixa saiu azul do
+navegador (#0000ee) sobre fundo escuro, 2:1. Nenhuma folha definia cor
+para link sem classe. Agora define, com seletor de um elemento so -
+qualquer regra com classe continua ganhando dela.
+
+
+9. VULNERABILIDADES ENCONTRADAS E FECHADAS
+------------------------------------------
+Passei o app inteiro procurando. O que achei:
+
+XSS ARMAZENADO NO CHAT (o mais grave)
+  Mensagem do tipo link ou video vira <a href="..."> com o mediaUrl que
+  esta no banco. O escape de HTML troca < > " e &, mas "javascript:" nao
+  tem nenhum desses caracteres: atravessava inteiro. Quem clicasse no
+  link executava codigo na sessao dele. O cliente validava https:// antes
+  de enviar, mas as regras nao validavam nada, entao bastava escrever
+  direto no Firestore.
+
+XSS MIRANDO O ADMINISTRADOR
+  pendingPhotoURL e um campo que o PROPRIO USUARIO escreve, e o painel
+  mostra ele como link clicavel para voce revisar a foto. Qualquer conta
+  podia plantar um javascript: ali e esperar voce clicar. Mesma coisa nas
+  evidencias de denuncia e no site das empresas.
+
+SELO OFICIAL E VERIFICADO FALSOS
+  accountType, verification e badges ficam em publicProfiles, que o
+  proprio usuario escreve. Nao havia nenhuma trava: dava para se marcar
+  como "official_sg", aparecer com selo oficial para todo mundo e ainda
+  passar a poder publicar EVENTO OFICIAL, porque a regra de evento
+  consultava justamente esse campo.
+
+ROUBO DE @
+  Trocar o nome de usuario em "editar perfil" nao reservava nada na
+  colecao usernames nem checava se ja era de alguem. Dava para assumir o
+  @ de outra pessoa. Agora reserva e libera o antigo na mesma transacao,
+  e a regra exige que a reserva esteja no seu nome.
+
+SVG NO STORAGE
+  A regra aceitava image/.* , e image/svg+xml passa. SVG executa script
+  quando aberto direto. Agora so png, jpeg, webp e gif.
+
+MENORES
+  - account-switcher nao escapava nome, e-mail nem foto
+  - dono do post podia reescrever o uid dele para o de outra pessoa
+  - arquivo enviado ao Storage nao podia ser apagado por ninguem
+
+O QUE EU CONFERI E ESTAVA CERTO
+  Sem eval, sem document.write, sem postMessage. O ?return= do login ja
+  era validado por lista. O feed ja checava https antes de montar a
+  midia. O modo developer so mostra um chip, nao contorna login.
+
+Agora existe um modulo unico, seguranca-web.js, com escaparHtml,
+urlSegura e urlDeMidia. Todo href e src montado com dado do banco passa
+por ele, E as regras do Firestore recusam o esquema na escrita. As duas
+pontas, porque so o cliente nao basta.
+
+
+10. O QUE EU NAO CONSEGUI TESTAR
+--------------------------------
+As regras do Firestore NAO foram rodadas no emulador (a maquina
+onde revisei nao tem Java). Elas passaram por conferencia
+estatica e por comparacao campo a campo com o que o app grava,
+mas emulador e emulador.
+
+Se voce tiver Java, rode antes de publicar:
+
+    firebase emulators:start --only firestore
+
+Se nao tiver, publique e ja teste na hora: criar conta, postar,
+comentar, mandar DM, aceitar amizade, criar servidor. Se algo
+der "permission-denied", e regra - me avise qual acao.
+
+
+11. COMO PUBLICAR (NESTA ORDEM)
+-------------------------------
+O site publicado agora sai de dist/, que e o fonte empacotado e
+ofuscado. Instale as ferramentas uma vez:
+
+    npm install
+
+Antes de publicar:
+
+    npm run verificar
+    npm run build
+
+Aviso honesto sobre a ofuscacao: ela NAO e controle de seguranca. O
+navegador precisa executar o codigo, entao quem quiser le. Quem protege
+o app sao as regras do Firestore e do Storage. A ofuscacao encarece a
+copia casual e a minificacao diminui o peso, so isso. O fonte continua
+legivel no repositorio: so o dist/ e ofuscado, e o dist/ nao vai pro
+git.
+
+Depois cadastre o segredo NOVO e OBRIGATORIO:
+
+    firebase functions:secrets:set MERCADO_PAGO_WEBHOOK_SECRET
+
+(Mercado Pago > Suas integracoes > sua aplicacao > Webhooks >
+Assinatura secreta. Sem ele o pagamento da Verificacao Gamer
+para de ser confirmado.)
+
+Ai sim:
+
+    firebase deploy --only hosting,firestore:rules,firestore:indexes,storage,functions --project something-gamer
+
+(ou simplesmente "npm run deploy", que faz verificar + build + deploy)
+
+O "firestore:indexes" e NOVO e obrigatorio. Sem ele as
+notificacoes nao carregam.
+
+E o Worker:
+
+    cd something-gamer-api
+    npx wrangler deploy
+
+
+12. DETALHE IMPORTANTE
+---------------------
+O painel administrativo nao depende mais de e-mail. Configure o mesmo
+ADMIN_UID nas Cloud Functions e no Worker. Na primeira abertura do painel,
+a Function concede a Custom Claim `admin`; se a claim ainda nao aparecer,
+saia e entre novamente para renovar o token.
+
+
+13. REVISAO DAS ALTERACOES
+---------------------------
+O pacote final nao inclui o antigo CORRECOES-v40.patch. Esse diff historico
+carregava configuracoes e identificadores administrativos antigos que nao devem
+voltar ao repositorio. As alteracoes relevantes e os passos de publicacao estao
+documentados neste arquivo, no README-SETUP.md e no README-STEAM.md.
+
+
+14. PARA NAO ACONTECER DE NOVO
+------------------------------
+Tem um verificador novo em scripts/verificar.mjs. Ele confere
+sintaxe, JSON, modulo carregado sem type="module", notificacao
+sem read:false e consulta com limit() sem orderBy.
+
+Rode antes de todo deploy:
+
+    node scripts/verificar.mjs
+
+Ele tambem roda sozinho no GitHub Actions (.github/workflows/
+verificar.yml) em todo push e pull request, e o deploy.yml agora
+se recusa a publicar se ele falhar.
+
+Era exatamente isso que teria pego o bug do chat, em 1 segundo.
+
+
+15. APP CHECK / RECAPTCHA ENTERPRISE
+-----------------------------------
+O projeto agora esta preparado para Firebase App Check com reCAPTCHA
+Enterprise invisivel. Nao e a caixinha "nao sou um robo".
+
+ANTES DE ATIVAR BLOQUEIO:
+1. No Google Cloud, crie uma chave reCAPTCHA Enterprise Web baseada em
+   pontuacao para os dominios de producao do Something Gamer.
+2. No Firebase Console > App Check, registre o app Web com essa mesma chave.
+3. Copie SOMENTE a site key publica para recaptchaEnterpriseSiteKey em config.js.
+   Nunca coloque secret key no JavaScript.
+4. Publique e acompanhe as metricas do App Check.
+5. So depois ative enforcement no Firebase Console para Firestore e Storage.
+6. Para os endpoints HTTP personalizados de Functions, configure o parâmetro
+   APP_CHECK_ENFORCED como true no ambiente de deploy das Functions e publique
+   novamente. O código não precisa ser editado para alternar o enforcement.
+
+A CSP do firebase.json ja permite os dominios oficiais necessarios ao reCAPTCHA.
+Em desenvolvimento local use uma chave/debug separado; nao autorize localhost
+na mesma chave usada em producao.
+
+
+16. ENDURECIMENTO FINAL DE SEGURANCA
+-----------------------------------
+- Administracao nao depende mais de e-mail hardcoded. Firestore e Storage usam
+  Custom Claim `admin`, concedida apenas pelo backend ao UID do secret ADMIN_UID.
+- O Worker tambem compara somente o UID autenticado com o secret ADMIN_UID.
+- ADMIN_RECOVERY_EMAIL saiu do wrangler.jsonc e deve ser cadastrado como secret.
+- A chave GIPHY saiu do frontend e virou GIPHY_API_KEY no Secret Manager.
+- Existe privacidade.html, linkada no cadastro, rodape e sitemap.
+- O hard-delete de mensagem de servidor nao fica mais disponivel ao autor fora
+  da janela: apagar para todos continua por soft-delete e expira em 5 minutos.
+- O painel pode conceder Selo DEV via backend; usuario comum nao consegue se
+  autoatribuir.
+- O reCAPTCHA Enterprise/App Check esta implementado. A ativacao real depende
+  da site key criada no seu projeto Google/Firebase e do enforcement no Console.
+
+
+17. TERMOS DE USO VERSIONADOS
+------------------------------
+A versao juridica atual e 2026-09-16 para:
+- Termos de Uso (termos.html)
+- Politica de Privacidade (privacidade.html)
+- Regras da Comunidade (regras.html)
+
+O cadastro exige a confirmacao. O aceite fica salvo em users/{uid}.legal com
+versao e acceptedAt do servidor. Se uma dessas versoes mudar, o usuario e
+enviado para aceitar-termos.html e novas escritas/uploads ficam bloqueadas ate
+aceitar novamente. As Cloud Functions de usuario aplicam a mesma verificacao.
+
+Ao publicar uma nova versao juridica, atualize os valores em config.js,
+firestore.rules, storage.rules e functions/index.js na mesma entrega.
+
+
+18. SELOS OFICIAIS
+------------------
+Os tres assets oficiais ficam em:
+- assets/verified-badge.png
+- assets/sg-follow-badge.png
+- assets/now-follow-badge.png
+
+O renderizador central e badges.js. Perfil, feed, dashboard, social, chat e
+eventos usam a mesma fonte. Conta oficial nao duplica o selo da mesma marca.
+DEV continua sendo um marcador administrativo e so o backend pode atribuir.
+As regras conferem snapshots de selo/autor em posts, mensagens e eventos contra
+o documento privado do usuario, evitando que alguem forje um selo no request.

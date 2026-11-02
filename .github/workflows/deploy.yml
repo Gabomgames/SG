@@ -1,0 +1,43 @@
+name: Publicar SG no Firebase
+on:
+  workflow_dispatch:
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .node-version
+
+      - name: Injetar Site Key pública do App Check
+        env:
+          RECAPTCHA_ENTERPRISE_SITE_KEY: ${{ vars.RECAPTCHA_ENTERPRISE_SITE_KEY }}
+        run: node scripts/configurar-app-check.mjs
+
+      - name: Instalar dependências bloqueadas
+        run: npm ci
+      - name: Verificar antes de publicar
+        run: npm run verificar && npm test && npm run test:rules
+
+      # O Hosting serve dist/, que é o fonte empacotado e ofuscado.
+      - name: Montar o dist
+        run: npm run build
+
+      - uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+      - run: npm install --global firebase-tools
+      - name: Instalar dependências das functions
+        working-directory: functions
+        run: npm ci
+      - name: Configurar enforcement do App Check nas Functions
+        env:
+          APP_CHECK_ENFORCED: ${{ vars.APP_CHECK_ENFORCED }}
+        run: |
+          VALUE="${APP_CHECK_ENFORCED:-false}"
+          case "$VALUE" in true|false) ;; *) echo "APP_CHECK_ENFORCED deve ser true ou false"; exit 1;; esac
+          printf 'APP_CHECK_ENFORCED=%s\n' "$VALUE" > functions/.env.something-gamer
+      - run: firebase deploy --only hosting,firestore:rules,firestore:indexes,storage,functions --project something-gamer

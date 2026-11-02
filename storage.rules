@@ -1,0 +1,62 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // Custom Claim concedido pelo backend à conta definida por ADMIN_UID.
+    function isAdmin() {
+      return false; // acesso privilegiado exclusivamente no backend
+    }
+    function acceptedTerms(userId) {
+      return firestore.exists(/databases/(default)/documents/users/$(userId))
+        && firestore.get(/databases/(default)/documents/users/$(userId)).data.get('legal', {}).get('termsAccepted', false) == true
+        && firestore.get(/databases/(default)/documents/users/$(userId)).data.get('legal', {}).get('termsVersion', '') == '2026-09-16'
+        && firestore.get(/databases/(default)/documents/users/$(userId)).data.get('legal', {}).get('privacyVersion', '') == '2026-09-16'
+        && firestore.get(/databases/(default)/documents/users/$(userId)).data.get('legal', {}).get('communityRulesVersion', '') == '2026-09-16';
+    }
+    function canAct(userId) {
+      return request.auth != null && request.auth.uid == userId
+        && acceptedTerms(userId)
+        && (!firestore.get(/databases/(default)/documents/users/$(userId)).data.keys().hasAny(['moderation'])
+          || firestore.get(/databases/(default)/documents/users/$(userId)).data.moderation.status == 'active'
+          || (firestore.get(/databases/(default)/documents/users/$(userId)).data.moderation.status == 'suspended'
+            && firestore.get(/databases/(default)/documents/users/$(userId)).data.moderation.suspendedUntil <= request.time));
+    }
+    match /posts/{userId}/{fileName} {
+      // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+      allow read: if request.auth != null;
+      allow write: if canAct(userId) && request.resource.size < 25 * 1024 * 1024
+        && request.resource.contentType.matches('(image/(png|jpeg|jpg|webp|gif)|video/(mp4|webm|quicktime))');
+      allow delete: if canAct(userId);
+    }
+    match /chat/{userId}/{conversationId}/{fileName} {
+      // Mídia privada de chat: somente os dois participantes da conversa.
+      allow read: if request.auth != null
+        && firestore.exists(/databases/(default)/documents/conversations/$(conversationId))
+        && request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.members;
+      allow write: if canAct(userId)
+        && firestore.exists(/databases/(default)/documents/conversations/$(conversationId))
+        && request.auth.uid in firestore.get(/databases/(default)/documents/conversations/$(conversationId)).data.members
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('(image/(png|jpeg|jpg|webp|gif)|audio/(webm|ogg|mpeg|wav|mp4)|video/(mp4|webm|quicktime))');
+      allow delete: if canAct(userId);
+    }
+    match /profiles/{userId}/{fileName} {
+      // leitura so para quem tem conta: sem isto da para raspar tudo pela API
+      allow read: if request.auth != null;
+      allow write: if canAct(userId) && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/(png|jpeg|jpg|webp|gif)');
+      allow delete: if canAct(userId);
+    }
+    match /profile-review/{userId}/{fileName} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if canAct(userId)
+        && request.resource.size < 5 * 1024 * 1024
+        && request.resource.contentType.matches('image/(png|jpeg|webp)');
+    }
+    match /reports/{userId}/{reportId}/{fileName} {
+      allow read: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if canAct(userId)
+        && request.resource.size < 20 * 1024 * 1024
+        && request.resource.contentType.matches('(image/(png|jpeg|webp)|audio/(mpeg|wav|ogg)|video/(mp4|webm))');
+    }
+  }
+}
