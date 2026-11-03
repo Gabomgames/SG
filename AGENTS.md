@@ -12,3 +12,5 @@ Use Node 24.19.0 da .node-version; Functions declaram Node 20. Testes Firestore 
 A continuação S01 está em docs/phase1/s01. Não encerrar a Fase 1 com regras/navegador bloqueados ou riscos altos/críticos sem tratamento verificável. Execute npm run validate:phase1; preserve resultados individuais e o commit 9445442. Nenhum avanço automático à Fase 2.
 
 Downloads do projeto exclusivamente pelo GitHub, com upload confirmado antes de fornecer link. Não substituir por links de download local nem inventar URL. Esta entrega não autoriza push, upload, deploy, merge ou ativação de lançamento; preservar o pacote preparado enquanto o envio estiver impedido.
+
+A reta final S02/S03 está em docs/phase1/final/RELATORIO.md. Preservar a797418 e todos os ancestrais. A primeira suíte usa também Storage Emulator em 127.0.0.1:9199, sempre demo-sg. Não encerrar S03 sem inventário/revogação verificáveis de tokens privados legados, nem S02/S01 sem a integração real. O plano offline de tokens não é autorização de migração em produção.

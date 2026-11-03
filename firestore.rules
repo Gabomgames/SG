@@ -180,14 +180,36 @@ service cloud.firestore {
     function fotoPropria(valor) {
       return valor == userData().get('photoURL', '');
     }
-    function snapshotDeAutorOk(data) {
+    function snapshotDeAutorOk(data, checkExpiration) {
       return nomeProprio(data.get('authorName', ''))
         && data.get('authorUsername', '') == userData().get('username', '')
         && fotoPropria(data.get('authorPhoto', ''))
-        && data.get('authorVerified', false) == (userData().get('verification', {}).get('status', 'none') == 'active')
+        && data.get('authorVerified', false) == (userData().get('verification', {}).get('status', 'none') == 'active'
+          && (!checkExpiration || userData().get('verification', {}).get('expiresAt', null) == null
+            || (userData().verification.expiresAt is timestamp && userData().verification.expiresAt > request.time)))
         && data.get('authorAccountType', 'gamer') == userData().get('accountType', 'gamer')
         && data.get('authorBadgeTheme', 'blue') == userData().get('verificationBadgeTheme', 'blue')
         && data.get('authorBadges', {}) == userData().get('badges', {});
+    }
+
+    function publicationReceiptOk(postId, data) {
+      let approval = get(/databases/$(database)/documents/publicationApprovals/$(postId)).data;
+      let consumed = getAfter(/databases/$(database)/documents/publicationApprovals/$(postId)).data;
+      return approval.uid == request.auth.uid && approval.used == false
+        && approval.expiresAt > request.time
+        && consumed.used == true && consumed.usedAt == request.time
+        && data.diff(approval.post).affectedKeys().hasOnly(['createdAt']);
+    }
+    match /publicationApprovals/{postId} {
+      allow get: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow list, create, delete: if false;
+      allow update: if canAct() && resource.data.uid == request.auth.uid
+        && resource.data.used == false && resource.data.expiresAt > request.time
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['used','usedAt'])
+        && request.resource.data.used == true && request.resource.data.usedAt == request.time
+        && !exists(/databases/$(database)/documents/posts/$(postId))
+        && getAfter(/databases/$(database)/documents/posts/$(postId)).data.createdAt == request.time
+        && getAfter(/databases/$(database)/documents/posts/$(postId)).data.diff(resource.data.post).affectedKeys().hasOnly(['createdAt']);
     }
 
     // ---------- relacoes ----------
@@ -440,7 +462,8 @@ service cloud.firestore {
         && request.resource.data.uid == request.auth.uid
         && request.resource.data.type in ['text', 'image', 'video', 'poll', 'news']
         && formaPostOk(request.resource.data)
-        && snapshotDeAutorOk(request.resource.data)
+        && publicationReceiptOk(postId, request.resource.data)
+        && snapshotDeAutorOk(request.resource.data, true)
         && request.resource.data.createdAt == request.time
         && texto(request.resource.data.get('title', ''), 200)
         && texto(request.resource.data.get('description', ''), 3000)
@@ -575,7 +598,7 @@ service cloud.firestore {
           && (exists(/databases/$(database)/documents/friendships/$(conversationId))
             || get(/databases/$(database)/documents/conversations/$(conversationId)).data.get('kind','') == 'market')
           && request.resource.data.createdAt == request.time
-          && snapshotDeAutorOk(request.resource.data)
+          && snapshotDeAutorOk(request.resource.data, false)
           && texto(request.resource.data.text, 1000)
           && midiaOk(request.resource.data.get('mediaUrl', ''))
           && urlOk(request.resource.data.get('authorPhoto', ''))
@@ -803,7 +826,7 @@ service cloud.firestore {
             && (!get(/databases/$(database)/documents/servers/$(serverId)).data.keys().hasAny(['bannedUids'])
               || !(request.auth.uid in get(/databases/$(database)/documents/servers/$(serverId)).data.bannedUids))
             && request.resource.data.createdAt == request.time
-            && snapshotDeAutorOk(request.resource.data)
+            && snapshotDeAutorOk(request.resource.data, false)
             && texto(request.resource.data.text, 1000)
             && midiaOk(request.resource.data.get('mediaUrl', ''))
             && urlOk(request.resource.data.get('authorPhoto', ''))

@@ -1,0 +1,12 @@
+
+> check:fast
+> npm run verificar && npm test && npm run test:contracts && npm run test:founders && npm run test:polls && npm run test:regressions && npm run test:sqlite
+
+
+> verificar
+> node scripts/verificar.mjs
+
+415 arquivos conferidos.
+
+1 problema(s):
+  - firestore.rules: publicação ainda pode falsificar snapshot de selo/autor

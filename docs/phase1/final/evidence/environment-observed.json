@@ -1,0 +1,18 @@
+{
+  "observedAt": "2026-11-03T09:51:27.649Z",
+  "spec_revision": "1",
+  "observed_spec_revision": "1",
+  "observations_current": true,
+  "phase": "running",
+  "networkMode": "restricted",
+  "networkState": "enforced",
+  "customAllowedHosts": [],
+  "requiredHostsMissing": [
+    "api.github.com",
+    "storage.googleapis.com",
+    "cdn.playwright.dev",
+    "uploads.github.com"
+  ],
+  "configuredSecretNames": [],
+  "noProductionAccess": true
+}

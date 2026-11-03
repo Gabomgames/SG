@@ -1,3 +1,4 @@
+import {legacyChatObject,protectedLegacyReference} from "./legacy-media-policy.js";
 import './channel-tools.js';
 import "./voice-room.js";
 import "./community-tools.js";
@@ -70,9 +71,9 @@ function renderFriends(){const visible=[...friends].sort((a,b)=>(conversationAct
 function voiceWave(){return '<span class="voice-note-wave" aria-hidden="true">'+Array.from({length:28},(_,i)=>`<i style="--h:${18+((i*17)%38)}%"></i>`).join('')+'</span>'}
 function messageBody(m){
   if(m.type==="market_offer"&&m.offer){const value=m.offer;return `<div class="market-offer-message"><strong>Negociação · Now Market</strong><p>R$ ${(Number(value.amountCents)/100).toFixed(2).replace(".",",")} por unidade · ${Number(value.quantity)} unidade(s)</p><small>${esc(value.state)}</small><button type="button" data-market-offer="${esc(value.id)}">Consultar proposta atual</button></div>`;}
-  if (!m.deleted && String(m.mediaUrl || '').includes('/private-media/')) {
+  if (!m.deleted && (String(m.mediaUrl || '').includes('/private-media/') || legacyChatObject(m.mediaUrl))) {
     const kind = m.type === 'image' ? 'img' : m.type === 'video' ? 'video' : 'audio';
-    return `<div class="private-attachment"><${kind} data-private-src="${srcSeguro(m.mediaUrl)}" ${kind === 'img' ? 'alt="Imagem privada"' : 'controls preload="none"'} class="chat-media"></${kind}><small role="status">Carregando arquivo privado…</small></div>`;
+    return `<div class="private-attachment"><${kind} data-private-src="${srcSeguro(protectedLegacyReference(m.mediaUrl))}" ${kind === 'img' ? 'alt="Imagem privada"' : 'controls preload="none"'} class="chat-media"></${kind}><small role="status">Carregando arquivo privado…</small></div>`;
   }
   if(m.type==="gif")return `<img class="chat-media chat-gif" src="${srcSeguro(m.mediaUrl)}" alt="GIF animado" loading="lazy">`;
   if(m.type==="sticker"){const src=srcSeguro(m.mediaUrl),label=String(m.text||"");if(src)return `<img class="chat-sticker-image" src="${src}" alt="${esc(label||"Figurinha")}" loading="lazy">`;return /\p{L}/u.test(label)?`<p>${esc(label)}</p>`:`<span class="chat-sticker" role="img" aria-label="Figurinha">${esc(label||"🙂")}</span>`}
@@ -333,19 +334,19 @@ async function toggleReaction(id,emoji){
 function toggleSaved(id,m){
   let list=loadSaved();
   if(list.some(x=>x.id===id)){list=list.filter(x=>x.id!==id);toast("Removida dos salvos.")}
-  else{list.push({id,path:activeMessagePath.join("/"),text:m.text||"",type:m.type,mediaUrl:m.mediaUrl||"",author:m.authorName||"",at:Date.now()});toast("Mensagem salva neste aparelho.")}
+  else{list.push({id,path:activeMessagePath.join("/"),text:m.text||"",type:m.type,mediaUrl:protectedLegacyReference(m.mediaUrl||""),author:m.authorName||"",at:Date.now()});toast("Mensagem salva neste aparelho.")}
   try{localStorage.setItem(savedKey(),JSON.stringify(list.slice(-200)))}catch{}
   repaintMessages()
 }
 async function forwardTo(uid,m){
-  if (String(m.mediaUrl || '').includes('/private-media/')) return toast('Arquivos privados pertencem à conversa original. Envie um novo arquivo na outra conversa.');
+  if ((String(m.mediaUrl || '').includes('/private-media/') || legacyChatObject(m.mediaUrl))) return toast('Arquivos privados pertencem à conversa original. Envie um novo arquivo na outra conversa.');
   const cid=pair(me.uid,uid),friend=friends.find(x=>x.uid===uid);
   try{
     await setDoc(doc(db,"conversations",cid),{members:[me.uid,uid].sort(),updatedAt:serverTimestamp()},{merge:true});
     await addDoc(collection(db,"conversations",cid,"messages"),{
       uid:me.uid,authorName:String(myProfile.name||myProfile.username||"Gamer").slice(0,60),authorUsername:myProfile.username||"",authorPhoto:myProfile.photoURL||"",
       authorVerified:myProfile.verification?.status==="active",authorAccountType:myProfile.accountType||"gamer",authorBadgeTheme:myProfile.verificationBadgeTheme||"blue",authorBadges:myProfile.badges||{},
-      type:m.type,text:m.type==="text"?`↪ ${m.text}`.slice(0,1000):(m.text||""),mediaUrl:m.mediaUrl||"",clientCreatedAt:Date.now(),createdAt:serverTimestamp()
+      type:m.type,text:m.type==="text"?`↪ ${m.text}`.slice(0,1000):(m.text||""),mediaUrl:protectedLegacyReference(m.mediaUrl||""),clientCreatedAt:Date.now(),createdAt:serverTimestamp()
     });
     toast(`Encaminhada para ${friend?.name||"seu amigo"}.`)
   }catch(error){console.error(error);toast("Não foi possível encaminhar essa mensagem.")}
@@ -358,7 +359,7 @@ $("messageActionContent").addEventListener("click",async event=>{
   if(!act)return;
   const kind=act.dataset.msgAction2;
   if(kind==="hide"){try{const prefs=currentPreferences();await savePreferences({hiddenIds:[...new Set([...prefs.hiddenIds,id])].slice(-1000)});$("messageActionDialog").close();repaintMessages();toast("Mensagem ocultada só para sua conta.");}catch(error){toast(error.message);}return;}
-  if(kind==="copy"){await navigator.clipboard.writeText(m.type==="text"?m.text:(m.mediaUrl||m.text||"")).then(()=>toast("Copiado.")).catch(()=>toast("Não foi possível copiar."));$("messageActionDialog").close()}
+  if(kind==="copy"){await navigator.clipboard.writeText(m.type==="text"?m.text:(protectedLegacyReference(m.mediaUrl)||m.text||"")).then(()=>toast("Copiado.")).catch(()=>toast("Não foi possível copiar."));$("messageActionDialog").close()}
   if(kind==="save"){$("messageActionDialog").close();toggleSaved(id,m)}
   if(kind==="forward"){
     $("messageActionTitle").textContent="Encaminhar para…";$("messageActionText").textContent="Escolha um amigo.";
@@ -434,7 +435,7 @@ addEventListener("pagehide",()=>{unsubscribeMessages?.();unsubscribeConvo?.();un
 
 async function hydratePrivateMedia(root){
  for(const node of root.querySelectorAll('[data-private-src]')){
-  try{const url=await resolvePrivateMedia(node.dataset.privateSrc);if(!node.isConnected){URL.revokeObjectURL(url);continue;}node.src=url;node.parentElement.querySelector('small').textContent='Arquivo privado · expira após 30 dias';}
+  try{const url=await resolvePrivateMedia(node.dataset.privateSrc);if(!node.isConnected){URL.revokeObjectURL(url);continue;}node.src=url;const download=document.createElement('a');download.href=url;download.download='';download.className='chat-media-download';download.textContent='Baixar arquivo';download.setAttribute('aria-label','Baixar arquivo autorizado');node.after(download);node.parentElement.querySelector('small').textContent=legacyChatObject(node.dataset.privateSrc)?'Arquivo legado · acesso protegido':'Arquivo privado · expira após 30 dias';}
   catch(error){if(node.isConnected)node.parentElement.querySelector('small').textContent=error.message;}
  }
 }
@@ -445,7 +446,7 @@ async function savePreferences(patch){if(!activeMessagePath||!me)throw new Error
 function watchPreferences(){unsubscribePreferences?.();unsubscribePreferences=onSnapshot(collection(db,'users',me.uid,'chatPreferences'),snap=>{chatPreferences.clear();for(const d of snap.docs)chatPreferences.set(d.id,d.data());if(activeMode==="dm")renderFriends();paintPreferenceControls(Boolean(activeMessagePath));repaintMessages();},()=>toast('As preferências não puderam ser sincronizadas.'));}
 function paintPreferenceControls(enabled){const root=document.querySelector(".chat-preference-tools");if(root)root.hidden=!enabled;const prefs=currentPreferences();document.querySelectorAll('[data-chat-pref]').forEach(b=>{b.hidden=!enabled;b.disabled=!enabled;});const mute=document.querySelector('[data-chat-pref="mute"]'),archive=document.querySelector('[data-chat-pref="archive"]');if(mute)mute.textContent=prefs.muted?'Reativar avisos':'Silenciar avisos';if(archive)archive.textContent=prefs.archived?'Desarquivar':'Arquivar';}
 const preferenceTools=document.createElement('details');preferenceTools.className='chat-preference-tools';preferenceTools.hidden=true;preferenceTools.innerHTML='<summary>Conversa</summary><button type="button" data-chat-pref="mute" hidden>Silenciar avisos</button><button type="button" data-chat-pref="archive" hidden>Arquivar</button><button type="button" data-chat-pref="export" hidden>Exportar mensagens carregadas</button>';document.querySelector('.discord-chat>header').append(preferenceTools);
-preferenceTools.addEventListener('click',async event=>{const action=event.target.closest('[data-chat-pref]')?.dataset.chatPref;if(!action)return;try{if(action==='mute')await savePreferences({muted:!currentPreferences().muted});if(action==='archive')await savePreferences({archived:!currentPreferences().archived});if(action==='export'){const messages=(lastSnap?.docs||[]).filter(d=>!currentPreferences().hiddenIds.includes(d.id)).map(d=>({id:d.id,...d.data()}));const url=URL.createObjectURL(new Blob([JSON.stringify({scope:'Mensagens carregadas nesta conversa; arquivos binários não incluídos.',exportedAt:new Date().toISOString(),messages},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='chat-sg.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}}catch(error){toast(error.message);}});
+preferenceTools.addEventListener('click',async event=>{const action=event.target.closest('[data-chat-pref]')?.dataset.chatPref;if(!action)return;try{if(action==='mute')await savePreferences({muted:!currentPreferences().muted});if(action==='archive')await savePreferences({archived:!currentPreferences().archived});if(action==='export'){const messages=(lastSnap?.docs||[]).filter(d=>!currentPreferences().hiddenIds.includes(d.id)).map(d=>{const data={id:d.id,...d.data()};if(data.mediaUrl)data.mediaUrl=protectedLegacyReference(data.mediaUrl);return data;});const url=URL.createObjectURL(new Blob([JSON.stringify({scope:'Mensagens carregadas nesta conversa; arquivos binários não incluídos.',exportedAt:new Date().toISOString(),messages},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=url;a.download='chat-sg.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}}catch(error){toast(error.message);}});
 const archivedSwitch=document.createElement('button');archivedSwitch.type='button';archivedSwitch.className='chat-archived-switch';archivedSwitch.textContent='Ver arquivadas';document.querySelector('.discord-sidebar>header').append(archivedSwitch);archivedSwitch.onclick=()=>{showArchived=!showArchived;archivedSwitch.textContent=showArchived?'Ver conversas':'Ver arquivadas';$('directMessages').click();renderFriends();};
 addEventListener('pagehide',()=>unsubscribePreferences?.());
 

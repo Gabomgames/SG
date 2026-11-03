@@ -229,9 +229,9 @@ saveProfile.addEventListener(
                 if (imageFile.size > 5 * 1024 * 1024) throw new Error("A imagem deve ter no máximo 5 MB.");
                 if (!["image/png","image/jpeg","image/webp"].includes(imageFile.type)) throw new Error("Use uma imagem PNG, JPG ou WEBP.");
                 const readyImage = await prepareImage(imageFile, { maxDimension: 1600, quality: .8, maxOutputBytes: 4 * 1024 * 1024 });
-                const uploaded = await uploadMedia(readyImage, { maxBytes: 5 * 1024 * 1024, label: "imagem" });
+                const uploaded = await uploadMedia(readyImage, { maxBytes: 5 * 1024 * 1024, label: "imagem", purpose:"profile" });
                 pendingPhotoURL = uploaded.url;
-                await assertModeratedImageUrl(pendingPhotoURL);
+                // The pending photo stays private until backend review.
             }
 
             const safeName=await assertModeratedPublicText(displayName.value,{field:"O nome",min:2,max:60});

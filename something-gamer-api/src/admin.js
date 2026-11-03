@@ -1,3 +1,4 @@
+import {mediaRecord,checkedObject} from './publication-media.js';
 import {getDocument,listDocuments,patchWrite,auditedCommit,safeId} from './firestore-store.js';
 const reason=v=>{const text=String(v||'').trim();if(text.length<5||text.length>1000)throw new Error('INVALID_ADMIN_ACTION');return text;};
 const millis=v=>v?.seconds? v.seconds*1000 : 0;
@@ -36,7 +37,7 @@ export async function adminApi(request,env,actor){
   if(action==='reviewPhoto'){
    if(!['approve','reject'].includes(body.decision)||!user.pendingPhotoURL)throw new Error('INVALID_ADMIN_ACTION');
    patch.photoModeration={status:body.decision==='approve'?'approved':'rejected',reviewedBy:actor.uid,reviewedAt:new Date()};
-   if(body.decision==='approve'){const u=new URL(user.pendingPhotoURL);if(u.protocol!=='https:'||!['something-gamer-api.something-gamer-nowtech.workers.dev','firebasestorage.googleapis.com'].includes(u.hostname))throw new Error('INVALID_ADMIN_ACTION');patch.photoURL=u.href;}
+   if(body.decision==='approve'){const candidate=new URL(user.pendingPhotoURL);if(candidate.origin===new URL(env.API_URL).origin&&/^\/media\/[a-f0-9]{48}$/.test(candidate.pathname)){const row=await mediaRecord(env,candidate.pathname.split('/').pop());if(row.owner_uid!==uid||row.purpose!=='profile')throw new Error('FORBIDDEN');await checkedObject(env,row);await env.SG_DB.prepare("UPDATE quarantined_media SET state='approved' WHERE id=?").bind(row.id).run();}const u=new URL(user.pendingPhotoURL);if(u.protocol!=='https:'||!['something-gamer-api.something-gamer-nowtech.workers.dev','firebasestorage.googleapis.com'].includes(u.hostname))throw new Error('INVALID_ADMIN_ACTION');patch.photoURL=u.href;}
    patch.pendingPhotoURL='';
   }
   const publicPatch=Object.fromEntries(Object.entries(patch).filter(([k])=>['badges','accountType','verification','photoURL'].includes(k)));

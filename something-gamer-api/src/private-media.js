@@ -12,7 +12,7 @@ export async function authorizeConversation(request,env,path,user,{write=false,t
  conversationPath(path);
  const base=`https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/`;
  const read=async p=>{
-  const response=await fetch(base+p,{headers:{Authorization:request.headers.get('Authorization')},signal:AbortSignal.timeout(10000)});
+  const response=await fetch(base+p,{headers:{Authorization:request.headers.get('Authorization'),...(request.headers.get('X-Firebase-AppCheck')?{'X-Firebase-AppCheck':request.headers.get('X-Firebase-AppCheck')}:{})},signal:AbortSignal.timeout(10000)});
   if([403,404].includes(response.status))throw new Error('FORBIDDEN');
   if(!response.ok)throw new Error('FIRESTORE_FAILED');
   return (await response.json()).fields||{};
@@ -29,6 +29,7 @@ export async function authorizeConversation(request,env,path,user,{write=false,t
    if(['mutedUids','bannedUids'].some(k=>(server[k]?.arrayValue?.values||[]).some(v=>v.stringValue===user.uid)))throw new Error('FORBIDDEN');
   }
  }
+ return context;
 }
 function configured(env){if((!env.SG_MEDIA&&!env.SG_AUTH)||!env.SG_DB)throw new Error('PRIVATE_MEDIA_NOT_CONFIGURED');}
 export async function uploadPrivate(request,env,user){

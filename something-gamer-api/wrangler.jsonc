@@ -15,6 +15,7 @@
     "PAYMENTS_ENABLED": "false",
     "ADMIN_ENABLED": "false",
     "PUBLIC_MEDIA_ENABLED": "false",
+    "POST_MODERATION_ENABLED": "false",
     "ALLOW_LOCAL_ORIGINS": "false",
     "API_URL": "https://something-gamer-api.something-gamer-nowtech.workers.dev",
     "MARKET_CHECKOUT_ENABLED": "false",

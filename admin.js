@@ -1,3 +1,5 @@
+import {legacyPrivateObject} from './legacy-media-policy.js';
+import {installPublicationReview} from "./admin-publications.js";
 import {installMarketReview} from './admin-market.js';
 import {installSocialReview} from "./admin-social.js";
 import {installPaymentReview,installCommerceReview} from "./admin-payments.js";
@@ -70,7 +72,7 @@ async function load(){
   companyApplications=Array.isArray(data.companyApplications)?data.companyApplications:[];
   communityReports=Array.isArray(data.reports)?data.reports:[];purchases=Array.isArray(data.purchases)?data.purchases:[];marketListings=Array.isArray(data.listings)?data.listings:[];adCampaigns=Array.isArray(data.campaigns)?data.campaigns:[];
   renderUsers();renderPromotions();renderCommunity();renderCommerce();initModeration();
-  if(!document.querySelector("[data-payment-queue]")){installPaymentReview();installCommerceReview();installSocialReview();installMarketReview();}
+  if(!document.querySelector("[data-payment-queue]")){installPaymentReview();installCommerceReview();installSocialReview();installPublicationReview();installMarketReview();}
   $("totalUsers").textContent=data.stats?.total??users.length;
   $("totalUsers").title="Contagem da página carregada (até 100). Use a busca/paginação para consultar mais.";
   $("verifiedUsers").textContent=data.stats?.verified??users.filter(item=>item.verification?.status==="active").length;
@@ -413,4 +415,13 @@ $("usersTable")?.addEventListener('click',async event=>{
  try{await adminFunction('cancelAccountRemoval',{uid:target.uid,reason:reason.trim()});notify('Exclusão cancelada e registrada.','success');await load();}
  catch(error){notify(error.message||'Falha ao cancelar exclusão.','error');}
  finally{button.disabled=false;}
+});
+
+// Quarantined evidence/photos never become bearer download links in the panel.
+document.addEventListener('click',async event=>{
+ const link=event.target.closest('a[href]');if(!link)return;
+ let url;try{url=new URL(link.href);}catch{return;}
+ const legacy=legacyPrivateObject(url.href);if(!legacy&&(url.origin!==new URL(APP_CONFIG.steamApiBaseUrl).origin||!/^\/media\/[a-f0-9]{48}$/.test(url.pathname)))return;
+ event.preventDefault();
+ try{const response=await fetch(`${APP_CONFIG.steamApiBaseUrl}${legacy?"/admin/media/legacy/read":"/admin/media/read"}`,{method:'POST',credentials:'include',cache:'no-store',headers:{Authorization:`Bearer ${await auth.currentUser.getIdToken()}`,'Content-Type':'application/json',...(await appCheckHeaders())},body:JSON.stringify(legacy?{url:url.href}:{id:url.pathname.split('/').pop()})});if(!response.ok)throw new Error('Arquivo indisponível ou acesso negado.');const local=URL.createObjectURL(await response.blob());const dialog=document.createElement('dialog'),media=document.createElement('iframe'),close=document.createElement('button');media.src=local;media.title='Arquivo de análise';close.textContent='Fechar';close.type='button';close.onclick=()=>dialog.close();dialog.append(media,close);dialog.addEventListener('close',()=>{URL.revokeObjectURL(local);dialog.remove();});document.body.append(dialog);dialog.showModal();}catch(error){notify(error.message,'error');}
 });

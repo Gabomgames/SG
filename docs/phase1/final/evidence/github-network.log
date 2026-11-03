@@ -1,0 +1,7 @@
+HTTP/1.1 403 Forbidden
+content-length: 16
+content-type: text/plain
+date: Tue, 03 Nov 2026 09:52:53 GMT
+server: envoy
+connection: close
+

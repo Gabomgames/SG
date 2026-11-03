@@ -1,8 +1,10 @@
+import {publishPost as publishApprovedPost,installPendingPosts} from "./post-publication.js";
+import {assertPublicText} from "./safety.js";
 import { auth, db } from "./firebase.js";
 import { APP_CONFIG } from "./config.js";
 import { signOut } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, limit, onSnapshot, orderBy, query, runTransaction, serverTimestamp, setDoc, updateDoc, where } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js";
-import { assertModeratedPublicText, assertModeratedImageUrl } from "./moderation.js";
+
 import { srcSeguro } from "./seguranca-web.js";
 import { escreverComLimite, mensagemDeLimite } from "./limites.js";
 import { icone, coracaoCheio } from "./icones.js";
@@ -237,8 +239,8 @@ async function publishPost() {
     let title, description;
     try {
         const rawTitle=$("postTitle").value.trim(),rawDescription=$("postDescription").value.trim();
-        title = rawTitle ? await assertModeratedPublicText(rawTitle, {field:"O título",min:2,max:100}) : (activePostType==="text"?"":`Publicação de ${currentProfile.name||currentProfile.username||"Gamer"}`);
-        description = rawDescription ? await assertModeratedPublicText(rawDescription, {field:"A publicação",min:2,max:2000}) : "";
+        title = rawTitle ? await assertPublicText(rawTitle, {field:"O título",min:2,max:100}) : (activePostType==="text"?"":`Publicação de ${currentProfile.name||currentProfile.username||"Gamer"}`);
+        description = rawDescription ? await assertPublicText(rawDescription, {field:"A publicação",min:2,max:2000}) : "";
     } catch (error) {
         return notify(error.message, "error");
     }
@@ -252,8 +254,8 @@ async function publishPost() {
         button.textContent = "Publicando...";
         const uploaded = await uploadPostFile($("postFile").files[0]);
         const mediaUrl = uploaded.url || "";
-        if (mediaUrl && uploaded.file?.type?.startsWith("image/")) await assertModeratedImageUrl(mediaUrl);
-        await escreverComLimite(currentUser.uid, "post", doc(collection(db, "posts")), {
+
+        const publication=await publishApprovedPost(currentUser.uid, doc(collection(db, "posts")), {
             uid: currentUser.uid,
             authorName: currentProfile.name || currentProfile.username,
             authorUsername: currentProfile.username || "",
@@ -276,7 +278,7 @@ async function publishPost() {
         $("postFile").value = "";
         updateDashboardPreview();
         closePostModal();
-        notify("Publicação criada com sucesso.", "success");
+        notify(publication.published?"Publicação criada com sucesso.":"Publicação enviada para análise. Ainda não está no feed.", "success");
     } catch (error) {
         console.error(error);
         const friendly=error?.code==="permission-denied"?"Sua sessão ou as regras impediram a publicação. Atualize a página e tente novamente.":error?.code==="unavailable"?"Sem conexão com o servidor. Verifique a internet e tente novamente.":"";
@@ -424,3 +426,5 @@ $("feedList").addEventListener("click",event=>handleFeedClick(event).catch(error
 $("feedList").addEventListener("submit",event=>handleComment(event).catch(error=>notify(error.message||"Não foi possível comentar.","error")));
 $("friendSuggestions").addEventListener("click",event=>handleFeedClick(event).catch(error=>notify(error.message||"Não foi possível adicionar.","error")));
 document.querySelectorAll(".feed-filter").forEach(button=>button.addEventListener("click",()=>{activeFeedFilter=button.dataset.feed;document.querySelectorAll(".feed-filter").forEach(item=>item.classList.toggle("active",item===button));renderFeed()}));
+
+installPendingPosts();

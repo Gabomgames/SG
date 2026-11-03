@@ -27,16 +27,16 @@ test('feed has an actual composer with picture video poll file selection',()=>{
  for(const type of ['image','video','poll','text'])assert.ok(h.includes(`data-compose-type="${type}"`));
  assert.match(h,/src="feed-composer.js\?v=6901"/);
  assert.match(js,/uploadMedia\(ready/);
- assert.match(js,/escreverComLimite/);
- assert.match(js,/assertModeratedImageUrl/);
+ assert.match(js,/publishPost/);
+ assert.match(read('post-publication-client.js'),/publicationApprovals/);
  assert.match(js,/authorVerified:profile.verification\?\.status==='active'/);
 });
-test('media fallback matches existing Firebase Storage authorization rules and schema',()=>{
+test('media publication uses quarantine and has no client Firebase fallback',()=>{
  const media=read('media-upload.js'),rules=read('storage.rules'),firestore=read('firestore.rules');
- assert.match(media,/uploadBytes\(dest,file/);
- assert.match(media,/getDownloadURL/);
- assert.match(media,/posts\/\$\{user.uid\}/);
- assert.match(media,/scope !== "public"/);
+ assert.doesNotMatch(media,/uploadBytes/);
+ assert.doesNotMatch(media,/getDownloadURL/);
+ assert.match(media,/purpose=\$\{encodeURIComponent\(purpose\)/);
+ assert.match(read('something-gamer-api/src/publication-media.js'),/pending_review/);
  assert.match(rules,/match \/posts\/\{userId\}\/\{fileName\}/);
  assert.match(firestore,/urlOk\(request.resource.data.get\('mediaUrl'/);
  assert.match(media,/MEDIA_NOT_CONFIGURED/);

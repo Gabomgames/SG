@@ -1,3 +1,8 @@
+import {runModeration} from './moderation-provider.js';
+import {quarantineUpload,serveApprovedMedia,mediaRecord,checkedObject,previewQuarantine,discardQuarantine,expireQuarantine} from './publication-media.js';
+import {authorizePost,postsMine,reviewPosts} from './publication.js';
+import {adoptLegacyPublic} from './legacy-public-media.js';
+import {readLegacyAdmin,readLegacyChat} from './legacy-media.js';
 import {expireSfu} from './now-call.js';
 import {reviewMarket} from './market-discovery.js';
 import {resolveDispute} from './market.js';
@@ -27,6 +32,8 @@ async function readJson(request) {
 }
 const json = (data, status = 200, headers = {}) =>
   new Response(JSON.stringify(data), { status, headers: { "Content-Type": "application/json; charset=utf-8", ...headers } });
+
+async function binaryResponse(promise,headers){const response=await promise;for(const [key,value] of Object.entries(headers))response.headers.set(key,value);response.headers.set('Cache-Control','private, no-store');return response;}
 
 const origemLiberada = (env, origin) => {
   if ([env.APP_URL, "https://something-gamer.web.app", "https://something-gamer.firebaseapp.com"].includes(origin)) return true;
@@ -178,19 +185,16 @@ async function requireAppCheck(request, env) {
 }
 
 async function firebaseUser(request, env) {
-  const header = request.headers.get("Authorization") || "";
-  if (!header.startsWith("Bearer ")) throw new Error("UNAUTHENTICATED");
-  const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(env.FIREBASE_API_KEY)}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ idToken: header.slice(7) })
-  });
-  const data = await response.json();
-  const conta = data.users?.[0];
-  if (!response.ok || !conta?.localId) throw new Error("UNAUTHENTICATED");
-  const claims = jwtJson(header.slice(7).split(".")[1]);
-  if (claims.aud !== env.FIREBASE_PROJECT_ID || claims.iss !== `https://securetoken.google.com/${env.FIREBASE_PROJECT_ID}`) throw new Error("UNAUTHENTICATED");
-  return { uid: conta.localId, email: conta.email || "", emailVerificado: conta.emailVerified === true, claims };
+  const header=request.headers.get('Authorization')||'';
+  if(!header.startsWith('Bearer '))throw new Error('UNAUTHENTICATED');
+  let claims;
+  try{const parts=header.slice(7).split('.');if(parts.length!==3||jwtJson(parts[0]).alg!=='RS256')throw new Error();claims=jwtJson(parts[1]);}catch{throw new Error('UNAUTHENTICATED');}
+  const now=Date.now()/1000;
+  if(claims.aud!==env.FIREBASE_PROJECT_ID||claims.iss!==`https://securetoken.google.com/${env.FIREBASE_PROJECT_ID}`||typeof claims.sub!=='string'||!claims.sub||!Number.isFinite(claims.exp)||claims.exp<=now||!Number.isFinite(claims.iat)||claims.iat>now+60||!Number.isFinite(claims.auth_time)||claims.auth_time>now+60)throw new Error('UNAUTHENTICATED');
+  const response=await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${encodeURIComponent(env.FIREBASE_API_KEY)}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({idToken:header.slice(7)}),signal:AbortSignal.timeout(10000)});
+  const data=await response.json(),account=data.users?.[0];
+  if(!response.ok||!account?.localId||account.disabled===true||account.localId!==claims.sub||Number(account.validSince||0)>claims.auth_time)throw new Error('UNAUTHENTICATED');
+  return {uid:account.localId,email:account.email||'',emailVerificado:account.emailVerified===true,claims};
 }
 
 async function requireAdmin(request, env) {
@@ -254,41 +258,11 @@ const MEDIA_TYPES = new Set([
 ]);
 const MEDIA_MAX_BYTES = 20 * 1024 * 1024;
 
-async function uploadMedia(request, env) {
-  const user = await firebaseUser(request, env);
-  await requireAppCheck(request, env);
-  const contentType = String(request.headers.get("Content-Type") || "").split(";")[0].trim().toLowerCase();
-  if (!MEDIA_TYPES.has(contentType)) throw new Error("MEDIA_TYPE_NOT_ALLOWED");
-  const length = Number(request.headers.get("Content-Length") || 0);
-  if (length && length > MEDIA_MAX_BYTES) throw new Error("MEDIA_TOO_LARGE");
-  const throttleKey = `media-throttle:${user.uid}`;
-  if (await env.SG_AUTH.get(throttleKey)) throw new Error("MEDIA_RATE_LIMITED");
-  if (new URL(request.url).searchParams.get("scope") === "private") throw new Error("PRIVATE_MEDIA_NOT_CONFIGURED");
-  if (env.PUBLIC_MEDIA_ENABLED !== "true") throw new Error("MEDIA_NOT_CONFIGURED");
-  const bytes = await request.arrayBuffer();
-  if (!bytes.byteLength || bytes.byteLength > MEDIA_MAX_BYTES) throw new Error("MEDIA_TOO_LARGE");
-  validateMediaSignature(new Uint8Array(bytes), contentType);
-  const mediaId = randomCode(24);
-  const name = decodeURIComponent(new URL(request.url).searchParams.get("name") || "media").replace(/[\r\n]/g, "").slice(0,120);
-  await env.SG_AUTH.put(`media:${mediaId}`, bytes, { metadata: { uid:user.uid, contentType, name, size:bytes.byteLength, createdAt:Date.now() } });
-  await env.SG_AUTH.put(throttleKey, "1", { expirationTtl: 60 });
-  return { ok:true, mediaId, url:`${new URL(request.url).origin}/media/${mediaId}`, contentType, size:bytes.byteLength };
+async function uploadMedia(request,env){
+  const user=await participatingUser(request,env);await requireAppCheck(request,env);
+  return quarantineUpload(request,env,user,(bytes,type)=>reviewStoredBytes(env,bytes,type));
 }
-
-async function serveMedia(request, env, mediaId) {
-  if (env.PUBLIC_MEDIA_ENABLED !== "true") return new Response("Media unavailable", {status:503, headers:{"Cache-Control":"no-store"}});
-  if (!/^[0-9a-f]{48}$/i.test(mediaId)) return new Response("Not found", { status:404 });
-  const result = await env.SG_AUTH.getWithMetadata(`media:${mediaId}`, { type:"arrayBuffer", cacheTtl:300 });
-  if (!result?.value) return new Response("Not found", { status:404 });
-  const type = String(result.metadata?.contentType || "application/octet-stream");
-  return new Response(result.value, { status:200, headers:{
-    "Content-Type":type,
-    "Cache-Control":"public, max-age=31536000, immutable",
-    "X-Content-Type-Options":"nosniff",
-    "Access-Control-Allow-Origin":"*",
-    "Cross-Origin-Resource-Policy":"cross-origin"
-  }});
-}
+async function serveMedia(request,env,id){return serveApprovedMedia(request,env,id);}
 
 // ---------- e-mails ----------
 function safe(value) {
@@ -368,34 +342,6 @@ function textoSeguroEntrada(valor, maximo = 5000) {
   return texto;
 }
 
-async function imagemParaDataUrl(imageUrl) {
-  if (!/^https:\/\//i.test(imageUrl) || imageUrl.length > 2048) throw new Error("INVALID_MODERATION_REQUEST");
-
-  safeRemoteImage(imageUrl);
-  const response = await fetch(imageUrl, {
-    redirect: "error", signal: AbortSignal.timeout(10000),
-    headers: { Accept: "image/avif,image/webp,image/png,image/jpeg,image/gif,image/*" }
-  });
-  if (!response.ok) throw new Error("MODERATION_FAILED");
-
-  const contentType = String(response.headers.get("Content-Type") || "").split(";")[0].trim().toLowerCase();
-  if (!/^image\/(png|jpeg|jpg|webp|gif|avif)$/.test(contentType)) throw new Error("INVALID_MODERATION_REQUEST");
-
-  const length = Number(response.headers.get("Content-Length") || 0);
-  if (length > 5 * 1024 * 1024) throw new Error("INVALID_MODERATION_REQUEST");
-
-  const buffer = await response.arrayBuffer();
-  if (buffer.byteLength > 5 * 1024 * 1024) throw new Error("INVALID_MODERATION_REQUEST");
-
-  const bytes = new Uint8Array(buffer);
-  let binary = "";
-  const chunk = 0x8000;
-  for (let i = 0; i < bytes.length; i += chunk) {
-    binary += String.fromCharCode(...bytes.subarray(i, Math.min(i + chunk, bytes.length)));
-  }
-  return `data:${contentType};base64,${btoa(binary)}`;
-}
-
 const categoriasLlamaGuard = {
   S1: "violent_crimes",
   S2: "non_violent_crimes",
@@ -419,7 +365,7 @@ function interpretarLlamaGuard(resultado) {
   const codigos = [...new Set(bruto.toUpperCase().match(/\bS(?:1[0-4]|[1-9])\b/g) || [])];
   const categories = codigos.map(codigo => categoriasLlamaGuard[codigo] || codigo);
 
-  if (/^safe\b/.test(normalizado)) {
+  if (normalizado === "safe") {
     return { flagged: false, categories: [], raw: bruto };
   }
   if (/^unsafe\b/.test(normalizado)) {
@@ -431,7 +377,7 @@ function interpretarLlamaGuard(resultado) {
 async function classificarTextoComLlamaGuard(env, texto) {
   if (!env.AI) throw new Error("MODERATION_NOT_CONFIGURED");
 
-  const resultado = await env.AI.run("@cf/meta/llama-guard-3-8b", {
+  const resultado = await runModeration(env,"@cf/meta/llama-guard-3-8b", {
     messages: [
       {
         role: "user",
@@ -445,9 +391,8 @@ async function classificarTextoComLlamaGuard(env, texto) {
   return interpretarLlamaGuard(resultado);
 }
 
-async function descreverImagemParaModeracao(env, imageUrl) {
-  const image = await imagemParaDataUrl(imageUrl);
-  const resultado = await env.AI.run("@cf/meta/llama-3.2-11b-vision-instruct", {
+async function describeImageData(env,image){
+  const resultado = await runModeration(env,"@cf/meta/llama-3.2-11b-vision-instruct", {
     messages: [
       {
         role: "system",
@@ -468,8 +413,15 @@ async function descreverImagemParaModeracao(env, imageUrl) {
   return descricao.slice(0, 4000);
 }
 
+function byteDataUrl(bytes,type){let text='';for(let i=0;i<bytes.length;i+=0x8000)text+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return `data:${type};base64,${btoa(text)}`;}
+async function reviewStoredBytes(env,bytes,type){
+  if(!env.AI||!['image/png','image/jpeg','image/webp'].includes(type)||bytes.length>5*1024*1024)return {state:'pending_review'};
+  const description=await describeImageData(env,byteDataUrl(bytes,type));
+  const decision=await classificarTextoComLlamaGuard(env,description);
+  return {state:decision.flagged?'rejected':'approved'};
+}
 async function moderateContent(request, env) {
-  await firebaseUser(request, env);
+  const user=await participatingUser(request, env);
   await requireAppCheck(request, env);
   if (!env.AI) throw new Error("MODERATION_NOT_CONFIGURED");
 
@@ -482,7 +434,13 @@ async function moderateContent(request, env) {
   let imageChecked = false;
 
   if (imageUrl) {
-    const descricaoImagem = await descreverImagemParaModeracao(env, imageUrl);
+    const parsed=new URL(imageUrl);
+    if(parsed.origin!==new URL(env.API_URL).origin||!/^\/media\/[a-f0-9]{48}$/.test(parsed.pathname))throw new Error("INVALID_MODERATION_REQUEST");
+    const row=await mediaRecord(env,parsed.pathname.split('/').pop());
+    if(row.owner_uid!==user.uid)throw new Error('FORBIDDEN');
+    const decision=await reviewStoredBytes(env,await checkedObject(env,row),row.content_type);
+    if(decision.state!=='approved')throw new Error('MODERATION_FAILED');
+    const descricaoImagem='Imagem validada pelo servidor.';
     imageChecked = true;
     textoParaAnalise = [
       text ? `Texto enviado pelo usuario:\n${text}` : "",
@@ -595,7 +553,7 @@ async function participatingUser(request, env) {
   const user = await firebaseUser(request, env);
   await requireAppCheck(request, env);
   const response = await fetch(`https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/users/${encodeURIComponent(user.uid)}`, {
-    headers: { Authorization: request.headers.get("Authorization") }, signal: AbortSignal.timeout(10000)
+    headers: { Authorization: request.headers.get("Authorization"), ...(request.headers.get("X-Firebase-AppCheck")?{"X-Firebase-AppCheck":request.headers.get("X-Firebase-AppCheck")}:{}) }, signal: AbortSignal.timeout(10000)
   });
   const data = await response.json().catch(() => ({}));
   const fields = data.fields || {}, legal = fields.legal?.mapValue?.fields || {}, moderation = fields.moderation?.mapValue?.fields || {};
@@ -608,7 +566,7 @@ async function participatingUser(request, env) {
 export default {
   async scheduled(event, env, ctx) {
     if(new Date(event.scheduledTime||Date.now()).getUTCMinutes()%15!==0){ctx.waitUntil(expireSfu(env));return;}
-    ctx.waitUntil(Promise.allSettled([reconcilePending(env, mercadoPago), expirePrivate(env),expireMarket(env),reconcileSubscriptions(env),reconcileAds(env),expireSocial(env),expireSfu(env)]));
+    ctx.waitUntil(Promise.allSettled([reconcilePending(env, mercadoPago), expirePrivate(env),expireMarket(env),reconcileSubscriptions(env),reconcileAds(env),expireSocial(env),expireSfu(env),expireQuarantine(env)]));
   },
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -623,13 +581,22 @@ export default {
       if (request.method === "POST" && url.pathname !== "/media/upload") await readJson(request.clone());
       if (url.pathname === "/health") return json({ ok: true, service: "Something Gamer API", shield: Boolean(env.AI), moderation: "cloudflare-workers-ai", media: env.PUBLIC_MEDIA_ENABLED === "true", privateMedia: Boolean((env.SG_MEDIA || env.SG_AUTH) && env.SG_DB), payments: env.PAYMENTS_ENABLED === "true" && Boolean(env.SG_DB), marketplaceCheckout: false }, 200, headers);
       if (url.pathname.startsWith("/giphy/media/") && request.method === "GET") return serveGiphyMedia(request, url.pathname.split("/").pop());
-      if (url.pathname.startsWith("/media/") && request.method === "GET") return serveMedia(request, env, url.pathname.split("/").pop());
+      if (url.pathname.startsWith("/media/") && request.method === "GET") return await binaryResponse(serveMedia(request, env, url.pathname.split("/").pop()),headers);
       if (url.pathname === "/media/upload" && request.method === "POST") return json(await (url.searchParams.get('scope') === 'public-social' ? uploadSocial(request,env,await participatingUser(request,env)) : url.searchParams.get('scope') === 'private' ? uploadPrivate(request, env, await participatingUser(request, env)) : uploadMedia(request, env)), 200, headers);
       if (url.pathname === "/media/read" && request.method === "POST") {
-        const response = await readPrivate(request, env, await firebaseUser(request, env));
+        const response = await readPrivate(request, env, await participatingUser(request, env));
         Object.entries(headers).forEach(([key,value]) => response.headers.set(key,value));
         return response;
       }
+      if (url.pathname === "/media/legacy/read" && request.method === "POST") return await binaryResponse(readLegacyChat(request,env,await participatingUser(request,env)),headers);
+      if (url.pathname === "/media/preview" && request.method === "POST") {const user=await participatingUser(request,env);const b=await request.json();return await binaryResponse(previewQuarantine(env,b.id,user),headers);}
+      if (url.pathname === "/media/discard" && request.method === "POST") {const user=await participatingUser(request,env);const b=await request.json();return json(await discardQuarantine(env,b.id,user),200,headers);}
+      if (url.pathname === "/admin/media/adopt-legacy" && request.method === "POST") return json(await adoptLegacyPublic(request,env,await requireAdmin(request,env)),200,headers);
+      if (url.pathname === "/admin/media/legacy/read" && request.method === "POST") {await requireAdmin(request,env);return await binaryResponse(readLegacyAdmin(request,env),headers);}
+      if (url.pathname === "/admin/media/read" && request.method === "POST") {const admin=await requireAdmin(request,env);const b=await request.json();return await binaryResponse(previewQuarantine(env,b.id,admin,{admin:true}),headers);}
+      if (url.pathname === "/posts/authorize" && request.method === "POST") {const user=await participatingUser(request,env);await requireAppCheck(request,env);return json(await authorizePost(request,env,user,text=>classificarTextoComLlamaGuard(env,text)),200,headers);}
+      if (url.pathname === "/posts/mine" && request.method === "POST") return json(await postsMine(request,env,await participatingUser(request,env)),200,headers);
+      if (url.pathname === "/admin/posts" && request.method === "POST") return json(await reviewPosts(request,env,await requireAdmin(request,env)),200,headers);
       if (url.pathname === "/media/delete" && request.method === "POST") return json(await deletePrivate(request,env,await firebaseUser(request,env)),200,headers);
       if (url.pathname.startsWith("/social/media/") && request.method === "GET") {const response=await socialMedia(env,url.pathname.split('/').pop());Object.entries(headers).forEach(([k,v])=>response.headers.set(k,v));return response;}
       if (url.pathname === "/social/media/read" && request.method === "POST") {const user=await participatingUser(request,env);const b=await request.json();const response=await socialMedia(env,b.id,{user});Object.entries(headers).forEach(([k,v])=>response.headers.set(k,v));return response;}
@@ -670,14 +637,14 @@ export default {
       const code = error.message;
       console.error(JSON.stringify({ event: "request_failed", requestId, code: /^[A-Z_]+$/.test(code) ? code : "INTERNAL_ERROR", path: url.pathname }));
       const status =
-        ["SOCIAL_NOT_CONFIGURED","SOCIAL_MEDIA_DISABLED"].includes(code) ? 503 :
+        ["PUBLICATION_NOT_CONFIGURED","SOCIAL_NOT_CONFIGURED","SOCIAL_MEDIA_DISABLED"].includes(code) ? 503 :
         code === "INVALID_WEBHOOK_SIGNATURE" || code === "UNAUTHENTICATED" || code === "ADMIN_REAUTH_REQUIRED" ? 401 :
         code === "PAYLOAD_TOO_LARGE" ? 413 :
         ["IDEMPOTENCY_CONFLICT","PAYMENT_NOT_REVIEWABLE","RESOURCE_CONFLICT"].includes(code) ? 409 :
         code === "ACCOUNT_RESTRICTED" ? 403 :
         ["PAYMENTS_DISABLED", "PAYMENTS_NOT_CONFIGURED", "PAYMENT_STORAGE_NOT_CONFIGURED", "WEBHOOK_NOT_CONFIGURED", "PAYMENT_ENV_MISMATCH", "FIRESTORE_NOT_CONFIGURED", "ADMIN_NOT_CONFIGURED", "PRIVATE_MEDIA_NOT_CONFIGURED", "MEDIA_NOT_CONFIGURED", "MEDIA_NOT_READY", "MARKET_NOT_CONFIGURED", "MARKET_CHECKOUT_DISABLED", "SELLER_NOT_CONNECTED", "SUBSCRIPTIONS_NOT_CONFIGURED", "SUBSCRIPTIONS_DISABLED", "ADS_NOT_CONFIGURED", "ADS_CHECKOUT_DISABLED"].includes(code) ? 503 :
         code === "FIRESTORE_FAILED" ? 502 :
-        ["AUDIENCE_TOO_SMALL","INVALID_SOCIAL_INPUT", "INVALID_COMMUNITY_INPUT", "CONTENT_REJECTED", "INVALID_AD_INPUT", "INVALID_SUBSCRIPTION", "INVALID_MARKET_INPUT", "MULTIPLE_SELLERS", "INVALID_ADMIN_ACTION", "INVALID_MEDIA_CONTEXT", "INVALID_REVIEW", "INVALID_IDEMPOTENCY_KEY", "MEDIA_SIGNATURE_INVALID"].includes(code) ? 400 :
+        ["INVALID_POST_INPUT","AUDIENCE_TOO_SMALL","INVALID_SOCIAL_INPUT", "INVALID_COMMUNITY_INPUT", "CONTENT_REJECTED", "INVALID_AD_INPUT", "INVALID_SUBSCRIPTION", "INVALID_MARKET_INPUT", "MULTIPLE_SELLERS", "INVALID_ADMIN_ACTION", "INVALID_MEDIA_CONTEXT", "INVALID_REVIEW", "INVALID_IDEMPOTENCY_KEY", "MEDIA_SIGNATURE_INVALID"].includes(code) ? 400 :
         code === "APP_CHECK_REQUIRED" || code === "APP_CHECK_INVALID" ? 401 :
         code === "FORBIDDEN" ? 403 :
         code === "INVALID_RESET_TOKEN" ? 410 :
@@ -695,6 +662,7 @@ export default {
         code === "MODERATION_NOT_CONFIGURED" ? 503 :
         code === "MODERATION_FAILED" || code === "GIF_SEARCH_FAILED" || code === "MERCADOPAGO_FAILED" ? 502 : 500;
       const mensagens = {
+        PUBLICATION_NOT_CONFIGURED: "A publicação segura aguarda configuração. Nenhum conteúdo foi publicado.",
         SOCIAL_NOT_CONFIGURED: "Stories e vídeos aguardam configuração do banco de homologação.",
         SOCIAL_MEDIA_DISABLED: "Uploads sociais ainda não foram habilitados neste ambiente.",
         SUBSCRIPTIONS_NOT_CONFIGURED: "Assinaturas aguardam configuração do banco e do provedor.",

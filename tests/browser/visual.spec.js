@@ -13,6 +13,7 @@ async function sdkFixtures(page){
  const sdk=readFileSync(new URL('../fixtures/firebase-sdk.js',import.meta.url),'utf8');
  await page.route('https://www.gstatic.com/firebasejs/**',route=>route.fulfill({status:200,contentType:'text/javascript',body:sdk}));
  await page.route('https://something-gamer-api.something-gamer-nowtech.workers.dev/**',route=>route.fulfill({status:503,contentType:'application/json',body:JSON.stringify({error:'Pagamentos em preparação.',code:'PAYMENT_STORAGE_NOT_CONFIGURED'})}));
+ await page.route('**/moderate',route=>route.fulfill({contentType:'application/json',body:JSON.stringify({allowed:true,flagged:false,categories:[]})}));
  await page.route('https://fonts.googleapis.com/**',route=>route.fulfill({body:'',contentType:'text/css'}));
 }
 for(const width of [320,375,768,1440,1920])test(`index responsivo ${width}px`,async({page})=>{

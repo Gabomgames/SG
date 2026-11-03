@@ -16,6 +16,7 @@ export function validateMediaSignature(bytes, type) {
     : ['video/webm','audio/webm'].includes(type) ? starts([26,69,223,163])
     : ['video/mp4','video/quicktime','audio/mp4','audio/x-m4a'].includes(type) ? text(4,8) === 'ftyp'
     : type === 'audio/ogg' ? text(0,4) === 'OggS'
+    : type === 'audio/wav' ? text(0,4) === 'RIFF' && text(8,12) === 'WAVE'
     : type === 'audio/mpeg' ? text(0,3) === 'ID3' || (bytes[0] === 255 && (bytes[1] & 224) === 224)
     : type === 'audio/aac' ? bytes[0] === 255 && (bytes[1] & 246) === 240 : false;
   if (!ok) throw new Error('MEDIA_SIGNATURE_INVALID');

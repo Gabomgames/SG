@@ -1,14 +1,21 @@
-# Continuação da Fase 1 — S01
+# Something Gamer — reta final da Fase 1
 
-Correções S01 implementadas localmente; Fase 1 ainda não aprovada. Sem push, deploy, merge, cobrança ou ativação da promoção.
+S02/S03 receberam implementação e 282 testes locais distintos passaram. **Fase 1 ainda não aprovada:** três suítes Firebase e 26 casos Chromium bloqueados, e tokens privados legados sem revogação comprovada. Sem push, merge, deploy, cobrança, alteração de produção ou Fase 2.
 
-- [Relatório de segurança atual](docs/phase1/s01/SEGURANCA.md)
-- [Executar todos os testes no Windows/VS Code](docs/phase1/s01/WINDOWS-VSCODE.md)
-- [Critérios objetivos de aceite](docs/phase1/s01/CRITERIOS-ACEITE.md)
+- [Relatório único atual, segurança e resultados](docs/phase1/final/RELATORIO.md)
+- [Comandos completos para Windows / VS Code](docs/phase1/final/WINDOWS-VSCODE.md)
+- [Compatibilidade do legado e revogação pendente](docs/phase1/final/MIGRACAO-LEGADO.md)
+- [Critérios objetivos de aceite](docs/phase1/final/CRITERIOS-ACEITE.md)
 
-Use Node 24.19.0 e `npm run validate:phase1`. Os testes de regras exigem o Firestore Emulator real e o navegador exige Chromium oficial. Bloqueios retornam 78; o resultado agregado é falha, nunca aprovação. Downloads do projeto são exclusivamente pelo GitHub após envio confirmado; não houve envio nesta tarefa.
+Use Node 24.19.0 e `npm run validate:phase1`; Functions mantêm Node 20.20.2. As regras exigem emulador real de Firestore/Storage e o navegador exige Chromium oficial. Exit 78 é bloqueio; a validação global retorna falha até todos os gates passarem. Preços e promoção automática de 50 Fundadores preservados; promoção continua desligada por padrão.
 
-## Entrega anterior preservada
+ZIP/bundle preparados para entrega exclusivamente pelo GitHub após upload autorizado e confirmado. Nenhum arquivo foi enviado e nenhum link foi inventado.
+
+## Histórico das entregas anteriores (preservado)
+
+Os relatórios em `docs/phase1/s01` descrevem a revisão anterior de S01 e não substituem o relatório atual.
+
+
 
 # Something Gamer — Beta 0.1
 

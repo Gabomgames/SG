@@ -1,0 +1,18 @@
+[
+  {
+    "path": "/workspace/SOMETHING-GAMER-BETA-0.1-ATUALIZADO.zip",
+    "sha256": "979eee693ff850cb50a36097df98353d81e7613e8de0ba055d066d10db30a5aa"
+  },
+  {
+    "path": "/workspace/SOMETHING-GAMER-FASE1-S01-ATUALIZADO.zip",
+    "sha256": "3002c8af0b293f607477f1df7ca3ebf4069299e8424c4fd5b99b5e6ca4325ea1"
+  },
+  {
+    "path": "/workspace/SG-Beta-0.1-release/backup/repository.bundle",
+    "sha256": "cd1127b59f9d2d54c3be285b108129654b9ffca9615c614360da4b99788e3ea0"
+  },
+  {
+    "path": "/workspace/SG-Fase1-S01-release/backup/repository-s01.bundle",
+    "sha256": "730105ea077163e785f2bdf26b8586f427f04983255d8ef95b46c4230bb5c5d0"
+  }
+]

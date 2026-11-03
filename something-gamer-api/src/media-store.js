@@ -7,7 +7,7 @@ export function mediaStore(env) {
   delete:id=>env.SG_MEDIA.delete(`private/${id}`)
  };
  if(env.SG_AUTH)return {
-  put:(id,bytes)=>env.SG_AUTH.put(`private-media:${id}`,bytes,{expirationTtl:30*86400}),
+  put:(id,bytes,type,{persistent=false}={})=>env.SG_AUTH.put(`private-media:${id}`,bytes,persistent?{}:{expirationTtl:30*86400}),
   get:id=>env.SG_AUTH.get(`private-media:${id}`,{type:'arrayBuffer'}),
   delete:id=>env.SG_AUTH.delete(`private-media:${id}`)
  };

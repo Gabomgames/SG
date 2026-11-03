@@ -4,8 +4,8 @@ import {createHmac} from 'node:crypto';
 import worker from '../something-gamer-api/src/index.js';
 import {createOrder,webhookOrder} from '../something-gamer-api/src/payments.js';
 const base={APP_URL:'https://something-gamer.web.app',FIREBASE_PROJECT_ID:'something-gamer',FIREBASE_API_KEY:'public-test-key',APP_CHECK_ENFORCED:'false'};
-const claims={aud:'something-gamer',iss:'https://securetoken.google.com/something-gamer',sub:'alice',auth_time:Math.floor(Date.now()/1000)};
-const token=`${btoa('{}')}.${btoa(JSON.stringify(claims))}.fixture`;
+const claims={iat:Math.floor(Date.now()/1000),exp:Math.floor(Date.now()/1000)+3600,aud:'something-gamer',iss:'https://securetoken.google.com/something-gamer',sub:'alice',auth_time:Math.floor(Date.now()/1000)};
+const token=`${btoa(JSON.stringify({alg:'RS256',kid:'fixture'}))}.${btoa(JSON.stringify(claims))}.fixture`;
 const request=(path,body={},extra={})=>new Request(`https://api.example${path}`,{method:'POST',headers:{Authorization:`Bearer ${token}`,'Content-Type':'application/json',...extra},body:JSON.stringify(body)});
 const originalFetch=globalThis.fetch;
 function mockAuth(){globalThis.fetch=async url=>{
@@ -32,4 +32,4 @@ test('repetição de checkout usa mesma referência e chave no provedor',async()
  const a=await createOrder(request('/payments/create',body),env,user,provider);const b=await createOrder(request('/payments/create',body),env,user,provider);assert.equal(a.orderId,b.orderId);assert.equal(calls,1);assert.equal(b.reused,true);
  await assert.rejects(()=>createOrder(request('/payments/create',{...body,plan:'annual'}),env,user,provider),/IDEMPOTENCY_CONFLICT/);
 });
-test('conta comum não acessa financeiro, revisão de ADS ou reembolso',async()=>{mockAuth();try{for(const path of ['/admin/payments','/admin/commerce','/adminApi','/ads/review','/market/refund','/market/disputes/resolve','/admin/social','/admin/social/media']){const response=await worker.fetch(request(path,{}),{...base,ADMIN_UIDS:'owner',ADMIN_ENABLED:'true'});assert.equal(response.status,403,path);}}finally{globalThis.fetch=originalFetch;}});
+test('conta comum não acessa financeiro, revisão de ADS ou reembolso',async()=>{mockAuth();try{for(const path of ['/admin/payments','/admin/commerce','/adminApi','/ads/review','/market/refund','/market/disputes/resolve','/admin/social','/admin/social/media','/admin/posts','/admin/media/read','/admin/media/legacy/read','/admin/media/adopt-legacy']){const response=await worker.fetch(request(path,{}),{...base,ADMIN_UIDS:'owner',ADMIN_ENABLED:'true'});assert.equal(response.status,403,path);}}finally{globalThis.fetch=originalFetch;}});

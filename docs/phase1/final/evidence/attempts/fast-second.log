@@ -1,0 +1,273 @@
+
+> check:fast
+> npm run verificar && npm test && npm run test:security && npm run test:contracts && npm run test:founders && npm run test:polls && npm run test:regressions && npm run test:sqlite
+
+
+> verificar
+> node scripts/verificar.mjs
+
+415 arquivos conferidos.
+Tudo certo.
+
+> test
+> node --test --experimental-test-isolation=none tests/unit.test.js tests/worker.test.js tests/market.test.js tests/features.test.js
+
+✔ cargos: moderador não promove usuário, não modera dono ou outro moderador (3.547916ms)
+✔ voz: seis vagas, sessão fixa, expiração e expulsão não são contornadas (0.720129ms)
+✔ Now ADS: sem consentimento não aplica geografia, idade, gênero ou interesses (0.405911ms)
+✔ Now ADS: remarketing e lista exigem correspondência real e consentida (2.349035ms)
+✔ Now ADS: distribuição usa desempenho observado e mantém exploração (0.354899ms)
+✔ Market: localização residencial é arredondada; ponto exato exige autorização (1.058199ms)
+✔ Now Call: SFU só habilita com banco, flag e configuração; espectador não publica (0.262509ms)
+✔ comissão de 10% exclui frete e não é somada ao total (1.157361ms)
+✔ centavos e quantidades inválidos são rejeitados (0.575003ms)
+✔ comprador não pode marcar pedido pago nem enviado (1.866215ms)
+✔ somente comprador confirma entrega e estados finais não regressam (0.224138ms)
+✔ pagamento exige valor, comissão, referência, ambiente e recebedor (0.292853ms)
+✔ novos anúncios exigem estoque e política de devolução (2.434461ms)
+✔ contexto de mídia impede path traversal e recurso público (3.133213ms)
+✔ mídia verifica acesso com token do usuário, sem conta de serviço (68.882576ms)
+✔ arquivo expirado não consulta objeto nem entrega conteúdo (5.918313ms)
+✔ OAuth é cifrado com vínculo à UID e adulteração falha (34.836203ms)
+✔ codec Firestore preserva listas e valores decimais (0.413944ms)
+✔ assinatura mensal conserva dia quando existe e ajusta fim do mês (3.32007ms)
+✔ planos e valores exatos em centavos (1.094053ms)
+✔ valor inválido -1 (0.121059ms)
+✔ valor inválido NaN (0.053423ms)
+✔ valor inválido 1.123 (1.793342ms)
+✔ valor inválido 1e3 (0.302259ms)
+✔ valor inválido  (0.075987ms)
+✔ valor inválido Infinity (0.046409ms)
+✔ valor inválido  14.90 (0.035964ms)
+✔ valor inválido 14,90 (0.033614ms)
+✔ HMAC fixture conhecida aceita e normaliza ID alfanumérico (9.107538ms)
+✔ fixture usa manifesto canônico exato (0.104492ms)
+✔ assinatura errada rejeitada (4.168817ms)
+✔ query adulterada rejeitada (2.08053ms)
+✔ ID apenas no corpo não autoriza estado financeiro (2.177961ms)
+✔ ausência de headers rejeitada (0.44699ms)
+✔ ausência de secret falha fechada (1.238391ms)
+✔ header malformado ts=abc,v1=111111 (0.28921ms)
+✔ header malformado ts=1727890000,v1 (0.106016ms)
+✔ header malformado ts=1727890000,ts (0.048299ms)
+✔ header malformado  (0.03913ms)
+✔ simulador numérico não é Order real (0.848428ms)
+✔ aprovação exige estado, detalhe e transações confirmadas (0.274728ms)
+✔ integridade do Order id (0.200283ms)
+✔ integridade do Order external_reference (0.073036ms)
+✔ integridade do Order total_amount (0.062184ms)
+✔ integridade do Order currency_id (0.079086ms)
+✔ integridade do Order collector_id (0.063575ms)
+✔ integridade do Order transactions (0.063943ms)
+✔ estorno vence pendência e aprovação posterior (0.104762ms)
+✔ checkout somente no provedor HTTPS (0.142052ms)
+✔ SSRF https://127.0.0.1/a (1.7513ms)
+✔ SSRF https://169.254.169.254/ (0.35608ms)
+✔ SSRF https://[::1]/ (0.067759ms)
+✔ SSRF https://evil.example/ (0.046873ms)
+✔ SSRF https://lh3.googleusercontent.com.evil.example/a (0.083191ms)
+✔ SSRF https://user:pass@lh3.googleusercontent.com/a (0.088393ms)
+✔ SSRF https://lh3.googleusercontent.com:444/a (0.128208ms)
+✔ imagem autorizada em host exato (0.076639ms)
+✔ upload disfarçado de PNG é bloqueado (0.31967ms)
+✔ Market valida preço e categorias físicas (0.197692ms)
+✔ destaque expirado não aumenta relevância (0.090317ms)
+✔ busca sem acento, faixa de preços e salvos (1.443911ms)
+✔ Worker rejeita Origin malicioso antes de tocar persistência (5.703026ms)
+✔ CORS local negado por padrão (3.421596ms)
+{"event":"request_failed","requestId":"0aedc4d1-9c66-416a-94c4-7016e996b8de","code":"INVALID_WEBHOOK_SIGNATURE","path":"/payments/webhook"}
+✔ webhook sem assinatura retorna 401 e não consulta provedor (10.213105ms)
+{"event":"request_failed","requestId":"93b13a5a-0d01-44e4-a17a-81dbcfb5c1ea","code":"WEBHOOK_NOT_CONFIGURED","path":"/payments/webhook"}
+✔ webhook sem secret não modifica estado (3.142299ms)
+✔ simulador assinado testa conectividade, não Order nem pagamento (1.810289ms)
+{"event":"request_failed","requestId":"fea3596b-6cbc-4364-832e-f21390c4fe74","code":"UNAUTHENTICATED","path":"/payments/list"}
+✔ consulta financeira anônima retorna 401 (3.862615ms)
+{"event":"request_failed","requestId":"b32fb109-8dbf-44a0-b715-1920656c1c9d","code":"PAYMENT_STORAGE_NOT_CONFIGURED","path":"/payments/create"}
+✔ D1 ausente desabilita pagamento autenticado (4.229336ms)
+✔ health não anuncia compras ou anexos privados habilitados (1.762726ms)
+{"event":"request_failed","requestId":"e9628e42-ff9e-47d4-a356-67c512385c15","code":"PRIVATE_MEDIA_NOT_CONFIGURED","path":"/media/upload"}
+✔ novos uploads privados falham antes de gravação (2.155708ms)
+{"event":"request_failed","requestId":"529826f8-f9ea-401c-86ac-f9772d0f2c2f","code":"MEDIA_NOT_CONFIGURED","path":"/media/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+✔ mídia legada não fica pública antes da revisão do armazenamento (1.984828ms)
+✔ repetição de checkout usa mesma referência e chave no provedor (1.616601ms)
+{"event":"request_failed","requestId":"87d029cd-fdde-47bb-8593-4c7879c8d3b3","code":"FORBIDDEN","path":"/admin/payments"}
+{"event":"request_failed","requestId":"c5b5bb43-db8c-43a6-bcb6-50cbbd74c259","code":"FORBIDDEN","path":"/admin/commerce"}
+{"event":"request_failed","requestId":"a1a5c0a8-43c0-472c-8ed8-4104324a8c67","code":"FORBIDDEN","path":"/adminApi"}
+{"event":"request_failed","requestId":"cd17c0c8-032c-4255-8a4b-87669f0f5f5b","code":"FORBIDDEN","path":"/ads/review"}
+{"event":"request_failed","requestId":"61320aae-e4d7-4116-9e52-a7f9d3c56c77","code":"FORBIDDEN","path":"/market/refund"}
+{"event":"request_failed","requestId":"82b253ae-97c9-4a29-8faa-627d536fb534","code":"FORBIDDEN","path":"/market/disputes/resolve"}
+{"event":"request_failed","requestId":"4f704f55-c4a4-40ab-8978-0d01dd198730","code":"FORBIDDEN","path":"/admin/social"}
+{"event":"request_failed","requestId":"e61f0c9c-7a4e-44f8-8522-556231f3a8eb","code":"FORBIDDEN","path":"/admin/social/media"}
+✔ conta comum não acessa financeiro, revisão de ADS ou reembolso (22.261626ms)
+ℹ tests 73
+ℹ suites 0
+ℹ pass 73
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 356.951519
+
+> test:security
+> node --test --experimental-test-isolation=none tests/security-s02-s03.test.mjs
+
+✔ S02 cliente falha fechado: rede (6.914329ms)
+✔ S02 cliente falha fechado: HTTP 503 (80.643162ms)
+✔ S02 cliente falha fechado: JSON inválido (8.20159ms)
+✔ S02 cliente falha fechado: objeto vazio (0.893309ms)
+✔ S02 cliente falha fechado: resposta ambígua (0.678151ms)
+✔ S02 cliente falha fechado: negação sem decisão (0.412734ms)
+✔ S02 cliente falha fechado: tipos falsos (0.59817ms)
+✔ S02 resposta aprovada não atravessa troca de conta (0.436534ms)
+✔ S02 decisão explícita, cache por conta, prazo e saída da sessão (1.955273ms)
+✔ S02 classificação de abuso nunca vira autorização (0.661605ms)
+✔ S02 binding AI ausente, rejeitado ou travado não aprova (13.326396ms)
+✔ S02 backend rejeita schema uid (0.895555ms)
+✔ S02 backend rejeita schema authorVerified (0.133702ms)
+✔ S02 backend rejeita schema type (0.173064ms)
+✔ S02 backend rejeita schema mediaUrl (0.22638ms)
+✔ S02 backend rejeita schema mediaId (0.142727ms)
+✔ S02 backend rejeita schema pollOptions (0.086567ms)
+✔ S02 backend rejeita schema tags (0.099999ms)
+✔ S02 backend rejeita schema description (0.327131ms)
+✔ S02 backend rejeita schema type,pollOptions (0.252974ms)
+✔ S02 identidade e selo derivam do perfil servidor; suspensão e termos são revalidados (0.705648ms)
+✔ S03 parser só retorna objeto canônico e descarta token (0.830114ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o (0.111155ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o (0.051422ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o (0.045429ms)
+✔ S03 parser rejeita caminho/host: http://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o/ (0.03528ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com.evil.test/v0/b/demo-sg.app (0.031187ms)
+✔ S03 parser rejeita caminho/host: https://user:pass@firebasestorage.googleapis.com/v0/b/demo-sg.app (0.09429ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/other/b/demo-sg.appspot.co (0.038198ms)
+✔ S03 bucket diferente e evidência fora do chat são recusados pelo parser do participante (0.155604ms)
+✔ S03 plano offline minimiza metadados, exige precondição e preserva bytes (0.376255ms)
+{"event":"request_failed","requestId":"86aa330e-7068-43dd-afd7-742d8f44acbd","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim aud antes da rede (6.080416ms)
+{"event":"request_failed","requestId":"a505eb5c-0ed5-4042-a267-310e367200c1","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim iss antes da rede (1.215803ms)
+{"event":"request_failed","requestId":"09cc2acb-086f-41cf-a60e-e35f6a8e2322","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim sub antes da rede (0.699992ms)
+{"event":"request_failed","requestId":"f9d8f67c-3162-4517-8930-7b59bcbfa64e","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim exp antes da rede (1.09266ms)
+{"event":"request_failed","requestId":"a34f08ca-bdef-4e1f-b2b3-41de8ec422a8","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim iat antes da rede (1.03474ms)
+{"event":"request_failed","requestId":"cadd7e46-a156-4afc-b659-9e700f54465d","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim auth_time antes da rede (1.364408ms)
+{"event":"request_failed","requestId":"ddbafb2e-c32a-4315-8511-aa4f36d38faa","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth rejeita claim exp antes da rede (1.686337ms)
+{"event":"request_failed","requestId":"882e3ed2-ee4d-4386-8447-66b1ecf83ae4","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth revalida conta UID diferente (1.865043ms)
+{"event":"request_failed","requestId":"a548b0cd-7577-4fe7-99da-0c454827b1ef","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth revalida conta desabilitada (1.153291ms)
+{"event":"request_failed","requestId":"56cf4199-b01f-4adf-81f8-c3d8649ed186","code":"UNAUTHENTICATED","path":"/admin/posts"}
+✔ Auth revalida conta revogada (1.531998ms)
+{"event":"request_failed","requestId":"252366da-55a0-4ab6-8499-4f050f5536ea","code":"FORBIDDEN","path":"/admin/posts"}
+✔ Admin não abre fila: sem claim (1.185618ms)
+{"event":"request_failed","requestId":"704d5abc-3f4f-4fce-9687-8e01890c53ad","code":"ADMIN_REAUTH_REQUIRED","path":"/admin/posts"}
+✔ Admin não abre fila: sem MFA (0.768739ms)
+{"event":"request_failed","requestId":"6d42a019-8c06-4367-b3ee-9fe963180a0a","code":"ADMIN_REAUTH_REQUIRED","path":"/admin/posts"}
+✔ Admin não abre fila: MFA antiga (0.535991ms)
+{"event":"request_failed","requestId":"bf627d7e-ee54-4eaf-bd53-2c62ff736d8e","code":"FORBIDDEN","path":"/admin/posts"}
+✔ Admin não abre fila: fora da allowlist (0.762728ms)
+{"event":"request_failed","requestId":"de72bbb3-8f36-4b04-88a0-1f662668b129","code":"ADMIN_NOT_CONFIGURED","path":"/admin/posts"}
+✔ Admin não abre fila: Access não configurado (1.299875ms)
+ℹ tests 46
+ℹ suites 0
+ℹ pass 46
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 263.585062
+
+> test:contracts
+> node --test --experimental-test-isolation=none tests/verifier.test.mjs tests/browser-fixture.test.mjs tests/verification-view.test.mjs tests/v69-audit/contracts.test.mjs tests/v69-audit/dev-server.test.mjs tests/preview-server.test.mjs tests/validation-runner.test.mjs tests/rules-runner.test.mjs
+
+✔ browser fixture exports match the actual Firebase imports (614.006816ms)
+✔ unconfigured browser fixtures reject upload and account mutations (3.769966ms)
+✖ portable preview serves the selected build and rejects hidden files and writes (44.7042ms)
+✔ Firestore runner rejects external hosts, different ports and unexpected rule paths (2.385265ms)
+✔ only known suites can run and no project or target override is accepted (2.459709ms)
+✔ monthly: preço, prazo e confirmação financeira íntegros (2.118972ms)
+✔ semiannual: preço, prazo e confirmação financeira íntegros (1.729877ms)
+✔ annual: preço, prazo e confirmação financeira íntegros (0.279784ms)
+✔ estorno é terminal para toda entrada financeira conhecida (0.253828ms)
+✔ checkout rejeita credenciais, downgrade e domínios semelhantes (1.825492ms)
+✖ dev server entrega fonte e bloqueia caminhos internos e métodos de escrita (5.662316ms)
+✖ a failed or blocked child cannot be reported as passed, and later gates still run (216.380259ms)
+✔ spawn failure remains a failure even with a missing process exit code (2.26958ms)
+✔ founder display relies on server grant status and future expiry (0.209964ms)
+✔ promotional copy explains automatic free entitlement while paid review copy is preserved (0.217701ms)
+✔ static imports and aliases bind only their local name (1.900028ms)
+✔ dynamic import destructuring resolves in its function (1.349783ms)
+✔ sibling and nested declarations cannot hide a missing import (0.826506ms)
+✔ parameters, destructuring, catch and function-scoped var are recognized (0.619776ms)
+✔ comments strings and member calls do not count as global references (0.463733ms)
+✔ loop-scoped binding does not leak outside the loop (0.245015ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 18
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1094.081646
+
+✖ failing tests:
+
+test at tests/preview-server.test.mjs:7:1
+✖ portable preview serves the selected build and rejects hidden files and writes (44.7042ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/v69-audit/dev-server.test.mjs:9:1
+✖ dev server entrega fonte e bloqueia caminhos internos e métodos de escrita (5.662316ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/validation-runner.test.mjs:5:1
+✖ a failed or blocked child cannot be reported as passed, and later gates still run (216.380259ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  -   'passed',
+      'failed',
+  +   'failed',
+      'blocked',
+  +   'failed'
+  -   'passed'
+    ]
+  
+      at TestContext.<anonymous> (file:///workspace/SG/tests/validation-runner.test.mjs:9:9)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:960:18)
+      at Test.postRun (node:internal/test_runner/test:1522:19)
+      at Test.run (node:internal/test_runner/test:1447:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:960:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [Array],
+    expected: [Array],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }

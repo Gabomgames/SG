@@ -12,8 +12,9 @@ const profile=uid=>({uid,name:uid,username:uid,photoURL:'',moderation:{status:'a
 const as=(uid=voter)=>env.authenticatedContext(uid).firestore();
 const ballot=(option=0,patch={})=>({uid:voter,option,updatedAt:serverTimestamp(),...patch});
 function post(patch={}){return {uid:voter,authorName:voter,authorUsername:voter,authorPhoto:'',authorVerified:false,authorAccountType:'gamer',authorBadgeTheme:'blue',authorBadges:{},type:'poll',title:'Qual jogo?',description:'Enquete de teste',tags:[],pollOptions:['A','B'],mediaUrl:'',mediaType:'',mediaId:'',createdAt:serverTimestamp(),...patch};}
-function publish(data,db=as()){
- const batch=writeBatch(db);batch.set(doc(db,'posts','audit-new-post'),data);batch.set(doc(db,'limites',voter),{post:serverTimestamp()});return batch.commit();
+async function publish(data,db=as()){
+ const proof={...data};delete proof.createdAt;await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'publicationApprovals','audit-new-post'),{uid:voter,post:proof,used:false,expiresAt:Timestamp.fromMillis(Date.now()+60000)}));
+ const batch=writeBatch(db);batch.set(doc(db,'posts','audit-new-post'),data);batch.set(doc(db,'limites',voter),{post:serverTimestamp()});batch.update(doc(db,'publicationApprovals','audit-new-post'),{used:true,usedAt:serverTimestamp()});return batch.commit();
 }
 before(async()=>{env=await initializeTestEnvironment({projectId:'demo-sg',firestore:{host:'127.0.0.1',port:8085,rules:readFileSync(new URL('../../firestore.rules',import.meta.url),'utf8')}});});
 after(async()=>{await env?.cleanup();});
@@ -46,7 +47,7 @@ for(const patch of [{admin:true},{likeCount:999},{founderGrant:{status:'active'}
 test('post não-enquete não armazena opções ocultas',async()=>{await assertFails(publish(post({type:'text'})));});
 for(const eventId of ['other-event','missing-event'])test(`notícia não forja evento ${eventId}`,async()=>{await assertFails(publish(post({type:'news',pollOptions:[],eventId})));});
 test('schema não elimina a limitação de frequência',async()=>{
- await assertSucceeds(publish(post()));const batch=writeBatch(as());batch.set(doc(as(),'posts','second'),post());batch.set(doc(as(),'limites',voter),{post:serverTimestamp()});await assertFails(batch.commit());
+ await assertSucceeds(publish(post()));const next=post();delete next.createdAt;await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'publicationApprovals','second'),{uid:voter,post:next,used:false,expiresAt:Timestamp.fromMillis(Date.now()+60000)}));const batch=writeBatch(as());batch.set(doc(as(),'posts','second'),post());batch.set(doc(as(),'limites',voter),{post:serverTimestamp()});batch.update(doc(as(),'publicationApprovals','second'),{used:true,usedAt:serverTimestamp()});await assertFails(batch.commit());
 });
 for(const option of [0,1,'A','B'])test(`voto legítimo ${JSON.stringify(option)} permanece válido`,async()=>{await assertSucceeds(setDoc(doc(as(),'posts','audit-poll','votes',voter),ballot(option)));});
 for(const option of [-1,2,999,0.5,'1','C','',null,{},[]])test(`rejeita opção de voto ${JSON.stringify(option)}`,async()=>{await assertFails(setDoc(doc(as(),'posts','audit-poll','votes',voter),ballot(option)));});
@@ -82,4 +83,42 @@ for(const direction of ['author','voter'])test(`bloqueio ${direction} impede vot
  await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'users',direction==='author'?author:voter,'blocks',direction==='author'?voter:author),{createdAt:Timestamp.now()}));
  await assertFails(setDoc(doc(as(),'posts','audit-poll','votes',voter),ballot()));
  const other='audit-other';await assertSucceeds(setDoc(doc(as(other),'posts','audit-poll','votes',other),{uid:other,option:0,updatedAt:serverTimestamp()}));
+});
+
+// S02: these controls exercise receipt semantics in the real rule engine.
+async function receipt(postId='s02-post',patch={}){const data=post({type:'text',pollOptions:[]});const canonical={...data};delete canonical.createdAt;await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'publicationApprovals',postId),{uid:voter,post:canonical,used:false,expiresAt:Timestamp.fromMillis(Date.now()+60000),...patch}));return data;}
+function receiptBatch(data,postId='s02-post',receiptId=postId){const db=as(),batch=writeBatch(db);batch.set(doc(db,'posts',postId),data);batch.set(doc(db,'limites',voter),{post:serverTimestamp()});batch.update(doc(db,'publicationApprovals',receiptId),{used:true,usedAt:serverTimestamp()});return batch.commit();}
+test('S02 publicação direta sem aprovação do backend é negada',async()=>{const db=as(),batch=writeBatch(db);batch.set(doc(db,'posts','s02-post'),post({type:'text',pollOptions:[]}));batch.set(doc(db,'limites',voter),{post:serverTimestamp()});await assertFails(batch.commit());});
+test('S02 cliente não fabrica aprovação nem consome recibo sozinho',async()=>{
+ const db=as();await assertFails(setDoc(doc(db,'publicationApprovals','fake'),{uid:voter,used:false,post:{},expiresAt:Timestamp.fromMillis(Date.now()+60000)}));
+ await receipt();await assertFails(updateDoc(doc(db,'publicationApprovals','s02-post'),{used:true,usedAt:serverTimestamp()}));
+});
+test('S02 recibo válido publica e consome em um lote; replay em outro ID é negado',async()=>{const data=await receipt();await assertSucceeds(receiptBatch(data));assert.equal((await getDoc(doc(as(),'publicationApprovals','s02-post'))).data().used,true);await env.withSecurityRulesDisabled(ctx=>deleteDoc(doc(ctx.firestore(),'limites',voter)));await assertFails(receiptBatch(data,'replay','s02-post'));});
+for(const patch of [{expiresAt:Timestamp.fromMillis(0)},{uid:author},{used:true}])test(`S02 rejeita recibo ${Object.keys(patch)[0]}`,async()=>{const data=await receipt('s02-post',patch);await assertFails(receiptBatch(data));});
+for(const change of [{description:'conteúdo alterado'},{mediaUrl:'https://evil.test/replaced'},{authorVerified:true}])test(`S02 conteúdo autorizado não pode mudar ${Object.keys(change)[0]}`,async()=>{const data=await receipt();await assertFails(receiptBatch({...data,...change}));});
+test('S02 expiração de selo é conferida na publicação nova',async()=>{
+ await env.withSecurityRulesDisabled(ctx=>updateDoc(doc(ctx.firestore(),'users',voter),{verification:{status:'active',expiresAt:Timestamp.fromMillis(1)}}));
+ const data=await receipt();await assertSucceeds(receiptBatch(data));
+});
+test('S02 recibo não pode ser lido por outra conta ou listado',async()=>{await receipt();await assertSucceeds(getDoc(doc(as(),'publicationApprovals','s02-post')));await assertFails(getDoc(doc(as(author),'publicationApprovals','s02-post')));});
+
+// Exercise the production REST write shape against the actual local Emulator,
+// including preconditions and an empty update mask plus timestamp transform.
+import {publicationStore} from '../../something-gamer-api/src/publication.js';
+test('S02 publicação administrativa REST cria post/recibo/auditoria atomicamente e preserva outros limites',async()=>{
+ const key=await crypto.subtle.generateKey({name:'RSASSA-PKCS1-v1_5',modulusLength:2048,publicExponent:new Uint8Array([1,0,1]),hash:'SHA-256'},true,['sign','verify']);
+ const privateKey=Buffer.from(await crypto.subtle.exportKey('pkcs8',key.privateKey)).toString('base64');
+ const config={FIREBASE_PROJECT_ID:'demo-sg',FIRESTORE_SERVICE_ACCOUNT:JSON.stringify({project_id:'demo-sg',client_email:'emulator-only@example.test',private_key:privateKey})};
+ await env.withSecurityRulesDisabled(ctx=>setDoc(doc(ctx.firestore(),'limites',voter),{mensagem:Timestamp.fromMillis(1234)}));
+ const original=globalThis.fetch;
+ globalThis.fetch=async(input,init={})=>{
+  const url=new URL(input);
+  if(url.origin==='https://oauth2.googleapis.com')return Response.json({access_token:'local-emulator-owner'});
+  if(url.origin==='https://firestore.googleapis.com'){url.protocol='http:';url.host='127.0.0.1:8085';return original(url,{...init,headers:{...init.headers,Authorization:'Bearer owner'}});}
+  if(url.hostname==='127.0.0.1'&&url.port==='8085')return original(input,init);
+  throw Error('External request forbidden in emulator tests');
+ };
+ try{const data=post({type:'text',pollOptions:[]});delete data.createdAt;await publicationStore(config).publish('admin-rest',voter,data,{uid:'test-admin'},'Revisão isolada do teste real de regras.');}finally{globalThis.fetch=original;}
+ const [created,approval,limits]=await Promise.all([getDoc(doc(as(),'posts','admin-rest')),getDoc(doc(as(),'publicationApprovals','admin-rest')),getDoc(doc(as(),'limites',voter))]);
+ assert.equal(created.data().uid,voter);assert.ok(created.data().createdAt instanceof Timestamp);assert.equal(approval.data().used,true);assert.equal(limits.data().mensagem.toMillis(),1234);assert.ok(limits.data().post instanceof Timestamp);
 });

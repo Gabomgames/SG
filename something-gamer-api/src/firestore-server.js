@@ -1,16 +1,18 @@
 // Conta de serviço somente em secret do Worker, nunca no frontend ou wrangler.jsonc.
 import founderPolicy from '../../functions/founders-domain.js';
 import {getDocument} from './firestore-store.js';
-let cached = { token: '', expires: 0, email: '' };
+const cachedTokens=new Map();
 const base64url = text => btoa(text).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-export async function serverToken(env) {
+export async function serverToken(env,scope='https://www.googleapis.com/auth/datastore') {
   if (!env.FIRESTORE_SERVICE_ACCOUNT) throw new Error('FIRESTORE_NOT_CONFIGURED');
   const account = JSON.parse(env.FIRESTORE_SERVICE_ACCOUNT);
   if (account.project_id !== env.FIREBASE_PROJECT_ID) throw new Error('FIRESTORE_NOT_CONFIGURED');
-  if (cached.email === account.client_email && cached.expires > Date.now()) return cached.token;
+  if(!['https://www.googleapis.com/auth/datastore','https://www.googleapis.com/auth/devstorage.read_only'].includes(scope))throw new Error('FIRESTORE_NOT_CONFIGURED');
+  const cacheKey=account.client_email+':'+scope,cached=cachedTokens.get(cacheKey);
+  if (cached?.expires > Date.now()) return cached.token;
   const now = Math.floor(Date.now() / 1000);
   const input = `${base64url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }))}.${base64url(JSON.stringify({
-    iss: account.client_email, scope: 'https://www.googleapis.com/auth/datastore',
+    iss: account.client_email, scope,
     aud: 'https://oauth2.googleapis.com/token', iat: now, exp: now + 3600
   }))}`;
   const pem = account.private_key.replace(/-----[^-]+-----/g, '').replace(/\s/g, '');
@@ -21,8 +23,9 @@ export async function serverToken(env) {
     body: new URLSearchParams({ grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer', assertion }) });
   const data = await response.json();
   if (!response.ok || !data.access_token) throw new Error('FIRESTORE_FAILED');
-  cached = { token: data.access_token, expires: Date.now() + 3000000, email: account.client_email };
-  return cached.token;
+  if(cachedTokens.size>8)cachedTokens.clear();
+  cachedTokens.set(cacheKey,{token:data.access_token,expires:Date.now()+3000000});
+  return data.access_token;
 }
 export function field(value) {
   if (value === null) return { nullValue: null };

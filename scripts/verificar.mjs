@@ -365,7 +365,7 @@ for (const arquivo of ["firestore.rules", "storage.rules"]) {
         const codigo = fs.readFileSync(path.join(raiz, arquivo), "utf8");
         if (!/from ["']\.\/badges\.js["']/.test(codigo)) falhas.push(`${arquivo}: ainda não usa badges.js`);
     }
-    if (!/snapshotDeAutorOk\(request\.resource\.data\)/.test(regras)) {
+    if (!/snapshotDeAutorOk\(request\.resource\.data, true\)/.test(regras)) {
         falhas.push("firestore.rules: publicação ainda pode falsificar snapshot de selo/autor");
     }
 }

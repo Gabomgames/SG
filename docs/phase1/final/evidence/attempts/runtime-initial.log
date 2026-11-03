@@ -1,0 +1,630 @@
+
+> test:runtime
+> node --test --experimental-test-isolation=none tests/runtime.test.js tests/publication-runtime.test.mjs
+
+✖ S02 R2: AI indisponível mantém bytes privados; só autor/admin veem prévia (22.613322ms)
+✖ S02 R2: aprovação isolada não torna órfão público; referência canônica libera e remoção revoga (1.796304ms)
+✖ S02 R2: MIME falso e classificação recusada não deixam bytes órfãos (0.206225ms)
+✖ S02 R2: integridade de bytes é conferida após a aprovação (0.172075ms)
+✖ S02 perfil mantém revisão anterior; somente foto efetivada é pública (0.258208ms)
+✖ S02 evidência de denúncia nunca é pública e é retida com seu relato (0.178335ms)
+✖ S02 limpeza remove só órfão novo; publicação e estado remoto incerto preservam bytes (0.400946ms)
+✖ S02 D1: backend emite recibo canônico; não publica nem aceita identidade do cliente (0.263541ms)
+✖ S02 D1: falha de AI não emite recibo (1.309968ms)
+✖ S02 D1: abuso não emite recibo (1.268784ms)
+✖ S02 D1: resposta vazia não emite recibo (0.132003ms)
+✖ S02 D1: mídia não revisada vai para fila; mídia alheia é recusada (0.12269ms)
+✖ S02 D1: autor/draft/id de mídia não podem mudar em retry (0.09177ms)
+✖ S02 D1: concorrência do mesmo ID concede autoridade a um único autor (1.982784ms)
+✖ S02 D1: conta suspensa após envio não passa por revisão administrativa (0.147373ms)
+✖ S02 D1: vídeo preserva análise/admin; duas decisões concorrentes não publicam duas vezes (0.563091ms)
+✖ S02 D1: rejeição exige justificativa e deixa auditoria; autor não ressuscita aprovação (0.067912ms)
+✖ S02 D1: publicações concluídas saem da fila do autor e não retornam receipt novo (0.30433ms)
+✖ S02 REST: revisão usa precondições de perfil/post/rate e timestamps de servidor, sem apagar outros limites (0.078522ms)
+✖ S03 gateway: autorização atual, AppCheck e token do participante precedem GCS; token legado nunca é enviado (0.057669ms)
+✖ S03 gateway: bloqueio/terceiro impede leitura antes de consultar bytes; bucket/owner forjado também (0.795866ms)
+✖ S03 gateway admin preserva evidência privada e não permite SSRF (0.074826ms)
+✖ S02 legado KV: adoção explícita preserva bytes/URL e exige vínculo da autoria real (0.051585ms)
+✖ D1 real: publicação, preço do servidor, comissão e reserva idempotente (0.049694ms)
+✖ D1 real: estranho não cancela, comprador cancela e libera estoque (0.224455ms)
+✖ D1 real: proposta, contraproposta, aceite e preço combinado no pedido (0.108877ms)
+✖ R2 real: mídia privada só entregue após autorização; bloqueio revoga novas leituras (0.064365ms)
+✖ D1 real: anúncio só ativa após revisão; impressão e clique deduplicados (1.253553ms)
+✖ D1 real: orçamento de ADS nunca ultrapassa o saldo (0.073475ms)
+✖ D1 real: autorização recorrente não concede benefício; só pagamento confirmado vigente (0.052179ms)
+✖ D1 real + provedor isolado: webhook assinado, repetição e estorno não restauram estoque/benefício (0.052751ms)
+✖ D1 real + provedor isolado: cobrança recorrente confirmada, estorno e replay (0.050429ms)
+✖ Stories: revisão, autoria, expiração, métricas deduplicadas e comentário moderado (0.049713ms)
+✖ ADS consentimento é revogável e segmentação exclui usuários não consentidos (0.048998ms)
+✖ mídia social nova não abre anexos privados e exige revisão para leitura pública (1.312043ms)
+✖ conversão ADS só conta produto comprado e pagamento; estorno retira a conversão (1.102992ms)
+✖ devolução exige comprador, entrega confirmada e transições corretas (0.154242ms)
+✖ disputa não pode ser marcada como reembolsada sem refund confirmado (0.071915ms)
+✖ Now ADS hierárquico: ownership, campanha idempotente e limites atômicos diário/conjunto (0.102586ms)
+✖ Now ADS: público semelhante recusa origem insuficiente e leads não aceitam entrega de outro usuário (0.06161ms)
+✖ Market: anúncio profissional não abre fotos antes da revisão e preserva localização aproximada (0.047587ms)
+✖ Now Call SFU: grant de espectador não publica, sala limita 25 e revogação respeita servidor (0.051498ms)
+✖ Now ADS leads: contato exige clique e consentimento; exportação só do anunciante (0.098999ms)
+✖ /workspace/SG/tests/publication-runtime.test.mjs (4.057015ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 0
+ℹ fail 43
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1361.524622
+
+✖ failing tests:
+
+test at tests/publication-runtime.test.mjs:53:1
+✖ S02 R2: AI indisponível mantém bytes privados; só autor/admin veem prévia (22.613322ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:59:1
+✖ S02 R2: aprovação isolada não torna órfão público; referência canônica libera e remoção revoga (1.796304ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:65:1
+✖ S02 R2: MIME falso e classificação recusada não deixam bytes órfãos (0.206225ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:69:1
+✖ S02 R2: integridade de bytes é conferida após a aprovação (0.172075ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:73:1
+✖ S02 perfil mantém revisão anterior; somente foto efetivada é pública (0.258208ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:77:1
+✖ S02 evidência de denúncia nunca é pública e é retida com seu relato (0.178335ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:81:1
+✖ S02 limpeza remove só órfão novo; publicação e estado remoto incerto preservam bytes (0.400946ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:88:1
+✖ S02 D1: backend emite recibo canônico; não publica nem aceita identidade do cliente (0.263541ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:92:204
+✖ S02 D1: falha de AI não emite recibo (1.309968ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:92:204
+✖ S02 D1: abuso não emite recibo (1.268784ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:92:204
+✖ S02 D1: resposta vazia não emite recibo (0.132003ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:93:1
+✖ S02 D1: mídia não revisada vai para fila; mídia alheia é recusada (0.12269ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:98:1
+✖ S02 D1: autor/draft/id de mídia não podem mudar em retry (0.09177ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:103:1
+✖ S02 D1: concorrência do mesmo ID concede autoridade a um único autor (1.982784ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:107:1
+✖ S02 D1: conta suspensa após envio não passa por revisão administrativa (0.147373ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:112:1
+✖ S02 D1: vídeo preserva análise/admin; duas decisões concorrentes não publicam duas vezes (0.563091ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:117:1
+✖ S02 D1: rejeição exige justificativa e deixa auditoria; autor não ressuscita aprovação (0.067912ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:121:1
+✖ S02 D1: publicações concluídas saem da fila do autor e não retornam receipt novo (0.30433ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:124:1
+✖ S02 REST: revisão usa precondições de perfil/post/rate e timestamps de servidor, sem apagar outros limites (0.078522ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:132:1
+✖ S03 gateway: autorização atual, AppCheck e token do participante precedem GCS; token legado nunca é enviado (0.057669ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:141:1
+✖ S03 gateway: bloqueio/terceiro impede leitura antes de consultar bytes; bucket/owner forjado também (0.795866ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:147:1
+✖ S03 gateway admin preserva evidência privada e não permite SSRF (0.074826ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:152:1
+✖ S02 legado KV: adoção explícita preserva bytes/URL e exige vínculo da autoria real (0.051585ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:24:1
+✖ D1 real: publicação, preço do servidor, comissão e reserva idempotente (0.049694ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:33:1
+✖ D1 real: estranho não cancela, comprador cancela e libera estoque (0.224455ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:39:1
+✖ D1 real: proposta, contraproposta, aceite e preço combinado no pedido (0.108877ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:48:1
+✖ R2 real: mídia privada só entregue após autorização; bloqueio revoga novas leituras (0.064365ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:61:1
+✖ D1 real: anúncio só ativa após revisão; impressão e clique deduplicados (1.253553ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:78:1
+✖ D1 real: orçamento de ADS nunca ultrapassa o saldo (0.073475ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:87:1
+✖ D1 real: autorização recorrente não concede benefício; só pagamento confirmado vigente (0.052179ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:95:1
+✖ D1 real + provedor isolado: webhook assinado, repetição e estorno não restauram estoque/benefício (0.052751ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:103:1
+✖ D1 real + provedor isolado: cobrança recorrente confirmada, estorno e replay (0.050429ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:110:1
+✖ Stories: revisão, autoria, expiração, métricas deduplicadas e comentário moderado (0.049713ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:123:1
+✖ ADS consentimento é revogável e segmentação exclui usuários não consentidos (0.048998ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:133:1
+✖ mídia social nova não abre anexos privados e exige revisão para leitura pública (1.312043ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:140:1
+✖ conversão ADS só conta produto comprado e pagamento; estorno retira a conversão (1.102992ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:147:1
+✖ devolução exige comprador, entrega confirmada e transições corretas (0.154242ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:153:1
+✖ disputa não pode ser marcada como reembolsada sem refund confirmado (0.071915ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:157:1
+✖ Now ADS hierárquico: ownership, campanha idempotente e limites atômicos diário/conjunto (0.102586ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:165:1
+✖ Now ADS: público semelhante recusa origem insuficiente e leads não aceitam entrega de outro usuário (0.06161ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:168:1
+✖ Market: anúncio profissional não abre fotos antes da revisão e preserva localização aproximada (0.047587ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:174:1
+✖ Now Call SFU: grant de espectador não publica, sala limita 25 e revogação respeita servidor (0.051498ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/runtime.test.js:179:1
+✖ Now ADS leads: contato exige clique e consentimento; exportação só do anunciante (0.098999ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }
+
+test at tests/publication-runtime.test.mjs:48:50
+✖ /workspace/SG/tests/publication-runtime.test.mjs (4.057015ms)
+  Error: listen EPERM: operation not permitted 127.0.0.1
+      at Server.setupListenHandle [as _listen2] (node:net:2145:21)
+      at listenInCluster (node:net:2224:12)
+      at node:net:2448:7
+      at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+    code: 'EPERM',
+    errno: -1,
+    syscall: 'listen',
+    address: '127.0.0.1'
+  }

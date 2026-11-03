@@ -1,15 +1,16 @@
 import test,{before,after,beforeEach} from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import {ref as storageRef,uploadBytes,getBytes,getDownloadURL} from 'firebase/storage';
 import {initializeTestEnvironment,assertSucceeds,assertFails} from '@firebase/rules-unit-testing';
 import {doc,getDoc,setDoc,updateDoc,serverTimestamp,Timestamp,collection,getDocs,query,where,orderBy,limit} from 'firebase/firestore';
-if(process.env.FIRESTORE_EMULATOR_HOST !== '127.0.0.1:8085') throw new Error('Testes Firestore exigem o emulador local 127.0.0.1:8085; produção não é permitida.');
+if(process.env.FIRESTORE_EMULATOR_HOST !== '127.0.0.1:8085'||process.env.FIREBASE_STORAGE_EMULATOR_HOST!=='127.0.0.1:9199'||process.env.GCLOUD_PROJECT!=='demo-sg') throw new Error('Testes Firestore exigem o emulador local 127.0.0.1:8085; produção não é permitida.');
 let env;
 const legal={termsAccepted:true,termsVersion:'2026-09-16',privacyVersion:'2026-09-16',communityRulesVersion:'2026-09-16',acceptedAt:Timestamp.now()};
 const listing={sellerUid:'alice',sellerName:'Alice',title:'Console real',price:100,category:'Consoles',condition:'Usado',description:'Produto físico',location:'Região',imageUrl:'',lat:null,lng:null,locationRadius:10,locationPrecision:'approximate',locationCity:'',status:'active',featured:false,createdAt:serverTimestamp(),updatedAt:serverTimestamp()};
 const message=()=>({uid:'alice',authorName:'Alice',authorUsername:'alice',authorPhoto:'',authorVerified:false,authorAccountType:'gamer',authorBadgeTheme:'blue',authorBadges:{},type:'text',text:'Olá Bob',mediaUrl:'',clientCreatedAt:Date.now(),createdAt:serverTimestamp(),clientId:'m1'});
 const as=uid=>env.authenticatedContext(uid).firestore();
-before(async()=>{env=await initializeTestEnvironment({projectId:'demo-sg',firestore:{host:'127.0.0.1',port:8085,rules:fs.readFileSync('firestore.rules','utf8')}})});
+before(async()=>{env=await initializeTestEnvironment({projectId:'demo-sg',firestore:{host:'127.0.0.1',port:8085,rules:fs.readFileSync('firestore.rules','utf8')},storage:{host:'127.0.0.1',port:9199,rules:fs.readFileSync('storage.rules','utf8')}})});
 after(async()=>{await env?.cleanup()});
 beforeEach(async()=>{await env.clearFirestore();await env.withSecurityRulesDisabled(async ctx=>{const db=ctx.firestore();await Promise.all(['alice','bob','eve'].map(uid=>setDoc(doc(db,'users',uid),{uid,name:uid==='alice'?'Alice':uid,username:uid,photoURL:'',legal,moderation:{status:'active'}})));await setDoc(doc(db,'friendships','alice_bob'),{members:['alice','bob'],gamerStatus:'accepted'});await setDoc(doc(db,'conversations','alice_bob'),{members:['alice','bob'],updatedAt:Timestamp.now()});await setDoc(doc(db,'servers','private'),{ownerUid:'alice',name:'Privado',members:['alice'],visibility:'private',createdAt:Timestamp.now()});await setDoc(doc(db,'servers','public'),{ownerUid:'alice',name:'Público',members:['alice'],visibility:'public',createdAt:Timestamp.now()})})});
 test('participante lê conversa; terceiro e anônimo não',async()=>{await assertSucceeds(getDoc(doc(as('alice'),'conversations','alice_bob')));await assertFails(getDoc(doc(as('eve'),'conversations','alice_bob')));await assertFails(getDoc(doc(env.unauthenticatedContext().firestore(),'conversations','alice_bob')))});
@@ -80,4 +81,30 @@ test('espectador acompanha canal mas não envia mensagens ou altera enquetes',as
 test('Now Bot protege respostas do quiz e pontuação não pode ser alterada pelo cliente',async()=>{
  await env.withSecurityRulesDisabled(async ctx=>{const db=ctx.firestore();await updateDoc(doc(db,'servers','private'),{members:['alice','bob']});await setDoc(doc(db,'servers','private','channels','games'),{name:'jogos',kind:'text',audience:'all'});await setDoc(doc(db,'servers','private','channels','games','botGames','bob'),{answer:'GPU',completed:false});await setDoc(doc(db,'servers','private','channels','games','scores','bob'),{uid:'bob',points:1});});
  await assertFails(getDoc(doc(as('bob'),'servers','private','channels','games','botGames','bob')));await assertSucceeds(getDoc(doc(as('alice'),'servers','private','channels','games','scores','bob')));await assertFails(updateDoc(doc(as('bob'),'servers','private','channels','games','scores','bob'),{points:1000}));
+});
+
+// Real Storage Emulator only: prove why deploying deny rules does not revoke
+// previously issued bearer URLs. No production requests or object deletion.
+const png=new Uint8Array([137,80,78,71,13,10,26,10,0]);
+test('S03 Storage: cliente não cria objetos públicos nem privados por fallback',async()=>{
+ for(const name of ['posts/alice/new.png','profiles/alice/new.png','chat/alice/alice_bob/new.png','reports/alice/r1/new.png','profile-review/alice/new.png'])await assertFails(uploadBytes(storageRef(env.authenticatedContext('alice').storage('gs://demo-sg.appspot.com'),name),png,{contentType:'image/png'}));
+});
+test('S03 Storage: leitura pública legada autorizada é preservada; privada direta é negada',async()=>{
+ await env.withSecurityRulesDisabled(async ctx=>{for(const name of ['posts/alice/legacy.png','chat/alice/alice_bob/legacy.png'])await uploadBytes(storageRef(ctx.storage('gs://demo-sg.appspot.com'),name),png,{contentType:'image/png'});});
+ await assertSucceeds(getBytes(storageRef(env.authenticatedContext('alice').storage('gs://demo-sg.appspot.com'),'posts/alice/legacy.png')));
+ await assertFails(getBytes(storageRef(env.unauthenticatedContext().storage('gs://demo-sg.appspot.com'),'posts/alice/legacy.png')));
+ await assertFails(getBytes(storageRef(env.authenticatedContext('alice').storage('gs://demo-sg.appspot.com'),'chat/alice/alice_bob/legacy.png')));
+});
+test('S03 Storage: token antigo atravessa regras; rotação local revoga URL e preserva bytes',async()=>{
+ let url;
+ await env.withSecurityRulesDisabled(async ctx=>{const file=storageRef(ctx.storage('gs://demo-sg.appspot.com'),'chat/alice/alice_bob/token-fixture.png');await uploadBytes(file,png,{contentType:'image/png'});url=await getDownloadURL(file);});
+ const target=new URL(url);assert.equal(target.hostname,'127.0.0.1');assert.equal(target.port,'9199');
+ const before=await fetch(url);assert.equal(before.status,200);assert.deepEqual(new Uint8Array(await before.arrayBuffer()),png);
+ const oldToken=target.searchParams.get('token');assert.ok(oldToken);target.search='';target.searchParams.set('delete_token',oldToken);
+ const revoked=await fetch(target,{method:'POST',headers:{Authorization:'Bearer owner'}});assert.equal(revoked.status,200);
+ assert.equal((await fetch(url)).status,403);
+ const bytes=await fetch('http://127.0.0.1:9199/storage/v1/b/demo-sg.appspot.com/o/'+encodeURIComponent('chat/alice/alice_bob/token-fixture.png')+'?alt=media',{headers:{Authorization:'Bearer owner'}});
+ assert.equal(bytes.status,200);assert.deepEqual(new Uint8Array(await bytes.arrayBuffer()),png);
+ // Emulator token API is used here. Real GCS metadata PATCH/preconditions and
+ // IAM still require a separately authorized staging check (not simulated).
 });

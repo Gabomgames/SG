@@ -1,9 +1,11 @@
+import {publishPost,installPendingPosts} from "./post-publication.js";
+import {assertPublicText} from "./safety.js";
 /** Compositor do feed V69: usa as mesmas coleções, moderação e limites do perfil. */
 import { auth, db } from './firebase.js';
 import { collection, doc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js';
 import { APP_CONFIG } from './config.js';
 import { escreverComLimite, mensagemDeLimite } from './limites.js';
-import { assertModeratedPublicText, assertModeratedImageUrl } from './moderation.js';
+
 import { prepareImage, uploadMedia } from './media-upload.js';
 import {validatePollOptions} from './poll-domain.js';
 const $ = id => document.getElementById(id);
@@ -41,18 +43,20 @@ form.addEventListener('submit',async e=>{
   button.disabled=true;button.textContent='Preparando publicação…';
   try {
     const [title,content]=await Promise.all([
-      rawTitle?assertModeratedPublicText(rawTitle,{field:'O título',min:2,max:90}):Promise.resolve(''),
-      description?assertModeratedPublicText(description,{field:'A publicação',min:2,max:2000}):Promise.resolve('')
+      rawTitle?assertPublicText(rawTitle,{field:'O título',min:2,max:90}):Promise.resolve(''),
+      description?assertPublicText(description,{field:'A publicação',min:2,max:2000}):Promise.resolve('')
     ]);
     let uploaded={url:'',mediaId:'',file};
-    if(file){button.textContent='Enviando mídia…';const ready=kind==='image'?await prepareImage(file):file;uploaded={...await uploadMedia(ready,{scope:'public',maxBytes:APP_CONFIG.maxPostFileSize,label:kind==='image'?'imagem':'vídeo'}),file:ready};if(uploaded.url&&ready.type.startsWith('image/'))await assertModeratedImageUrl(uploaded.url);}
+    if(file){button.textContent='Enviando mídia…';const ready=kind==='image'?await prepareImage(file):file;uploaded={...await uploadMedia(ready,{scope:'public',maxBytes:APP_CONFIG.maxPostFileSize,label:kind==='image'?'imagem':'vídeo'}),file:ready};}
     button.textContent='Publicando…';
     if(auth.currentUser?.uid!==user.uid)throw new Error('A sessão expirou. Entre novamente.');
     // Perfil deve vir do documento autorizado, nunca de entrada arbitrária.
     const {getDoc}=await import('https://www.gstatic.com/firebasejs/12.1.0/firebase-firestore.js');
     const userDoc=await getDoc(doc(db,'users',user.uid));const profile=userDoc.data()||{};
-    await escreverComLimite(user.uid,'post',doc(collection(db,'posts')),{uid:user.uid,authorName:profile.name||profile.username||'Gamer',authorUsername:profile.username||'',authorPhoto:profile.photoURL||'',type:kind,title:title||(kind==='text'?'':`Publicação de ${profile.name||profile.username||'Gamer'}`),description:content,tags:$('sg69Tags').value.split(/[ ,]+/).map(x=>x.replace(/^#/,'').trim()).filter(Boolean).slice(0,10),pollOptions:kind==='poll'?polls:[],mediaUrl:uploaded.url||'',mediaType:uploaded.file?.type||'',mediaId:uploaded.mediaId||'',authorVerified:profile.verification?.status==='active',authorAccountType:profile.accountType||'gamer',authorBadgeTheme:profile.verificationBadgeTheme||'blue',authorBadges:profile.badges||{},createdAt:serverTimestamp()});
-    dialog.close();form.reset();notify('Publicação criada com sucesso.','success');
+    const publication=await publishPost(user.uid,doc(collection(db,'posts')),{uid:user.uid,authorName:profile.name||profile.username||'Gamer',authorUsername:profile.username||'',authorPhoto:profile.photoURL||'',type:kind,title:title||(kind==='text'?'':`Publicação de ${profile.name||profile.username||'Gamer'}`),description:content,tags:$('sg69Tags').value.split(/[ ,]+/).map(x=>x.replace(/^#/,'').trim()).filter(Boolean).slice(0,10),pollOptions:kind==='poll'?polls:[],mediaUrl:uploaded.url||'',mediaType:uploaded.file?.type||'',mediaId:uploaded.mediaId||'',authorVerified:profile.verification?.status==='active',authorAccountType:profile.accountType||'gamer',authorBadgeTheme:profile.verificationBadgeTheme||'blue',authorBadges:profile.badges||{},createdAt:serverTimestamp()});
+    dialog.close();form.reset();notify(publication.published?'Publicação criada com sucesso.':'Publicação enviada para análise. Ainda não está no feed.','success');
   }catch(e){console.error(e);error(mensagemDeLimite(e,'uma publicação')||e.message||'Não foi possível publicar.');}
   finally{button.disabled=false;button.textContent='Publicar no feed →';}
 });
+
+installPendingPosts();

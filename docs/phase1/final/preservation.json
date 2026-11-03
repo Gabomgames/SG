@@ -1,0 +1,76 @@
+{
+  "originalSourcePaths": 344,
+  "missingOriginalPaths": [],
+  "changedOriginalPaths": [
+    ".gitignore",
+    "dashboard.js",
+    "admin.html",
+    "storage.rules",
+    "ecosystem.js",
+    "reports.js",
+    "firestore.rules",
+    "admin.js",
+    "package.json",
+    "media-upload.js",
+    "events.js",
+    "moderation.js",
+    "chat.js",
+    "firebase.js",
+    "feed.js",
+    "config.js",
+    "verification.js",
+    "playwright.config.js",
+    "edit-profile.js",
+    "feed-composer.js",
+    "call-now.html",
+    "firebase.test.json",
+    "package-lock.json",
+    "dashboard.html",
+    "scripts/verificar.mjs",
+    "scripts/build.mjs",
+    "tests/worker.test.js",
+    "tests/firestore.test.js",
+    "tests/v69-regression.test.mjs",
+    "tests/v67-regressions.test.mjs",
+    "something-gamer-api/wrangler.jsonc",
+    "functions/index.js",
+    "functions/package-lock.json",
+    "something-gamer-api/src/firestore-server.js",
+    "something-gamer-api/src/index.js",
+    "something-gamer-api/src/admin.js",
+    "something-gamer-api/src/private-media.js",
+    "something-gamer-api/src/media-store.js",
+    "something-gamer-api/src/firestore-store.js",
+    "something-gamer-api/src/security.js",
+    "tests/browser/visual.spec.js",
+    ".github/workflows/deploy.yml",
+    ".github/workflows/verificar.yml"
+  ],
+  "changedPathCount": 43,
+  "meaning": "Source preservation and byte comparison; not proof of feature equivalence or executed Chromium tests.",
+  "preservedCommits": {
+    "9445442": "9445442223cec3ce2112e889969f8239dbf4eab3",
+    "a797418": "a7974184c3bbe0c796f26f152c8dd3db1ec7d803"
+  },
+  "priorArtifactsPreserved": true,
+  "priorArtifacts": [
+    {
+      "path": "/workspace/SOMETHING-GAMER-BETA-0.1-ATUALIZADO.zip",
+      "sha256": "979eee693ff850cb50a36097df98353d81e7613e8de0ba055d066d10db30a5aa"
+    },
+    {
+      "path": "/workspace/SOMETHING-GAMER-FASE1-S01-ATUALIZADO.zip",
+      "sha256": "3002c8af0b293f607477f1df7ca3ebf4069299e8424c4fd5b99b5e6ca4325ea1"
+    },
+    {
+      "path": "/workspace/SG-Beta-0.1-release/backup/repository.bundle",
+      "sha256": "cd1127b59f9d2d54c3be285b108129654b9ffca9615c614360da4b99788e3ea0"
+    },
+    {
+      "path": "/workspace/SG-Fase1-S01-release/backup/repository-s01.bundle",
+      "sha256": "730105ea077163e785f2bdf26b8586f427f04983255d8ef95b46c4230bb5c5d0"
+    }
+  ],
+  "productionFlagsChanged": false,
+  "allInheritedFeaturesBrowserVerified": false
+}
