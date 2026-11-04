@@ -14,3 +14,5 @@ A continuação S01 está em docs/phase1/s01. Não encerrar a Fase 1 com regras/
 Downloads do projeto exclusivamente pelo GitHub, com upload confirmado antes de fornecer link. Não substituir por links de download local nem inventar URL. Esta entrega não autoriza push, upload, deploy, merge ou ativação de lançamento; preservar o pacote preparado enquanto o envio estiver impedido.
 
 A reta final S02/S03 está em docs/phase1/final/RELATORIO.md. Preservar a797418 e todos os ancestrais. A primeira suíte usa também Storage Emulator em 127.0.0.1:9199, sempre demo-sg. Não encerrar S03 sem inventário/revogação verificáveis de tokens privados legados, nem S02/S01 sem a integração real. O plano offline de tokens não é autorização de migração em produção.
+
+A validação após recuperação de 6052659 está em docs/phase1/validation-6052659. Preservar 6052659 como ancestral. O plano S03 agora exige generation e metageneration, registra inventário desconhecido/incompleto e não implementa executor remoto. Nunca converter exemplos sintéticos em prova de inventário/revogação real.

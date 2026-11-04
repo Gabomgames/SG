@@ -1,3 +1,13 @@
+# Validação final após recuperação de 6052659
+
+Esta revisão mantém 6052659 como ancestral e acrescenta correções S03 e evidências reais de nova execução. A Fase 1 continua aberta enquanto Firestore/Storage, Chromium e a revogação S03 não forem comprovados.
+
+- [Relatório desta validação](docs/phase1/validation-6052659/RELATORIO.md)
+- [Executar no Windows/VS Code](docs/phase1/validation-6052659/EXECUTAR-VALIDACAO.md)
+- [Inventário e plano S03, sem acesso a produção](docs/phase1/validation-6052659/S03-INVENTARIO-E-PLANO.md)
+
+Os relatórios anteriores abaixo são históricos. Preços e Fundadores preservados; nenhuma campanha ativada ou dado de produção alterado.
+
 # Something Gamer — reta final da Fase 1
 
 S02/S03 receberam implementação e 282 testes locais distintos passaram. **Fase 1 ainda não aprovada:** três suítes Firebase e 26 casos Chromium bloqueados, e tokens privados legados sem revogação comprovada. Sem push, merge, deploy, cobrança, alteração de produção ou Fase 2.

@@ -1,0 +1,29 @@
+{
+  "baseCommit": "605265933686b64bbbfd5334a166c2231d9c5c9d",
+  "baselineRecordedTreeClean": true,
+  "baselineInputHashesMatchGitCommit": true,
+  "currentInputHashesMatchFinalRun": true,
+  "originalSourcePathsPresent": 344,
+  "trackedFilesRemoved": [],
+  "businessInvariantFilesUnchanged": [
+    "config.js",
+    "functions/index.js",
+    "functions/founders.js",
+    "functions/founders-domain.js",
+    "something-gamer-api/src/payment-domain.js",
+    "verification.html"
+  ],
+  "prior6052659ArtifactsPreserved": [
+    {
+      "name": "SOMETHING-GAMER-FASE1-FINAL-ATUALIZADO.zip",
+      "sha256": "450db13e484831c737bd54b2a9f8679505bd148c89a60c6323dfee9de7c67eb6"
+    },
+    {
+      "name": "repository-phase1-final.bundle",
+      "sha256": "40a52f50d045a286bcb05204fa671f46f634aaa1bf63ea0f5eb9e464a9d36003"
+    }
+  ],
+  "actualProductionInventoryCount": null,
+  "productionRevocationsPerformed": 0,
+  "pushPerformedAtEvidenceCapture": false
+}

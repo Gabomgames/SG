@@ -32,7 +32,7 @@ function main(){
  const base=path.join(root,'artifacts');fs.mkdirSync(base,{recursive:true});const output=fs.mkdtempSync(path.join(base,'phase1-'));
  const trackedInputs=['firestore.rules','storage.rules','firebase.test.json','package.json','package-lock.json','functions/package-lock.json',
   'something-gamer-api/src/publication.js','something-gamer-api/src/publication-media.js','something-gamer-api/src/legacy-media.js','something-gamer-api/src/legacy-public-media.js','something-gamer-api/src/index.js','moderation-client.js','legacy-media-policy.js','post-publication.js','post-publication-client.js','tests/security-s02-s03.test.mjs','tests/publication-runtime.test.mjs','poll-domain.js','feed.js','feed-composer.js','dashboard.js','events.js','playwright.config.js',
-  'scripts/test-rules.mjs','scripts/validate-phase1.mjs','scripts/check-browser.mjs','scripts/preview-server.mjs',
+  'private-media-client.js','media-upload.js','tests/private-media-client.test.mjs','scripts/legacy-token-plan.mjs','tests/legacy-token-plan.test.mjs','scripts/test-rules.mjs','scripts/validate-phase1.mjs','scripts/check-browser.mjs','scripts/preview-server.mjs',
   'tests/v69-audit/firestore-boundaries.test.mjs','tests/firestore.test.js','tests/founders-emulator.test.mjs','tests/browser/visual.spec.js'];
  const inputSha256=Object.fromEntries(trackedInputs.map(name=>[name,createHash('sha256').update(fs.readFileSync(path.join(root,name))).digest('hex')]));
  const commit=spawnSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'});

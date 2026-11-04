@@ -1,0 +1,55 @@
+
+> test:runtime
+> node --test --experimental-test-isolation=none tests/runtime.test.js tests/publication-runtime.test.mjs
+
+✔ S02 R2: AI indisponível mantém bytes privados; só autor/admin veem prévia (4392.063045ms)
+✔ S02 R2: aprovação isolada não torna órfão público; referência canônica libera e remoção revoga (140.985492ms)
+✔ S02 R2: MIME falso e classificação recusada não deixam bytes órfãos (143.485443ms)
+✔ S02 R2: integridade de bytes é conferida após a aprovação (89.740726ms)
+✔ S02 perfil mantém revisão anterior; somente foto efetivada é pública (109.589629ms)
+✔ S02 evidência de denúncia nunca é pública e é retida com seu relato (173.11013ms)
+✔ S02 limpeza remove só órfão novo; publicação e estado remoto incerto preservam bytes (289.289933ms)
+✔ S02 D1: backend emite recibo canônico; não publica nem aceita identidade do cliente (116.606609ms)
+✔ S02 D1: falha de AI não emite recibo (81.349574ms)
+✔ S02 D1: abuso não emite recibo (74.034601ms)
+✔ S02 D1: resposta vazia não emite recibo (80.833642ms)
+✔ S02 D1: mídia não revisada vai para fila; mídia alheia é recusada (198.324061ms)
+✔ S02 D1: autor/draft/id de mídia não podem mudar em retry (298.752095ms)
+✔ S02 D1: concorrência do mesmo ID concede autoridade a um único autor (123.066838ms)
+✔ S02 D1: conta suspensa após envio não passa por revisão administrativa (117.976083ms)
+✔ S02 D1: revisão de mídia preserva análise/admin; decisões concorrentes são exclusivas (205.909653ms)
+✔ S02 D1: rejeição exige justificativa e deixa auditoria; autor não ressuscita aprovação (139.849938ms)
+✔ S02 D1: publicações concluídas saem da fila do autor e não retornam receipt novo (133.932976ms)
+✔ S02 REST: revisão usa precondições de perfil/post/rate e timestamps de servidor, sem apagar outros limites (25.291813ms)
+✔ S03 gateway: autorização atual, AppCheck e token do participante precedem GCS; token legado nunca é enviado (24.410068ms)
+✔ S03 gateway: bloqueio/terceiro impede leitura antes de consultar bytes; bucket/owner forjado também (27.730803ms)
+✔ S03 gateway admin preserva evidência privada e não permite SSRF (23.230983ms)
+✔ S02 legado KV: adoção explícita preserva bytes/URL e exige vínculo da autoria real (65.937866ms)
+✔ D1 real: publicação, preço do servidor, comissão e reserva idempotente (478.037152ms)
+✔ D1 real: estranho não cancela, comprador cancela e libera estoque (134.628161ms)
+✔ D1 real: proposta, contraproposta, aceite e preço combinado no pedido (307.319079ms)
+✔ R2 real: mídia privada só entregue após autorização; bloqueio revoga novas leituras (160.440693ms)
+✔ D1 real: anúncio só ativa após revisão; impressão e clique deduplicados (481.802731ms)
+✔ D1 real: orçamento de ADS nunca ultrapassa o saldo (381.714773ms)
+✔ D1 real: autorização recorrente não concede benefício; só pagamento confirmado vigente (100.881966ms)
+✔ D1 real + provedor isolado: webhook assinado, repetição e estorno não restauram estoque/benefício (182.805827ms)
+✔ D1 real + provedor isolado: cobrança recorrente confirmada, estorno e replay (108.401645ms)
+✔ Stories: revisão, autoria, expiração, métricas deduplicadas e comentário moderado (518.140431ms)
+✔ ADS consentimento é revogável e segmentação exclui usuários não consentidos (459.501429ms)
+✔ mídia social nova não abre anexos privados e exige revisão para leitura pública (334.748149ms)
+✔ conversão ADS só conta produto comprado e pagamento; estorno retira a conversão (418.461429ms)
+✔ devolução exige comprador, entrega confirmada e transições corretas (627.419185ms)
+✔ disputa não pode ser marcada como reembolsada sem refund confirmado (91.34025ms)
+✔ Now ADS hierárquico: ownership, campanha idempotente e limites atômicos diário/conjunto (847.784089ms)
+✔ Now ADS: público semelhante recusa origem insuficiente e leads não aceitam entrega de outro usuário (60.116618ms)
+✔ Market: anúncio profissional não abre fotos antes da revisão e preserva localização aproximada (615.962514ms)
+✔ Now Call SFU: grant de espectador não publica, sala limita 25 e revogação respeita servidor (83.435611ms)
+✔ Now ADS leads: contato exige clique e consentimento; exportação só do anunciante (443.63943ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 43
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14558.524491

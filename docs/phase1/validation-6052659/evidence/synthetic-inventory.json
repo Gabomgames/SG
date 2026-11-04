@@ -1,0 +1,71 @@
+{
+  "schemaVersion": 1,
+  "mode": "offline-inventory-and-plan",
+  "scope": {
+    "projectId": "demo-sg",
+    "bucket": "demo-sg.appspot.com",
+    "capturedAt": "2026-11-03T00:00:00Z",
+    "sourceKind": "synthetic"
+  },
+  "listingCompleteDeclared": false,
+  "allVersionsDeclared": false,
+  "totals": {
+    "received": 4,
+    "privateObjects": 3,
+    "otherObjects": 1,
+    "tokenPresent": 2,
+    "tokenAbsent": 0,
+    "tokenUnknown": 1
+  },
+  "records": [
+    {
+      "bucket": "demo-sg.appspot.com",
+      "name": "chat/alice/alice_bob/example.png",
+      "kind": "chat",
+      "generation": "1001",
+      "metageneration": "1",
+      "tokenState": "present",
+      "publicAcl": "absent",
+      "publicCaching": false,
+      "versionReady": true
+    },
+    {
+      "bucket": "demo-sg.appspot.com",
+      "name": "reports/alice/report1/example.png",
+      "kind": "reports",
+      "generation": "1002",
+      "metageneration": "1",
+      "tokenState": "present",
+      "publicAcl": "absent",
+      "publicCaching": null,
+      "versionReady": true
+    },
+    {
+      "bucket": "demo-sg.appspot.com",
+      "name": "profile-review/alice/example.png",
+      "kind": "profile-review",
+      "generation": "1003",
+      "metageneration": "1",
+      "tokenState": "unknown",
+      "publicAcl": "unknown",
+      "publicCaching": null,
+      "versionReady": true
+    }
+  ],
+  "blockers": [
+    "LISTING_COMPLETENESS_NOT_CONFIRMED",
+    "OBJECT_VERSIONS_NOT_CONFIRMED",
+    "TOKEN_METADATA_UNKNOWN",
+    "TOKEN_REVOCATION_NOT_EXECUTED",
+    "OBJECT_ACL_NOT_REVIEWED",
+    "AUTHORITATIVE_INVENTORY_REVIEW_PENDING",
+    "BUCKET_IAM_REVIEW_PENDING",
+    "GATEWAY_AND_REVOCATION_VERIFICATION_PENDING"
+  ],
+  "phase1Approved": false,
+  "productionReadPerformed": false,
+  "productionWritePerformed": false,
+  "executionImplemented": false,
+  "requiresSeparateProductionAuthorization": true,
+  "sourceFileSha256": "790008390748beda6ca1866adc299a51ba4545292d14279456d3e3b64bcd60a5"
+}

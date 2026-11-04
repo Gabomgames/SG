@@ -1,0 +1,399 @@
+
+> check:fast
+> npm run verificar && npm test && npm run test:security && npm run test:contracts && npm run test:founders && npm run test:polls && npm run test:regressions && npm run test:sqlite
+
+
+> verificar
+> node scripts/verificar.mjs
+
+424 arquivos conferidos.
+Tudo certo.
+
+> test
+> node --test --experimental-test-isolation=none tests/unit.test.js tests/worker.test.js tests/market.test.js tests/features.test.js
+
+✔ cargos: moderador não promove usuário, não modera dono ou outro moderador (2.17715ms)
+✔ voz: seis vagas, sessão fixa, expiração e expulsão não são contornadas (0.887121ms)
+✔ Now ADS: sem consentimento não aplica geografia, idade, gênero ou interesses (0.264934ms)
+✔ Now ADS: remarketing e lista exigem correspondência real e consentida (0.153797ms)
+✔ Now ADS: distribuição usa desempenho observado e mantém exploração (0.522555ms)
+✔ Market: localização residencial é arredondada; ponto exato exige autorização (1.216835ms)
+✔ Now Call: SFU só habilita com banco, flag e configuração; espectador não publica (0.293068ms)
+✔ comissão de 10% exclui frete e não é somada ao total (0.390986ms)
+✔ centavos e quantidades inválidos são rejeitados (0.515702ms)
+✔ comprador não pode marcar pedido pago nem enviado (0.45174ms)
+✔ somente comprador confirma entrega e estados finais não regressam (0.311416ms)
+✔ pagamento exige valor, comissão, referência, ambiente e recebedor (0.294049ms)
+✔ novos anúncios exigem estoque e política de devolução (0.559805ms)
+✔ contexto de mídia impede path traversal e recurso público (0.411771ms)
+✔ mídia verifica acesso com token do usuário, sem conta de serviço (24.646176ms)
+✔ arquivo expirado não consulta objeto nem entrega conteúdo (2.916966ms)
+✔ OAuth é cifrado com vínculo à UID e adulteração falha (7.217658ms)
+✔ codec Firestore preserva listas e valores decimais (0.338809ms)
+✔ assinatura mensal conserva dia quando existe e ajusta fim do mês (0.822163ms)
+✔ planos e valores exatos em centavos (0.258907ms)
+✔ valor inválido -1 (0.097776ms)
+✔ valor inválido NaN (0.061988ms)
+✔ valor inválido 1.123 (0.041706ms)
+✔ valor inválido 1e3 (0.083809ms)
+✔ valor inválido  (0.041359ms)
+✔ valor inválido Infinity (0.038457ms)
+✔ valor inválido  14.90 (0.039349ms)
+✔ valor inválido 14,90 (0.03722ms)
+✔ HMAC fixture conhecida aceita e normaliza ID alfanumérico (4.958011ms)
+✔ fixture usa manifesto canônico exato (0.241463ms)
+✔ assinatura errada rejeitada (1.503808ms)
+✔ query adulterada rejeitada (2.166393ms)
+✔ ID apenas no corpo não autoriza estado financeiro (0.630971ms)
+✔ ausência de headers rejeitada (0.365007ms)
+✔ ausência de secret falha fechada (0.558834ms)
+✔ header malformado ts=abc,v1=111111 (0.137835ms)
+✔ header malformado ts=1727890000,v1 (0.063417ms)
+✔ header malformado ts=1727890000,ts (0.080081ms)
+✔ header malformado  (0.039041ms)
+✔ simulador numérico não é Order real (0.145953ms)
+✔ aprovação exige estado, detalhe e transações confirmadas (0.220174ms)
+✔ integridade do Order id (0.104551ms)
+✔ integridade do Order external_reference (0.050043ms)
+✔ integridade do Order total_amount (0.20945ms)
+✔ integridade do Order currency_id (0.059149ms)
+✔ integridade do Order collector_id (0.053233ms)
+✔ integridade do Order transactions (0.055396ms)
+✔ estorno vence pendência e aprovação posterior (0.10017ms)
+✔ checkout somente no provedor HTTPS (0.563209ms)
+✔ SSRF https://127.0.0.1/a (0.276801ms)
+✔ SSRF https://169.254.169.254/ (0.076321ms)
+✔ SSRF https://[::1]/ (0.066365ms)
+✔ SSRF https://evil.example/ (0.045398ms)
+✔ SSRF https://lh3.googleusercontent.com.evil.example/a (0.041406ms)
+✔ SSRF https://user:pass@lh3.googleusercontent.com/a (0.481406ms)
+✔ SSRF https://lh3.googleusercontent.com:444/a (0.106393ms)
+✔ imagem autorizada em host exato (0.078035ms)
+✔ upload disfarçado de PNG é bloqueado (0.560675ms)
+✔ Market valida preço e categorias físicas (0.668623ms)
+✔ destaque expirado não aumenta relevância (0.210635ms)
+✔ busca sem acento, faixa de preços e salvos (1.158459ms)
+✔ Worker rejeita Origin malicioso antes de tocar persistência (2.366499ms)
+✔ CORS local negado por padrão (0.703932ms)
+✔ webhook sem assinatura retorna 401 e não consulta provedor (2.999411ms)
+✔ webhook sem secret não modifica estado (1.12059ms)
+✔ simulador assinado testa conectividade, não Order nem pagamento (2.208009ms)
+✔ consulta financeira anônima retorna 401 (1.383286ms)
+✔ D1 ausente desabilita pagamento autenticado (9.0819ms)
+✔ health não anuncia compras ou anexos privados habilitados (2.025173ms)
+✔ novos uploads privados falham antes de gravação (1.600685ms)
+✔ mídia legada não fica pública antes da revisão do armazenamento (1.388377ms)
+✔ repetição de checkout usa mesma referência e chave no provedor (2.313191ms)
+✔ conta comum não acessa financeiro, revisão de ADS ou reembolso (10.432511ms)
+ℹ tests 73
+ℹ suites 0
+ℹ pass 73
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 166.40632
+
+> test:security
+> node --test --experimental-test-isolation=none tests/security-s02-s03.test.mjs tests/legacy-token-plan.test.mjs tests/private-media-client.test.mjs
+
+✔ S03 plano recusa objeto sem generation para não atingir uma substituição concorrente (3.801017ms)
+✔ S03 plano vincula a versão exata e as duas precondições, sem expor o token (0.302907ms)
+✔ S03 recusa generation inválida 0 (0.154474ms)
+✔ S03 recusa generation inválida -1 (0.24066ms)
+✔ S03 recusa generation inválida 0.5 (0.592708ms)
+✔ S03 recusa generation inválida 9007199254740992 (0.210984ms)
+✔ S03 recusa generation inválida 0 (0.11261ms)
+✔ S03 recusa generation inválida -1 (0.077967ms)
+✔ S03 recusa generation inválida 1e3 (0.367276ms)
+✔ S03 recusa generation inválida 01 (0.413682ms)
+✔ S03 gera precondições distintas para versões diferentes do mesmo objeto (1.233682ms)
+✔ S03 rejeita duplicação de objeto/versão em páginas sobrepostas (1.964483ms)
+✔ S03 ausência de metadados não significa ausência de tokens (0.486074ms)
+✔ S03 versão incompleta não gera operação candidata (0.164138ms)
+✔ S03 inventário vazio sem escopo e sem paginação não aprova risco (0.085056ms)
+✔ S03 declaração de listagem completa não comprova IAM ou encerra a Fase 1 (0.07461ms)
+✔ S03 paginação pendente e cobertura apenas da versão atual ficam registradas (0.159904ms)
+✔ S03 recusa dados fora do bucket do inventário (0.093613ms)
+✔ S03 registra ACL pública e cache público como pendências adicionais (0.239298ms)
+✔ S03 inventário e plano nunca retornam valores de tokens ou outros metadados privados (0.219762ms)
+✔ S03 entradas malformadas falham sem plano parcial (0.352658ms)
+✔ S03 CLI gera inventário e plano privados, mantém input e não altera produção (63.374262ms)
+✔ S03 cliente entrega blob privado e revoga os URLs da conversa (37.071572ms)
+✔ S03 cliente não envia token antigo ao gateway legado (1.561774ms)
+✔ S03 resposta HTTP pendente não atravessa troca de conta (9.075745ms)
+✔ S03 logout durante leitura do corpo não cria novo blob privado (1.157776ms)
+✔ S03 troca de conversa invalida resposta pendente mesmo com o mesmo UID (1.023495ms)
+✔ S03 troca direta de conta revoga os blobs já exibidos (1.112379ms)
+✔ S03 mantém retry de disponibilidade com autorização renovada (1.44889ms)
+✔ S03 erro de autorização e URL de outra origem não criam blobs (1.024086ms)
+✔ S02 cliente falha fechado: rede (0.871897ms)
+✔ S02 cliente falha fechado: HTTP 503 (0.935486ms)
+✔ S02 cliente falha fechado: JSON inválido (0.488635ms)
+✔ S02 cliente falha fechado: objeto vazio (0.391564ms)
+✔ S02 cliente falha fechado: resposta ambígua (0.424969ms)
+✔ S02 cliente falha fechado: negação sem decisão (0.45714ms)
+✔ S02 cliente falha fechado: tipos falsos (0.902067ms)
+✔ S02 resposta aprovada não atravessa troca de conta (0.911568ms)
+✔ S02 decisão explícita, cache por conta, prazo e saída da sessão (1.330016ms)
+✔ S02 classificação de abuso nunca vira autorização (0.456618ms)
+✔ S02 binding AI ausente, rejeitado ou travado não aprova (10.968546ms)
+✔ S02 backend rejeita schema uid (0.322541ms)
+✔ S02 backend rejeita schema authorVerified (0.078982ms)
+✔ S02 backend rejeita schema type (0.443107ms)
+✔ S02 backend rejeita schema mediaUrl (0.77866ms)
+✔ S02 backend rejeita schema mediaId (0.149376ms)
+✔ S02 backend rejeita schema pollOptions (0.100521ms)
+✔ S02 backend rejeita schema tags (0.262733ms)
+✔ S02 backend rejeita schema description (0.386866ms)
+✔ S02 backend rejeita schema type,pollOptions (0.709547ms)
+✔ S02 identidade e selo derivam do perfil servidor; suspensão e termos são revalidados (0.355967ms)
+✔ S03 parser só retorna objeto canônico e descarta token (0.445375ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o (0.350602ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o (0.081567ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o (0.696001ms)
+✔ S03 parser rejeita caminho/host: http://firebasestorage.googleapis.com/v0/b/demo-sg.appspot.com/o/ (0.05642ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com.evil.test/v0/b/demo-sg.app (0.033229ms)
+✔ S03 parser rejeita caminho/host: https://user:pass@firebasestorage.googleapis.com/v0/b/demo-sg.app (0.04888ms)
+✔ S03 parser rejeita caminho/host: https://firebasestorage.googleapis.com/other/b/demo-sg.appspot.co (0.735352ms)
+✔ S03 bucket diferente e evidência fora do chat são recusados pelo parser do participante (0.817679ms)
+✔ S03 plano offline minimiza metadados, exige precondição e preserva bytes (1.865182ms)
+✔ Auth rejeita claim aud antes da rede (6.997977ms)
+✔ Auth rejeita claim iss antes da rede (1.720827ms)
+✔ Auth rejeita claim sub antes da rede (2.726965ms)
+✔ Auth rejeita claim exp antes da rede (0.968486ms)
+✔ Auth rejeita claim iat antes da rede (0.791191ms)
+✔ Auth rejeita claim auth_time antes da rede (0.919501ms)
+✔ Auth rejeita claim exp antes da rede (1.696072ms)
+✔ Auth revalida conta UID diferente (1.986ms)
+✔ Auth revalida conta desabilitada (1.81593ms)
+✔ Auth revalida conta revogada (1.279115ms)
+✔ Admin não abre fila: sem claim (2.226547ms)
+✔ Admin não abre fila: sem MFA (2.150454ms)
+✔ Admin não abre fila: MFA antiga (1.651284ms)
+✔ Admin não abre fila: fora da allowlist (0.81635ms)
+✔ Admin não abre fila: Access não configurado (1.351033ms)
+✔ S02 cliente não grava quando análise (0.573886ms)
+✔ S02 cliente não grava quando recusada (0.222783ms)
+✔ S02 cliente não grava quando UID forjado (0.12085ms)
+✔ S02 cliente não grava quando ID errado (0.081505ms)
+✔ S02 cliente não grava quando falha (0.146214ms)
+✔ S02 cliente grava só conteúdo canônico e consome o recibo no mesmo lote com rate limit (0.299477ms)
+✔ S02 cliente não grava se sessão muda durante a autorização (0.150936ms)
+✔ S02 Worker interpreta AI safe exato de forma estrita (2.336319ms)
+✔ S02 Worker interpreta AI safe com lixo de forma estrita (2.023466ms)
+✔ S02 Worker interpreta AI objeto vazio de forma estrita (1.388058ms)
+✔ S02 Worker interpreta AI unsafe explícito de forma estrita (1.432213ms)
+✔ S02 KV: publicação persistente não herda expiração de 30 dias do anexo privado (0.507106ms)
+ℹ tests 88
+ℹ suites 0
+ℹ pass 88
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 283.758599
+
+> test:contracts
+> node --test --experimental-test-isolation=none tests/verifier.test.mjs tests/browser-fixture.test.mjs tests/verification-view.test.mjs tests/v69-audit/contracts.test.mjs tests/v69-audit/dev-server.test.mjs tests/preview-server.test.mjs tests/validation-runner.test.mjs tests/rules-runner.test.mjs
+
+✔ browser fixture exports match the actual Firebase imports (193.640764ms)
+✔ unconfigured browser fixtures reject upload and account mutations (0.811351ms)
+✔ portable preview serves the selected build and rejects hidden files and writes (76.796766ms)
+✔ Firestore runner rejects external hosts, different ports and unexpected rule paths (2.273778ms)
+✔ only known suites can run and no project or target override is accepted (0.387048ms)
+✔ monthly: preço, prazo e confirmação financeira íntegros (1.181812ms)
+✔ semiannual: preço, prazo e confirmação financeira íntegros (0.219139ms)
+✔ annual: preço, prazo e confirmação financeira íntegros (0.387296ms)
+✔ estorno é terminal para toda entrada financeira conhecida (0.287652ms)
+✔ checkout rejeita credenciais, downgrade e domínios semelhantes (0.918933ms)
+✔ dev server entrega fonte e bloqueia caminhos internos e métodos de escrita (177.663512ms)
+✔ a failed or blocked child cannot be reported as passed, and later gates still run (302.59299ms)
+✔ spawn failure remains a failure even with a missing process exit code (4.623124ms)
+✔ founder display relies on server grant status and future expiry (0.383966ms)
+✔ promotional copy explains automatic free entitlement while paid review copy is preserved (0.547006ms)
+✔ static imports and aliases bind only their local name (2.200025ms)
+✔ dynamic import destructuring resolves in its function (1.024096ms)
+✔ sibling and nested declarations cannot hide a missing import (0.754827ms)
+✔ parameters, destructuring, catch and function-scoped var are recognized (1.474765ms)
+✔ comments strings and member calls do not count as global references (0.515922ms)
+✔ loop-scoped binding does not leak outside the loop (0.460356ms)
+ℹ tests 21
+ℹ suites 0
+ℹ pass 21
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1028.24485
+
+> test:founders
+> node --test --experimental-test-isolation=none tests/founders.test.mjs tests/founders-client.test.mjs tests/founders-mirror.test.mjs
+
+✔ verified sign-in syncs automatically without a claim button or client entitlement fields (4.463528ms)
+✔ email verification is reloaded automatically and does not consume a request while unverified (0.520274ms)
+✔ backend outage does not break login or mark the promotion as granted (0.387748ms)
+✔ Firestore timestamp serialization retains millisecond expiry precision (2.618383ms)
+✔ paid mirror retains founder badge and retries a concurrent grant conflict (86.790054ms)
+✔ paid mirror fails closed when the authoritative profile version is missing (81.654608ms)
+✔ 80 concurrent eligible accounts receive exactly 50 atomic awards (90.867117ms)
+✔ concurrent duplicate calls cannot consume additional slots or notifications (3.419629ms)
+✔ disabled promotion and beta before launch consume no slots (1.194176ms)
+✔ unverified disabled anonymous and suspicious accounts do not hold up legitimate accounts (1.554588ms)
+✔ normalized email aliases cannot win twice under distinct UIDs (1.700296ms)
+✔ award contains exactly 365 free days and updates private/public badge and welcome notice atomically (2.106618ms)
+✔ transaction failure cannot consume a slot or leave a partial entitlement (0.342648ms)
+✔ paid reviews and refunds remain separate from the founder entitlement (2.612593ms)
+✔ longer paid benefit is not shortened and administrative revocation cannot regrant a founder slot (0.649795ms)
+✔ corrupt counter fails closed and expired grants never produce an active badge (0.351894ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 347.362995
+
+> test:polls
+> node --test --experimental-test-isolation=none tests/poll-domain.test.mjs
+
+✔ two to four distinct labels are accepted without changing user text (21.592362ms)
+✔ malformed options cannot become a valid new poll (0.598504ms)
+✔ duplicates are rejected even if they differ only in case (0.268556ms)
+✔ numeric votes and legacy text votes select the same real option (1.102946ms)
+✔ numeric-looking labels are never coerced to an unrelated index (0.292756ms)
+✔ untrusted vote values cannot choose outside the poll (0.383216ms)
+✔ ambiguous legacy labels are left unselected rather than inventing an answer (2.688747ms)
+✔ existing polls with more than four options remain readable and votable (0.481679ms)
+✔ new clients write integer indexes only and refuse missing/non-poll targets (0.268971ms)
+ℹ tests 9
+ℹ suites 0
+ℹ pass 9
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 610.939807
+
+> test:regressions
+> npm run build && node --test --experimental-test-isolation=none tests/v65-ui.test.mjs tests/v651-regressions.test.mjs tests/v66-regressions.test.mjs tests/v67-regressions.test.mjs tests/v68-ui.test.mjs tests/v69-regression.test.mjs
+
+
+> build
+> node scripts/build.mjs
+
+copiados 180 arquivos para dist/
+42 páginas para empacotar
+removidos de dist/ (já estão dentro dos pacotes): admin-market.js, admin-payments.js, admin-publications.js, admin-social.js, ads-pro.js, api-client.js, badges.js, call-sfu-client.js, calls.js, channel-tools.js, community-tools.js, config.js, firebase.js, founders-client.js, i18n.js, icones.js, landing.js, legacy-media-policy.js, legal.js, limites.js, market-app.js, market-domain.js, media-upload.js, moderation-client.js, moderation.js, now-telemetry.js, poll-domain.js, post-publication-client.js, post-publication.js, private-media-client.js, professional-ui.js, reports.js, safety.js, sanction-gate.js, sanction-ui.js, sanctions.js, seguranca-web.js, social-studio.js, subscriptions-app.js, v53-pro.js, vendor/livekit-client.js, verification-view.js, voice-room.js
+
+javascript: 570 KB de fonte -> 1329 KB empacotado e minificado
+dist/ pronto. O fonte no repositório continua legível.
+✔ V65: feed.html com CSS e navegação unificados (2.362212ms)
+✔ V65: social.html com CSS e navegação unificados (0.214674ms)
+✔ V65: communities.html com CSS e navegação unificados (0.256093ms)
+✔ V65: chat.html com CSS e navegação unificados (0.407963ms)
+✔ V65: marketplace.html com CSS e navegação unificados (1.773613ms)
+✔ V65: dashboard.html com CSS e navegação unificados (0.470482ms)
+✔ V65: profile.html com CSS e navegação unificados (0.27427ms)
+✔ V65: settings.html com CSS e navegação unificados (0.155051ms)
+✔ V65: events.html com CSS e navegação unificados (0.263443ms)
+✔ V65: companies.html com CSS e navegação unificados (0.360266ms)
+✔ V65: verification.html com CSS e navegação unificados (0.231258ms)
+✔ V65: monetization.html com CSS e navegação unificados (0.138984ms)
+✔ Now ADS mantém seu gerenciador e tema unificado (0.292704ms)
+✔ Criar conta e login permanecem disponíveis (0.341241ms)
+✔ Navegação possui URLs existentes (0.26424ms)
+✔ Now Call oferece saída segura e lado direito para mensagens próprias (1.106208ms)
+✔ Regras validam saída individual e bloqueiam proprietário (1.034573ms)
+✔ Link de convite público pede consentimento antes de entrar (0.775356ms)
+✔ Service worker não usa cache privado (0.222218ms)
+✔ feed usa um só fluxo de publicações (0.823424ms)
+✔ repair stylesheet é carregado em páginas afetadas (0.489895ms)
+✔ modal de criar servidor cabe dentro da viewport (0.37192ms)
+✔ ADMIN não concede privilégio pelo cliente (1.148115ms)
+✔ conquistas são geradas a partir de seguidores e verificação ativa (0.364444ms)
+✔ Novo design carregado nas páginas principais (2.711306ms)
+✔ Now Call sem dado, quiz e bots no composer (0.994023ms)
+✔ Market sem Seller Pro ou banners de monetização (2.823074ms)
+✔ Confirmação segura para excluir conta e backend autenticado (0.373917ms)
+✔ Menções exigem permissão para perfis privados (0.857316ms)
+✔ Sem privilégio administrativo no cliente (0.316008ms)
+✔ Arquivos de implementação necessários presentes (0.255955ms)
+✔ login and registration include explicit accessible password visibility toggle (0.332651ms)
+✔ admin uses its own navigation without injected global sidebar (0.386007ms)
+✔ notifications use real content and constrained layout (0.496209ms)
+✔ account closure protected by super admin, separate backend and cooling-off period (0.531415ms)
+✔ appeals remain available from support and are attached to a sanction (0.621843ms)
+✔ dist preview includes updated pages and styles (0.399985ms)
+✔ Landing V68 tem cadastro, chat e áreas reais do SG (0.244558ms)
+✔ Now Call real mantém todos os seletores usados pelo JavaScript V67 (0.609799ms)
+✔ Rotas modificadas resolvem seus recursos locais (0.712032ms)
+✔ Now Call mobile tem layout sem sobreposição do V57 (0.614079ms)
+✔ landing não força redirecionamento em sessão autenticada (0.125869ms)
+✔ V69 preserves all three original verified gamer plans and payment logic (0.796235ms)
+✔ new slogans are exact and public navigation exposes verification (1.403849ms)
+✔ feed has an actual composer with picture video poll file selection (0.318327ms)
+✔ media publication uses quarantine and has no client Firebase fallback (0.515342ms)
+✔ old dashboard creation IDs are preserved and preview was added (0.374333ms)
+✔ mobile verification and legacy hidden card are fixed in final CSS (1.076881ms)
+✔ local resources for the changed routes exist (1.052328ms)
+✔ public profile is responsive and uses final V69 styles (0.404304ms)
+✔ brand text differentiates SG slogan from NOW slogan (0.17111ms)
+ℹ tests 51
+ℹ suites 0
+ℹ pass 51
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 70.1159
+
+> test:sqlite
+> node scripts/test-sqlite.mjs
+
+{"event":"request_failed","requestId":"62ee5b6d-f77a-4d40-a758-04082d734e72","code":"INVALID_WEBHOOK_SIGNATURE","path":"/payments/webhook"}
+{"event":"request_failed","requestId":"d9502bbb-ae90-4ce0-a4ac-46329e53dd2e","code":"WEBHOOK_NOT_CONFIGURED","path":"/payments/webhook"}
+{"event":"request_failed","requestId":"8ff0d67a-9333-47f2-bde0-1afeadbf05d5","code":"UNAUTHENTICATED","path":"/payments/list"}
+{"event":"request_failed","requestId":"e9e4901b-a325-4c7f-a3fe-a6a59264537d","code":"PAYMENT_STORAGE_NOT_CONFIGURED","path":"/payments/create"}
+{"event":"request_failed","requestId":"2dfa1df9-3f34-4c30-80c5-ff07b99ac178","code":"PRIVATE_MEDIA_NOT_CONFIGURED","path":"/media/upload"}
+{"event":"request_failed","requestId":"4cab74f6-e185-4bb6-a427-5840fb99bfb8","code":"MEDIA_NOT_CONFIGURED","path":"/media/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}
+{"event":"request_failed","requestId":"c4e301b1-fce2-497a-a9cf-d826af3d04d0","code":"FORBIDDEN","path":"/admin/payments"}
+{"event":"request_failed","requestId":"7eff6946-02cc-45ba-9236-93701eb66770","code":"FORBIDDEN","path":"/admin/commerce"}
+{"event":"request_failed","requestId":"5cc48c85-ca93-4da6-a29a-2412907d7e9a","code":"FORBIDDEN","path":"/adminApi"}
+{"event":"request_failed","requestId":"c6f00e28-f41c-4553-a21e-976ee66a3ca5","code":"FORBIDDEN","path":"/ads/review"}
+{"event":"request_failed","requestId":"137d4b2f-f43a-47c4-946c-912488e1caff","code":"FORBIDDEN","path":"/market/refund"}
+{"event":"request_failed","requestId":"9ccaa70d-6683-416e-ad75-d250b9f410c2","code":"FORBIDDEN","path":"/market/disputes/resolve"}
+{"event":"request_failed","requestId":"6a048a94-49ad-405b-bf62-3df88c7356a8","code":"FORBIDDEN","path":"/admin/social"}
+{"event":"request_failed","requestId":"94bf1145-a5cb-466b-b2cf-eb03f04918ea","code":"FORBIDDEN","path":"/admin/social/media"}
+{"event":"request_failed","requestId":"29dd2b8f-393a-412c-bb1a-7896baec9550","code":"FORBIDDEN","path":"/admin/posts"}
+{"event":"request_failed","requestId":"217c52d1-9119-414e-9a6a-d073e67793b6","code":"FORBIDDEN","path":"/admin/media/read"}
+{"event":"request_failed","requestId":"77f79f3d-790c-499c-a151-a4f3ea8beba5","code":"FORBIDDEN","path":"/admin/media/legacy/read"}
+{"event":"request_failed","requestId":"5f9e0b9d-6400-4767-bc79-c8cd2c0786d4","code":"FORBIDDEN","path":"/admin/media/adopt-legacy"}
+{"event":"request_failed","requestId":"019aa091-d9e8-4a74-8e9f-cd68c35b2010","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"45319092-e8f2-4664-a979-e78d155ed5f1","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"978fe24a-224a-4ec5-b9fc-b287e9eb14ba","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"9f07e1a5-c702-4c14-9097-97ab12137e80","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"48200c1e-782a-462b-8b23-918b7d440a02","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"7ea18aed-4064-4b39-8db0-5d412910211b","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"0301866b-ad19-44b5-b058-f0f0f0e8e5f9","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"d7911c2b-4e34-4a19-8d34-07d74e0aa8c2","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"992e59e2-7191-40cc-8c3b-d56b806d523e","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"1e2dff07-d04e-4d7a-b3da-1ed18319e225","code":"UNAUTHENTICATED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"bbd2c580-3cab-4496-9831-3aad03340f7a","code":"FORBIDDEN","path":"/admin/posts"}
+{"event":"request_failed","requestId":"c95b3929-e92e-4b0c-b73c-4dc0cc13ccf1","code":"ADMIN_REAUTH_REQUIRED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"8de8a71d-59ea-42d3-bb97-861e949dc6ed","code":"ADMIN_REAUTH_REQUIRED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"40636d2a-a7c7-44ad-9948-6b3666a4104e","code":"FORBIDDEN","path":"/admin/posts"}
+{"event":"request_failed","requestId":"915904c9-df24-4523-99e4-a3428e9dd012","code":"ADMIN_NOT_CONFIGURED","path":"/admin/posts"}
+{"event":"request_failed","requestId":"87bcfbb0-663d-4d9d-b688-f95d5a5e72b5","code":"MODERATION_FAILED","path":"/moderate"}
+{"event":"request_failed","requestId":"8495b20a-a6b0-4abd-a128-0f05ce5e24e4","code":"MODERATION_FAILED","path":"/moderate"}
+....
+----------------------------------------------------------------------
+Ran 4 tests in 0.003s
+
+OK
+.......
+----------------------------------------------------------------------
+Ran 7 tests in 0.065s
+
+OK

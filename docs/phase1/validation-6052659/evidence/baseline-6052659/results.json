@@ -1,0 +1,92 @@
+{
+  "completedAt": "2026-11-04T09:06:56.197Z",
+  "node": "v24.19.0",
+  "gitCommit": "605265933686b64bbbfd5334a166c2231d9c5c9d",
+  "gitDirty": false,
+  "inputSha256": {
+    "firestore.rules": "f610e4275921e9a1285323f08c7a037c3a50e5e3ffdf947b994ba907fa97bd9e",
+    "storage.rules": "9e513f092ec77b9358923a624f53559088a0ef0eaaf7d2174b403493c33c6831",
+    "firebase.test.json": "d73dc1798c45e881efbf05ef6db5dfc4f964154bcb3955368775ff6694f2d4af",
+    "package.json": "fd7aa67aee8e69458e9e1c082a5f0251394c91d08149ace251e2bdec7ba52d43",
+    "package-lock.json": "12254e84a78b6f282ade7e2ad3b88f6afd3a0ee1ad940395da452da8a98b87b1",
+    "functions/package-lock.json": "5f13bb0ce2d6a9f3b493d34ff346c68a4c71bc103f5554a4fb6b2604d40a03c2",
+    "something-gamer-api/src/publication.js": "5e904dee75238384e722e9e8428c6076137bf9241004d6b8327897cfa0daf328",
+    "something-gamer-api/src/publication-media.js": "91ea15b5d9a8f2b4be0d38cdbba7969f5190852e5954cff17577e29456eb3ffd",
+    "something-gamer-api/src/legacy-media.js": "04e95d309f87d35a5af44520334977658401c4883d007114f9065c718a9bec41",
+    "something-gamer-api/src/legacy-public-media.js": "f1abff9c6247f7567b30ca0e023e6d31b44587bc52a7bb3cc2e17d678d385e49",
+    "something-gamer-api/src/index.js": "8ddb1ec1c58953c15dd92f6f1c434ed163f4adb473144d28cf1414d29b0153b6",
+    "moderation-client.js": "0171f44a626a03965be455257882ed2cfdc7f7bb4225baa279cbf6f654d65bde",
+    "legacy-media-policy.js": "e87d1db1dc0714a50d58aa72343d509a8b96724c63492ac8334e1e8c07744fbe",
+    "post-publication.js": "1325e6c8630b716eb35b2c45793cb1b9525a5024cf149c7c34b20f14575cdfdf",
+    "post-publication-client.js": "cb73f5be8a43448a3d9fa974c96998f8c274a52144a7462bfc3f1ca2afeb87b6",
+    "tests/security-s02-s03.test.mjs": "5111bfdb8a7caf4855f6fc2e92223070fe26bd72fd92b5a5287b91a027d59091",
+    "tests/publication-runtime.test.mjs": "8486c4a2b169f3a25aadebe76cac4ee0dfa6ca053b58a325a69db9cfcbe97a63",
+    "poll-domain.js": "1e53e5a43ccd0c06b62de0ac33c29846b1ea5308f708a77e9b054f037d90ee54",
+    "feed.js": "59d97417e4495a79f69301833f617e3cdc781d832fc6faa0750d0518c96a9931",
+    "feed-composer.js": "fb6faac3575575dfb80fc325d622739895ac541e0330e6edd5a04bc350321643",
+    "dashboard.js": "845bef8fabc3fe311e3b032d7c9c6a565613e983d0aad0ad3b260c4fae825800",
+    "events.js": "bbe7aab55dd6a9f4cb277a1ecbb23eee4ff129252969ccd429ed696065575842",
+    "playwright.config.js": "2f03c4f2421ea15070c34e2277775eb1d29285609125c3de76e1af4a7cc19119",
+    "scripts/test-rules.mjs": "4219631e1614c31d9e3fc4553a60e59abf741d3785207605770bbdf3c04aac63",
+    "scripts/validate-phase1.mjs": "9ae5b4470a3749623352b31f145a94e77348c5f2d58ababe403eebe5f60d97f8",
+    "scripts/check-browser.mjs": "d41d3be1828c00dcbcfb4a4e133cb441dff36c1212acced5d922b44a6cc047b9",
+    "scripts/preview-server.mjs": "273a6412f380ee838428f9a017c31bc7fc5820bd41499b4121e695bd832a36ca",
+    "tests/v69-audit/firestore-boundaries.test.mjs": "d06c0f0284895a5801501594191469c0edcb9068c18670f13b8b5579e76b1fc4",
+    "tests/firestore.test.js": "e1c861a36cabce57a52e183f909534a44f3e5cd9d75d34846889a3001b70149c",
+    "tests/founders-emulator.test.mjs": "41c97bba048a8344a5d136c09208f6b5f85915fe0c851a09ec6cddc0b2dc29b6",
+    "tests/browser/visual.spec.js": "7b6ef7c46b74f272eda9988b9510e8c8fab84076266a03a07089cc11ddbe926b"
+  },
+  "allSelectedGatesPassed": false,
+  "completePhase1Run": true,
+  "results": [
+    {
+      "name": "dependencies",
+      "script": "audit:high",
+      "exitCode": 0,
+      "status": "passed",
+      "log": "dependencies.log"
+    },
+    {
+      "name": "fast",
+      "script": "check:fast",
+      "exitCode": 0,
+      "status": "passed",
+      "log": "fast.log"
+    },
+    {
+      "name": "runtime",
+      "script": "test:runtime",
+      "exitCode": 0,
+      "status": "passed",
+      "log": "runtime.log"
+    },
+    {
+      "name": "firestore",
+      "script": "test:rules",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "firestore.log"
+    },
+    {
+      "name": "security-s01",
+      "script": "test:rules:security",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "security-s01.log"
+    },
+    {
+      "name": "founders-emulator",
+      "script": "test:rules:founders",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "founders-emulator.log"
+    },
+    {
+      "name": "browser",
+      "script": "test:e2e",
+      "exitCode": 78,
+      "status": "blocked",
+      "log": "browser.log"
+    }
+  ]
+}

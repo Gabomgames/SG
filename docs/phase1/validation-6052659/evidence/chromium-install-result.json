@@ -1,0 +1,7 @@
+{
+  "command": "node node_modules/playwright/cli.js install chromium",
+  "exitCode": 1,
+  "status": "blocked",
+  "log": "chromium-install.log",
+  "applicationTestsExecuted": false
+}

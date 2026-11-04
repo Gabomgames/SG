@@ -1,6 +1,6 @@
 import { auth, appCheckHeaders } from "./firebase.js";
 import { APP_CONFIG } from "./config.js";
-import {legacyChatObject,protectedLegacyReference} from "./legacy-media-policy.js";
+import {createPrivateMediaResolver} from "./private-media-client.js";
 
 const TYPES = new Set(["image/jpeg","image/png","image/webp","image/gif","video/mp4","video/webm","video/quicktime","audio/webm","audio/ogg","audio/mpeg","audio/mp4","audio/aac","audio/x-m4a","audio/wav"]);
 const baseMime = value => String(value || "").toLowerCase().split(";")[0].trim();
@@ -55,31 +55,8 @@ export async function prepareImage(file, { maxDimension = 2200, quality = .82, m
   return new File([blob], String(file.name || "imagem").replace(/\.[^.]+$/, "") + ".jpg", { type:"image/jpeg" });
 }
 
-const privateBlobs = new Set();
-export async function resolvePrivateMedia(value) {
-  const url = new URL(value), base = new URL(APP_CONFIG.steamApiBaseUrl), legacy=legacyChatObject(value);
-  if (!legacy && (url.origin !== base.origin || !/^\/private-media\/[a-f0-9-]{36}$/.test(url.pathname))) throw new Error("Mídia privada inválida.");
-  const user = auth.currentUser;
-  if (!user) throw new Error("Faça login novamente.");
-  let response;
-  for(let attempt=0;attempt<3;attempt++){
-  response = await fetch(`${base.origin}${legacy?"/media/legacy/read":"/media/read"}`, {
-    method: "POST", cache: "no-store", signal: AbortSignal.timeout(20000),
-    headers: { Authorization: `Bearer ${await user.getIdToken()}`, "Content-Type": "application/json", ...(await appCheckHeaders()) },
-    body: JSON.stringify(legacy?{url:protectedLegacyReference(value)}:{ id: url.pathname.split('/').pop() })
-  });
-  if(response.status!==503||attempt===2)break;
-  await new Promise(resolve=>setTimeout(resolve,400*(attempt+1)));
-  }
-  if (!response.ok) throw new Error(response.status===503?"Arquivo ainda indisponível. Tente novamente em instantes.":"Arquivo expirado ou acesso indisponível.");
-  const local = URL.createObjectURL(await response.blob());
-  privateBlobs.add(local);
-  return local;
-}
-export function revokePrivateMedia() {
-  for (const url of privateBlobs) URL.revokeObjectURL(url);
-  privateBlobs.clear();
-}
-addEventListener('pagehide', revokePrivateMedia);
-
-auth.onAuthStateChanged(user=>{if(!user)revokePrivateMedia();});
+const privateMedia=createPrivateMediaResolver({currentUser:()=>auth.currentUser,baseUrl:APP_CONFIG.steamApiBaseUrl,headers:appCheckHeaders});
+export const resolvePrivateMedia=privateMedia.resolve;
+export const revokePrivateMedia=privateMedia.revoke;
+addEventListener('pagehide',revokePrivateMedia);
+auth.onAuthStateChanged(()=>privateMedia.synchronize());

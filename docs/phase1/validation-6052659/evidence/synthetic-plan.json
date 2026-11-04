@@ -1,0 +1,52 @@
+{
+  "schemaVersion": 1,
+  "mode": "offline-plan-only",
+  "sourceFileSha256": "790008390748beda6ca1866adc299a51ba4545292d14279456d3e3b64bcd60a5",
+  "scope": {
+    "projectId": "demo-sg",
+    "bucket": "demo-sg.appspot.com",
+    "capturedAt": "2026-11-03T00:00:00Z",
+    "sourceKind": "synthetic"
+  },
+  "requiresSeparateProductionAuthorization": true,
+  "executionImplemented": false,
+  "phase1Approved": false,
+  "operations": [
+    {
+      "bucket": "demo-sg.appspot.com",
+      "name": "chat/alice/alice_bob/example.png",
+      "generation": "1001",
+      "ifGenerationMatch": "1001",
+      "ifMetagenerationMatch": "1",
+      "patch": {
+        "metadata": {
+          "firebaseStorageDownloadTokens": null
+        }
+      },
+      "preserveObjectBytes": true
+    },
+    {
+      "bucket": "demo-sg.appspot.com",
+      "name": "reports/alice/report1/example.png",
+      "generation": "1002",
+      "ifGenerationMatch": "1002",
+      "ifMetagenerationMatch": "1",
+      "patch": {
+        "metadata": {
+          "firebaseStorageDownloadTokens": null
+        }
+      },
+      "preserveObjectBytes": true
+    }
+  ],
+  "blockers": [
+    "LISTING_COMPLETENESS_NOT_CONFIRMED",
+    "OBJECT_VERSIONS_NOT_CONFIRMED",
+    "TOKEN_METADATA_UNKNOWN",
+    "TOKEN_REVOCATION_NOT_EXECUTED",
+    "OBJECT_ACL_NOT_REVIEWED",
+    "AUTHORITATIVE_INVENTORY_REVIEW_PENDING",
+    "BUCKET_IAM_REVIEW_PENDING",
+    "GATEWAY_AND_REVOCATION_VERIFICATION_PENDING"
+  ]
+}
