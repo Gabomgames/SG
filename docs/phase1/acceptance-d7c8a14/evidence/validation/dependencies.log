@@ -1,0 +1,158 @@
+
+> audit:high
+> npm audit --audit-level=high && npm audit --prefix functions --audit-level=high
+
+# npm audit report
+
+@opentelemetry/core  <2.8.0
+Severity: moderate
+OpenTelemetry Core: Unbounded memory allocation in W3C Baggage propagation - https://github.com/advisories/GHSA-8988-4f7v-96qf
+fix available via `npm audit fix --force`
+Will install firebase-tools@13.11.2, which is a breaking change
+node_modules/@opentelemetry/core
+  @google-cloud/pubsub  5.1.0 - 6.0.0
+  Depends on vulnerable versions of @opentelemetry/core
+  node_modules/@google-cloud/pubsub
+    firebase-tools  >=2.0.0
+    Depends on vulnerable versions of @google-cloud/pubsub
+    Depends on vulnerable versions of archiver
+    Depends on vulnerable versions of exegesis
+    Depends on vulnerable versions of gaxios
+    Depends on vulnerable versions of glob
+    Depends on vulnerable versions of minimatch
+    Depends on vulnerable versions of superstatic
+    node_modules/firebase-tools
+
+fast-uri  3.0.0 - 3.1.8
+Severity: moderate
+fast-uri vulnerable to URI scheme spoofing via percent-encoded scheme decoding - https://github.com/advisories/GHSA-w74x-v6f9-j3xg
+fast-uri vulnerable to improper path equivalence in relative reference normalization - https://github.com/advisories/GHSA-xhq7-xmqj-769h
+fast-uri vulnerable to host confusion via unchecked WHATWG host canonicalization - https://github.com/advisories/GHSA-wjr9-j795-jxcr
+fast-uri vulnerable to scheme injection via an unescaped first-segment colon in suffix references - https://github.com/advisories/GHSA-333x-w4r6-6crp
+fix available via `npm audit fix`
+node_modules/fast-uri
+
+glob  3.0.0 - 14.0.1
+Severity: moderate
+Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal - https://github.com/advisories/GHSA-3g3m-2fjr-6pw4
+Depends on vulnerable versions of minimatch
+fix available via `npm audit fix --force`
+Will install firebase-tools@13.11.2, which is a breaking change
+node_modules/glob
+  archiver-utils  >=5.0.1
+  Depends on vulnerable versions of glob
+  node_modules/archiver-utils
+    archiver  >=5.0.0
+    Depends on vulnerable versions of archiver-utils
+    Depends on vulnerable versions of readdir-glob
+    Depends on vulnerable versions of zip-stream
+    node_modules/archiver
+    zip-stream  6.0.0 - 6.0.1
+    Depends on vulnerable versions of archiver-utils
+    node_modules/zip-stream
+  exegesis  >=4.1.2
+  Depends on vulnerable versions of glob
+  node_modules/exegesis
+  rimraf  4.2.0 - 6.1.3
+  Depends on vulnerable versions of glob
+  node_modules/rimraf
+    gaxios  6.4.0 - 6.7.1 || 7.1.3
+    Depends on vulnerable versions of rimraf
+    Depends on vulnerable versions of uuid
+    node_modules/gaxios
+    node_modules/google-gax/node_modules/gcp-metadata/node_modules/gaxios
+      gcp-metadata  8.1.3 - 8.1.4
+      Depends on vulnerable versions of gaxios
+      node_modules/google-gax/node_modules/gcp-metadata
+    google-gax  5.0.5 - 5.0.8
+    Depends on vulnerable versions of rimraf
+    node_modules/google-gax
+
+ip-address  <=10.7.3
+Severity: moderate
+ip-address: Address6 matches a zone identifier in quadratic time ahead of its length limit, allowing a single long string to stall the process - https://github.com/advisories/GHSA-rxp7-6hxx-x8q5
+fix available via `npm audit fix`
+node_modules/ip-address
+
+minimatch  <11.0.1
+Severity: moderate
+minimatch has potential denial of service via globparts amplification - https://github.com/advisories/GHSA-g3hv-75wg-m249
+fix available via `npm audit fix --force`
+Will install firebase-tools@13.11.2, which is a breaking change
+node_modules/glob/node_modules/minimatch
+node_modules/minimatch
+node_modules/readdir-glob/node_modules/minimatch
+node_modules/superstatic/node_modules/minimatch
+  readdir-glob  *
+  Depends on vulnerable versions of minimatch
+  node_modules/readdir-glob
+  superstatic  <=0.13.0-rc4 || >=2.0.0-rc1
+  Depends on vulnerable versions of minimatch
+  node_modules/superstatic
+
+qs  6.7.0 - 6.16.0
+Severity: moderate
+qs : qs.stringify with arrayFormat 'comma' throws an uncaught TypeError on array elements carrying a non-callable own toString (DoS) - https://github.com/advisories/GHSA-6pq8-jhm2-2vcw
+fix available via `npm audit fix`
+node_modules/qs
+
+uuid  <11.1.1
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+fix available via `npm audit fix --force`
+Will install firebase-tools@13.11.2, which is a breaking change
+node_modules/uuid
+
+19 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+# npm audit report
+
+qs  6.7.0 - 6.16.0
+Severity: moderate
+qs : qs.stringify with arrayFormat 'comma' throws an uncaught TypeError on array elements carrying a non-callable own toString (DoS) - https://github.com/advisories/GHSA-6pq8-jhm2-2vcw
+fix available via `npm audit fix`
+node_modules/qs
+
+uuid  <11.1.1
+Severity: moderate
+uuid: Missing buffer bounds check in v3/v5/v6 when buf is provided - https://github.com/advisories/GHSA-w5hq-g745-h8pq
+fix available via `npm audit fix --force`
+Will install firebase-admin@14.5.0, which is a breaking change
+node_modules/uuid
+  gaxios  6.4.0 - 6.7.1
+  Depends on vulnerable versions of uuid
+  node_modules/gaxios
+  google-gax  4.0.5-experimental - 4.6.1
+  Depends on vulnerable versions of retry-request
+  Depends on vulnerable versions of uuid
+  node_modules/google-gax
+    @google-cloud/firestore  7.5.0-pre.0 || 7.6.0 - 7.11.6
+    Depends on vulnerable versions of google-gax
+    node_modules/@google-cloud/firestore
+      firebase-admin  7.0.0 - 8.2.0 || 11.0.0 - 14.3.0
+      Depends on vulnerable versions of @google-cloud/firestore
+      Depends on vulnerable versions of @google-cloud/storage
+      node_modules/firebase-admin
+  teeny-request  3.9.1 - 9.0.0
+  Depends on vulnerable versions of uuid
+  node_modules/teeny-request
+    @google-cloud/storage  2.2.0 - 2.5.0 || 5.19.0 - 8.0.0
+    Depends on vulnerable versions of retry-request
+    Depends on vulnerable versions of teeny-request
+    node_modules/@google-cloud/storage
+    retry-request  7.0.0 - 7.0.2
+    Depends on vulnerable versions of teeny-request
+    node_modules/retry-request
+
+9 moderate severity vulnerabilities
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force

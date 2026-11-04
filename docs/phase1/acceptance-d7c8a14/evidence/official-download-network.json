@@ -1,0 +1,19 @@
+{
+  "method": "HTTPS HEAD through inherited proxy; TLS preserved",
+  "results": [
+    {
+      "url": "https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.22.0.jar",
+      "curlExit": 56,
+      "originStatus": "000",
+      "proxyConnectStatus": "403",
+      "error": "curl: (56) CONNECT tunnel failed, response 403"
+    },
+    {
+      "url": "https://cdn.playwright.dev/builds/cft/145.0.7632.6/linux64/chrome-linux64.zip",
+      "curlExit": 56,
+      "originStatus": "000",
+      "proxyConnectStatus": "403",
+      "error": "curl: (56) CONNECT tunnel failed, response 403"
+    }
+  ]
+}

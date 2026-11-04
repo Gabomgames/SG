@@ -1,0 +1,4 @@
+{
+  "command": "npm run validate:phase1",
+  "exitCode": 1
+}

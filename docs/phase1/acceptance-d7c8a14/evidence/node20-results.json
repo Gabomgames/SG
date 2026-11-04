@@ -1,0 +1,17 @@
+{
+  "checks": [
+    {
+      "file": "founders.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "founders-client.test.mjs",
+      "exitCode": 0
+    },
+    {
+      "file": "founders-mirror.test.mjs",
+      "exitCode": 0
+    }
+  ],
+  "exportsLoadExit": 0
+}

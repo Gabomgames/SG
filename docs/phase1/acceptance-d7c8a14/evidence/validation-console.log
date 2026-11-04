@@ -1,0 +1,19 @@
+
+> validate:phase1
+> node scripts/validate-phase1.mjs
+
+Running dependencies: npm run audit:high
+Running fast: npm run check:fast
+Running runtime: npm run test:runtime
+Running firestore: npm run test:rules
+Running security-s01: npm run test:rules:security
+Running founders-emulator: npm run test:rules:founders
+Running browser: npm run test:e2e
+dependencies: passed (exit 0)
+fast: passed (exit 0)
+runtime: passed (exit 0)
+firestore: blocked (exit 78)
+security-s01: blocked (exit 78)
+founders-emulator: blocked (exit 78)
+browser: blocked (exit 78)
+Evidence: /workspace/SG/artifacts/phase1-pHmbyt

@@ -1,0 +1,121 @@
+{
+  "files": [
+    {
+      "path": "chromium-cases.log",
+      "sha256": "a0c317db9687a06452b89aac6c69458ca2124917350942e95d6d76cc6a158d06"
+    },
+    {
+      "path": "chromium-install-result.json",
+      "sha256": "d66658fcf496a82e6716c0c31c4b49967dfe2bd0c90e061c2fdbf4fecd589db8"
+    },
+    {
+      "path": "chromium-install.log",
+      "sha256": "6fa7ffd116e1358e19a1f250667a623a58c1a278e0a2afbd8f29df9c4d3dfae3"
+    },
+    {
+      "path": "environment.json",
+      "sha256": "15fdc2c89318fd9f10525490e85fe84e15f072be0b92c15b82413f32fe5fed01"
+    },
+    {
+      "path": "functions-install.log",
+      "sha256": "11dd58627a66ddfd02f9bba6af0eabcafccf74177dd7dd8175e6349dff1fa89c"
+    },
+    {
+      "path": "install-results.json",
+      "sha256": "61c468390278c7bbba32f74357bfba186e745dc1fa3b8f128b140d7431c915a0"
+    },
+    {
+      "path": "node20-founders-client.test.mjs.log",
+      "sha256": "c43f0810e3d9bf206f2d45b267886cfcf97ff7a3ddc3c183da8598f152084617"
+    },
+    {
+      "path": "node20-founders-mirror.test.mjs.log",
+      "sha256": "fe856f46285d206f4f320f76b8f1c3e6b12dc93ce4cb0b064bdee65e218365cd"
+    },
+    {
+      "path": "node20-founders.test.mjs.log",
+      "sha256": "6db97f10b20eac86135d98cb47af14bc50af439dda7f8057fa4bec61f91f81c0"
+    },
+    {
+      "path": "node20-functions-load.log",
+      "sha256": "4e1719165fcd3b953b5a16faa357ed00985641f6b493ad81aa970d418302329b"
+    },
+    {
+      "path": "node20-results.json",
+      "sha256": "35b53fb6177dc1ed41c60f74896b970f644f24e3644c99fe9474791d8301a055"
+    },
+    {
+      "path": "official-download-network.json",
+      "sha256": "37590698fbdca561e1d651f4d76e348223e82ee4b72d05b44d42ac0962f6099e"
+    },
+    {
+      "path": "preservation.json",
+      "sha256": "4bcc17eb9a95fdff2e364f5ea404b1a49770c8818d7c6d1056991c247b8fdaf2"
+    },
+    {
+      "path": "root-install.log",
+      "sha256": "2f2cc66402ebcde80d8cc0a5a1bc54742d05a9c4b10a0233cc437cf16644724b"
+    },
+    {
+      "path": "secret-scan-before-commit.log",
+      "sha256": "db776e9bac871a58391127feca2831a687de3b76c348ca2b4e24dc533549834c"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "6e120361121f413c6efc7514c3fc3522f4f92d221ccf79413f1e5b0b3a71a117"
+    },
+    {
+      "path": "synthetic-inventory.json",
+      "sha256": "16ae6d5ccbaac0c1744b741ec99787f08c31986516aae8dffcea0941eab7ecfd"
+    },
+    {
+      "path": "synthetic-plan.json",
+      "sha256": "f01c129f9ff14f0ce48c09b32546103f32cf069e89221e9c13bdd0c3da6a0d77"
+    },
+    {
+      "path": "synthetic-s03-cli.log",
+      "sha256": "c4d7c41e102dec7b583a4048f808e8f747d36775a1431a5abd7ea64c0b89ee3e"
+    },
+    {
+      "path": "validation/browser.log",
+      "sha256": "655b10d5712e1601af416638a48b2890d03d01c427c683e120eaa21c54a0fb2d"
+    },
+    {
+      "path": "validation/dependencies.log",
+      "sha256": "d88cb833aceacfddebce49d580b61ecd2cea344a5b0b3caa0bdcb160caee4146"
+    },
+    {
+      "path": "validation/fast.log",
+      "sha256": "4051594680b46e1228c8c144deb0ea12b87b4616830e65a555de3b3cad7097bb"
+    },
+    {
+      "path": "validation/firestore.log",
+      "sha256": "66b650d9a12836a824c01ae3eebc4b7037c2965b3282a32ff98b944633209698"
+    },
+    {
+      "path": "validation/founders-emulator.log",
+      "sha256": "d9ff384dfb3384b1e3317dd686a0c1f6ae760f82d8959c83da22747430685674"
+    },
+    {
+      "path": "validation/results.json",
+      "sha256": "b983dbee47beae1732c1213713084145695c10fc52ff5319013cf6c9be2044e4"
+    },
+    {
+      "path": "validation/runtime.log",
+      "sha256": "5fe2ef7242788877ce1864561e7cd463b68b3a99d017fbfcfbfbe9d2eb865dee"
+    },
+    {
+      "path": "validation/security-s01.log",
+      "sha256": "5f8379d71722406420465b96137b5ad70cbcb714d2c7914c5eeae3832872a12e"
+    },
+    {
+      "path": "validation-console.log",
+      "sha256": "a2604c6383fea9ee9c93b8414dd476ce765b10b7aa73612146844444c61ae4c1"
+    },
+    {
+      "path": "validation-exit.json",
+      "sha256": "b0038512753041226c524916d92f114fa1245202b945ca3b4c30446b40035707"
+    }
+  ],
+  "excludesItself": true
+}

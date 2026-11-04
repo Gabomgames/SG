@@ -1,0 +1,50 @@
+{
+  "referenceCommit": "d7c8a14999549eeb5b8568e2597e2a111a20e106",
+  "referenceBranch": "codex/v69-phase1-local",
+  "originalPathsPresent": 344,
+  "trackedBlobsVerifiedBeforeInstall": 524,
+  "referenceCheckoutClean": true,
+  "inputHashesMatchReferenceCommit": true,
+  "applicationCodeChanged": false,
+  "lockfilesChanged": false,
+  "dependencyInstallResults": [
+    {
+      "name": "root-install",
+      "node": "v24.19.0",
+      "command": "npm ci --no-audit --no-fund",
+      "exitCode": 0,
+      "log": "root-install.log",
+      "status": "passed"
+    },
+    {
+      "name": "functions-install",
+      "node": "v20.20.2",
+      "command": "npm ci --prefix functions --no-audit --no-fund",
+      "exitCode": 0,
+      "log": "functions-install.log",
+      "status": "passed"
+    }
+  ],
+  "distinctLocalTestsPassed": 312,
+  "assertionFailuresInExecutedFinalSuites": 0,
+  "firebaseSuitesBlocked": 3,
+  "chromiumCasesDiscovered": 26,
+  "chromiumCasesExecuted": 0,
+  "chromiumInstallerInvocations": 1,
+  "completeValidationInvocations": 1,
+  "actualProductionInventoryCount": null,
+  "actualProductionRevocations": 0,
+  "phase1Approved": false,
+  "criteria": {
+    "referenceIntegrity": "met",
+    "dependencyInstallation": "met",
+    "localBuildVerifiersRegressions": "met",
+    "updatedCloudEnvironment": "not_confirmed",
+    "firebaseStorageIntegration": "blocked",
+    "chromiumIntegration": "blocked",
+    "syntheticS03Preparation": "met",
+    "realS03InventoryAndRevocation": "pending",
+    "businessInvariantsPreservedInCode": "met",
+    "phase2Authorization": "not_given"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "command": "node node_modules/playwright/cli.js install chromium",
+  "exitCode": 1,
+  "status": "blocked",
+  "applicationTestsExecuted": false,
+  "externalInstallerInvocations": 1,
+  "note": "Only the bounded retry policy of the official installer was used."
+}

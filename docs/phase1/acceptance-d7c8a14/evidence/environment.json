@@ -1,0 +1,17 @@
+{
+  "environment_id": "ccarenv_b64_Y2NhcmVudl8xYjdkZjk4YTVlMDg4MTkxYThlY2NiZDljM2EyY2NiMg",
+  "source_config_version_id": "fc721c31-f0fc-47d5-83cc-2bc1ccb9352e~cecfgver_6ae8edf4ae64819e9ae9a377c4f7e20b",
+  "spec_revision": "1",
+  "observed_spec_revision": "1",
+  "observations_current": true,
+  "phase": "running",
+  "networkMode": "restricted",
+  "networkState": "enforced",
+  "customHosts": [],
+  "requiredHosts": {
+    "github.com": true,
+    "api.github.com": false,
+    "storage.googleapis.com": false,
+    "cdn.playwright.dev": false
+  }
+}
