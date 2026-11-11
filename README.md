@@ -1,38 +1,78 @@
-# Validação final após recuperação de 6052659
+# Something Gamer (SG)
 
-Esta revisão mantém 6052659 como ancestral e acrescenta correções S03 e evidências reais de nova execução. A Fase 1 continua aberta enquanto Firestore/Storage, Chromium e a revogação S03 não forem comprovados.
+**Plataforma social gamer | Projeto independente em desenvolvimento**
 
-- [Relatório desta validação](docs/phase1/validation-6052659/RELATORIO.md)
-- [Executar no Windows/VS Code](docs/phase1/validation-6052659/EXECUTAR-VALIDACAO.md)
-- [Inventário e plano S03, sem acesso a produção](docs/phase1/validation-6052659/S03-INVENTARIO-E-PLANO.md)
+O Something Gamer (SG) é uma aplicação voltada à comunidade de jogadores, criada para reunir perfis, publicações, conversas, comunidades e outros recursos em uma mesma experiência. Este repositório contém o código do projeto existente e sua evolução incremental — não é um projeto de demonstração refeito do zero.
 
-Os relatórios anteriores abaixo são históricos. Preços e Fundadores preservados; nenhuma campanha ativada ou dado de produção alterado.
+**Estado atual:** beta em desenvolvimento. A Fase 1 **não está homologada para publicação**. A existência de funcionalidades no código não equivale à sua validação completa em produção.
 
-# Something Gamer — reta final da Fase 1
+## Funcionalidades e escopo
 
-S02/S03 receberam implementação e 282 testes locais distintos passaram. **Fase 1 ainda não aprovada:** três suítes Firebase e 26 casos Chromium bloqueados, e tokens privados legados sem revogação comprovada. Sem push, merge, deploy, cobrança, alteração de produção ou Fase 2.
+- Cadastro, autenticação e gerenciamento de perfis.
+- Feed social, publicações e interações.
+- Conversas, comunidades e ferramentas de moderação.
+- Interfaces para computador e dispositivos móveis.
+- **Verificado Gamer** e **NOW ADS**: recursos já presentes no projeto, sujeitos a revisão, configuração e testes.
+- Estruturas de chamadas e integrações de mídia: funcionamento depende dos serviços, permissões e configurações correspondentes.
 
-- [Relatório único atual, segurança e resultados](docs/phase1/final/RELATORIO.md)
-- [Comandos completos para Windows / VS Code](docs/phase1/final/WINDOWS-VSCODE.md)
-- [Compatibilidade do legado e revogação pendente](docs/phase1/final/MIGRACAO-LEGADO.md)
-- [Critérios objetivos de aceite](docs/phase1/final/CRITERIOS-ACEITE.md)
+Alguns recursos financeiros, administrativos e de mídia permanecem desativados ou limitados por segurança. Não se deve confundir código implementado com serviço habilitado.
 
-Use Node 24.19.0 e `npm run validate:phase1`; Functions mantêm Node 20.20.2. As regras exigem emulador real de Firestore/Storage e o navegador exige Chromium oficial. Exit 78 é bloqueio; a validação global retorna falha até todos os gates passarem. Preços e promoção automática de 50 Fundadores preservados; promoção continua desligada por padrão.
+## Tecnologias utilizadas
 
-ZIP/bundle preparados para entrega exclusivamente pelo GitHub após upload autorizado e confirmado. Nenhum arquivo foi enviado e nenhum link foi inventado.
+| Área | Tecnologias |
+| --- | --- |
+| Interface | HTML, CSS e JavaScript |
+| Ferramentas e automação | Node.js, npm e scripts de validação |
+| Autenticação e dados | Firebase Authentication, Firestore e Firebase Storage |
+| Serviços | Firebase Functions e Cloudflare Workers |
+| Desenvolvimento e versionamento | Git e GitHub |
+| Testes | Node.js Test Runner e Playwright |
 
-## Histórico das entregas anteriores (preservado)
+O repositório também contém diretórios para integrações Android e desktop.
 
-Os relatórios em `docs/phase1/s01` descrevem a revisão anterior de S01 e não substituem o relatório atual.
+## Executar localmente
 
+**Requisito de referência:** Node.js 24.19.0 (consulte a versão fixada nos arquivos de configuração).
 
+Em um ambiente de desenvolvimento autorizado, com dependências e serviços configurados:
 
-# Something Gamer — Beta 0.1
+    npm ci
+    npm run dev
 
-Fonte V69 existente, com correções da Fase 1 e promoção automática dos 50 Fundadores SG implementada localmente, desativada por padrão. Sem deploy ou push.
+O servidor de desenvolvimento local é acessado em \`http://localhost:5173\`. Isso **não publica** o SG na internet nem garante, por si só, o funcionamento de integrações externas.
 
-- [Relatório e resultados reais](docs/phase1/RELATORIO.md)
-- [Executar no VS Code](docs/phase1/EXECUTAR-NO-VSCODE.md)
-- [Promoção dos fundadores e limites](docs/phase1/FOUNDERS.md)
+Para validação:
 
-Web/Worker: Node 24.19.0. Functions: Node 20.20.2. Instale com npm ci em cada runtime. Execute npm run check:fast, npm run test:runtime e os gates Firestore/navegador documentados. Emulador e navegador permanecem bloqueados na nuvem; a beta não está certificada para produção.
+    npm run check:fast
+    npm run test:runtime
+    npm run validate:phase1
+
+A validação completa exige o ambiente oficial de testes Firestore/Storage e Chromium; uma suíte bloqueada **não conta como aprovada**.
+
+Guia detalhado: [Execução e validação no VS Code](docs/phase1/validation-6052659/EXECUTAR-VALIDACAO.md).
+
+## Organização do projeto
+
+- Interface e módulos web: arquivos HTML, CSS e JavaScript na raiz.
+- \`functions/\`: serviços executados em Firebase Functions.
+- \`something-gamer-api/\`: API e serviços Cloudflare.
+- \`android-app/\` e \`desktop-app/\`: integração com outras plataformas.
+- \`tests/\`: testes e verificações automatizadas.
+- \`docs/\`: documentação técnica, auditorias e registros de validação.
+
+## Segurança e estado de publicação
+
+A proteção de usuários e informações privadas é prioridade. A revisão atual da Fase 1 registra verificações de integração pendentes e tarefas de segurança que exigem validação em ambiente autorizado.
+
+- [Segurança e moderação](SECURITY.md)
+- [Relatório da validação mais recente](docs/phase1/validation-6052659/RELATORIO.md)
+- [Critérios de aceite da Fase 1](docs/phase1/final/CRITERIOS-ACEITE.md)
+- [Checklist de preparação para repositório público](docs/PUBLICATION_READINESS.md)
+
+**Não torne este repositório público nem ative serviços de produção antes da conclusão documentada do checklist de publicação.** Nunca adicione tokens, senhas, contas de serviço ou dados de usuários ao Git.
+
+## Projeto e autoria
+
+**Something Gamer (SG)** — projeto pessoal de desenvolvimento de software de **Gabomgames**.
+
+Uso de ferramentas de IA como apoio ao desenvolvimento, com revisão, integração e testes do código. Projeto em evolução; funcionalidades e condições de uso podem mudar.
