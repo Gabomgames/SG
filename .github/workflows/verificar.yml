@@ -7,6 +7,17 @@ on:
 permissions:
   contents: read
 jobs:
+  repository-security:
+    name: Revisar segredos versionados e historico Git
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Escanear arquivos e historico por formatos conhecidos de credenciais
+        run: python3 scripts/scan-secrets.py
   fast:
     runs-on: ubuntu-latest
     steps:
