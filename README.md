@@ -39,7 +39,7 @@ Em um ambiente de desenvolvimento autorizado, com dependências e serviços conf
     npm ci
     npm run dev
 
-O servidor de desenvolvimento local é acessado em \`http://localhost:5173\`. Isso **não publica** o SG na internet nem garante, por si só, o funcionamento de integrações externas.
+O servidor de desenvolvimento local é acessado em `http://localhost:5173`. Isso **não publica** o SG na internet nem garante, por si só, o funcionamento de integrações externas.
 
 Para validação:
 
@@ -54,11 +54,11 @@ Guia detalhado: [Execução e validação no VS Code](docs/phase1/validation-605
 ## Organização do projeto
 
 - Interface e módulos web: arquivos HTML, CSS e JavaScript na raiz.
-- \`functions/\`: serviços executados em Firebase Functions.
-- \`something-gamer-api/\`: API e serviços Cloudflare.
-- \`android-app/\` e \`desktop-app/\`: integração com outras plataformas.
-- \`tests/\`: testes e verificações automatizadas.
-- \`docs/\`: documentação técnica, auditorias e registros de validação.
+- `functions/`: serviços executados em Firebase Functions.
+- `something-gamer-api/`: API e serviços Cloudflare.
+- `android-app/` e `desktop-app/`: integração com outras plataformas.
+- `tests/`: testes e verificações automatizadas.
+- `docs/`: documentação técnica, auditorias e registros de validação.
 
 ## Segurança e estado de publicação
 
